@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CardioVera Research | Cardiovascular Clinical Research Organization</title>
+<meta name="description" content="CardioVera Research — a specialized cardiovascular CRO delivering expert clinical trial management, regulatory strategy, and data-driven outcomes for heart-focused therapeutics.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brown: {
+          50: '#faf8f5',
+          100: '#f3efe9',
+          200: '#e8e0d6',
+          300: '#d4c8b8',
+          400: '#b5a593',
+          500: '#6b5e55',
+          600: '#3d3027',
+          700: '#2d2420',
+        },
+        coral: {
+          DEFAULT: '#e8634a',
+          light: '#f0876f',
+          dark: '#d14a31',
+        },
+        amber: '#f2cc8f',
+        sage: '#81b29a',
+      },
+      fontFamily: {
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        '2xl': '20px',
+        '3xl': '24px',
+        'pill': '999px',
+      },
+    }
+  }
+}
+</script>
+<style>
+  * { font-family: 'DM Sans', system-ui, sans-serif; }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  body {
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+    color: #2d2420;
+    background: #faf8f5;
+  }
+
+  /* Floating Blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    will-change: transform;
+  }
+  .blob-coral {
+    background: #e8634a;
+    width: 420px; height: 420px;
+    animation: blobFloat1 14s ease-in-out infinite;
+  }
+  .blob-amber {
+    background: #f2cc8f;
+    width: 360px; height: 360px;
+    animation: blobFloat2 16s ease-in-out infinite;
+  }
+  .blob-sage {
+    background: #81b29a;
+    width: 380px; height: 380px;
+    animation: blobFloat3 12s ease-in-out infinite;
+  }
+
+  @keyframes blobFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(60px, -40px) scale(1.1) rotate(30deg); }
+    66% { transform: translate(-30px, 50px) scale(0.95) rotate(-20deg); }
+  }
+  @keyframes blobFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(-50px, 60px) scale(1.08) rotate(-25deg); }
+    66% { transform: translate(40px, -30px) scale(0.92) rotate(35deg); }
+  }
+  @keyframes blobFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(70px, 30px) scale(0.9) rotate(40deg); }
+    66% { transform: translate(-40px, -60px) scale(1.12) rotate(-30deg); }
+  }
+
+  /* Growing section bar */
+  .section-bar {
+    width: 0;
+    height: 4px;
+    background: #e8634a;
+    border-radius: 999px;
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .section-bar.active {
+    width: 60px;
+  }
+
+  /* Bouncy spring entrance */
+  .bounce-in {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .bounce-in.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Fade in */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger children */
+  .stagger-children .bounce-in:nth-child(1) { transition-delay: 0ms; }
+  .stagger-children .bounce-in:nth-child(2) { transition-delay: 100ms; }
+  .stagger-children .bounce-in:nth-child(3) { transition-delay: 200ms; }
+  .stagger-children .bounce-in:nth-child(4) { transition-delay: 300ms; }
+
+  /* Button ripple */
+  .btn-ripple {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-ripple::after {
+    content: '';
+    position: absolute;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .btn-ripple:active::after {
+    width: 300px; height: 300px;
+    opacity: 1;
+    transition: 0s;
+  }
+
+
+  /* Floating particles */
+  .particle {
+    position: fixed;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+  }
+
+  /* Pill input focus */
+  .pill-input {
+    border-radius: 999px;
+    border: 2px solid #e8e0d6;
+    background: #fff;
+    padding: 0.875rem 1.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+    font-size: 1rem;
+    width: 100%;
+    color: #2d2420;
+  }
+  .pill-input:focus {
+    border-color: #e8634a;
+    box-shadow: 0 0 0 4px rgba(232, 99, 74, 0.1);
+  }
+  textarea.pill-input {
+    border-radius: 20px;
+  }
+
+  /* Team avatar coral ring */
+  .team-avatar {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .team-avatar:hover {
+    box-shadow: 0 0 0 4px #e8634a;
+    transform: scale(1.05);
+  }
+
+  /* Nav pill hover */
+  .nav-pill {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .nav-pill:hover {
+    background: #f3efe9;
+    color: #e8634a;
+  }
+
+  /* Smooth scrolling */
+  html { scroll-behavior: smooth; }
+
+  /* Warm shadow utility */
+  .shadow-warm {
+    box-shadow: 0 4px 24px rgba(61, 48, 39, 0.08);
+  }
+  .shadow-warm-lg {
+    box-shadow: 0 8px 40px rgba(61, 48, 39, 0.12);
+  }
+  .shadow-warm-hover {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .shadow-warm-hover:hover {
+    box-shadow: 0 12px 48px rgba(61, 48, 39, 0.16);
+    transform: translateY(-4px);
+  }
+
+  /* Mobile nav */
+  .mobile-nav {
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+  .mobile-nav.open {
+    transform: translateX(0);
+  }
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<!-- Floating Warm Particles -->
+<div id="particles" class="fixed inset-0 pointer-events-none z-0" aria-hidden="true"></div>
+
+
+<!-- ========== NAVIGATION ========== -->
+<nav class="fixed top-0 w-full z-50 bg-brown-50/90 backdrop-blur-md border-b border-brown-200/50" role="navigation" aria-label="Main navigation">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-3 group" aria-label="CardioVera Research Home">
+        <div class="w-10 h-10 bg-coral rounded-xl flex items-center justify-center shadow-warm group-hover:scale-105 transition-transform">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#fff"/>
+            <!-- Pulse line on heart -->
+            <path d="M6 11h2l1.5-3 2 6 1.5-3H18" stroke="#e8634a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold text-brown-700 tracking-tight">CardioVera</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-1">
+        <a href="#services" class="nav-pill text-brown-500 font-medium text-sm">Services</a>
+        <a href="#about" class="nav-pill text-brown-500 font-medium text-sm">About</a>
+        <a href="#team" class="nav-pill text-brown-500 font-medium text-sm">Team</a>
+        <a href="#testimonials" class="nav-pill text-brown-500 font-medium text-sm">Testimonials</a>
+        <a href="#contact" class="nav-pill text-brown-500 font-medium text-sm">Contact</a>
+      </div>
+
+      <!-- CTA + Mobile Toggle -->
+      <div class="flex items-center gap-4">
+        <a href="#contact" class="hidden md:inline-flex btn-ripple bg-coral text-white font-medium text-sm px-6 py-2.5 rounded-pill hover:bg-coral-dark transition-colors shadow-warm">
+          Start a Conversation
+        </a>
+        <button id="mobileToggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-brown-100 transition-colors" aria-label="Open menu" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3d3027" stroke-width="2" stroke-linecap="round">
+            <line x1="4" y1="7" x2="20" y2="7"/>
+            <line x1="4" y1="12" x2="20" y2="12"/>
+            <line x1="4" y1="17" x2="20" y2="17"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Nav Panel -->
+  <div id="mobileNav" class="mobile-nav fixed top-0 right-0 h-full w-80 bg-brown-50 shadow-2xl z-50 p-8 md:hidden" role="dialog" aria-label="Mobile navigation">
+    <button id="mobileClose" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-xl hover:bg-brown-100" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3d3027" stroke-width="2" stroke-linecap="round">
+        <line x1="6" y1="6" x2="18" y2="18"/>
+        <line x1="6" y1="18" x2="18" y2="6"/>
+      </svg>
+    </button>
+    <div class="flex flex-col gap-2 mt-16">
+      <a href="#services" class="nav-pill text-brown-600 font-medium text-lg py-3 px-4 mobile-link">Services</a>
+      <a href="#about" class="nav-pill text-brown-600 font-medium text-lg py-3 px-4 mobile-link">About</a>
+      <a href="#team" class="nav-pill text-brown-600 font-medium text-lg py-3 px-4 mobile-link">Team</a>
+      <a href="#testimonials" class="nav-pill text-brown-600 font-medium text-lg py-3 px-4 mobile-link">Testimonials</a>
+      <a href="#contact" class="nav-pill text-brown-600 font-medium text-lg py-3 px-4 mobile-link">Contact</a>
+      <a href="#contact" class="btn-ripple bg-coral text-white font-medium text-center py-3 px-6 rounded-pill mt-4 hover:bg-coral-dark transition-colors">Start a Conversation</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" aria-label="Hero">
+  <!-- Warm gradient background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-brown-50 via-brown-100 to-brown-50" aria-hidden="true"></div>
+
+  <!-- Faint medical team bg image (simulated with gradient overlay) -->
+  <div class="absolute inset-0 opacity-[0.04]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22><circle cx=%22100%22 cy=%22150%22 r=%2230%22 fill=%22%233d3027%22/><circle cx=%22200%22 cy=%22140%22 r=%2230%22 fill=%22%233d3027%22/><circle cx=%22300%22 cy=%22150%22 r=%2230%22 fill=%22%233d3027%22/><rect x=%2270%22 y=%22180%22 width=%2260%22 height=%2280%22 rx=%2210%22 fill=%22%233d3027%22/><rect x=%22170%22 y=%22170%22 width=%2260%22 height=%2290%22 rx=%2210%22 fill=%22%233d3027%22/><rect x=%22270%22 y=%22180%22 width=%2260%22 height=%2280%22 rx=%2210%22 fill=%22%233d3027%22/></svg>'); background-size: 400px; background-repeat: repeat;" aria-hidden="true"></div>
+
+  <!-- Floating blobs -->
+  <div class="blob blob-coral" style="top: 10%; left: 15%;" aria-hidden="true"></div>
+  <div class="blob blob-amber" style="top: 50%; right: 10%;" aria-hidden="true"></div>
+  <div class="blob blob-sage" style="bottom: 10%; left: 40%;" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-6 text-center py-20 lg:py-32">
+    <div class="fade-in">
+      <div class="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm rounded-pill px-5 py-2 mb-8 shadow-warm">
+        <span class="w-2 h-2 bg-coral rounded-full animate-pulse"></span>
+        <span class="text-sm font-medium text-brown-500">Specialized Cardiovascular CRO</span>
+      </div>
+    </div>
+
+    <h1 class="fade-in text-5xl md:text-6xl lg:text-7xl font-bold text-brown-700 leading-[1.1] mb-6 tracking-tight">
+      Where Heart Science<br>
+      <span class="text-coral">Meets Human Care</span>
+    </h1>
+
+    <p class="fade-in text-lg md:text-xl text-brown-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+      CardioVera Research partners with sponsors to design, execute, and deliver cardiovascular clinical trials with precision, warmth, and unwavering commitment to patient outcomes.
+    </p>
+
+    <div class="fade-in flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#contact" class="btn-ripple bg-coral text-white font-medium px-8 py-4 rounded-pill text-lg hover:bg-coral-dark transition-all shadow-warm-lg hover:shadow-xl">
+        Partner With Us
+      </a>
+      <a href="#services" class="btn-ripple bg-white text-brown-600 font-medium px-8 py-4 rounded-pill text-lg border-2 border-brown-200 hover:border-coral hover:text-coral transition-all shadow-warm">
+        Explore Services
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STATS ========== -->
+<section class="relative z-10 -mt-16 mb-12 px-6" aria-label="Key statistics">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 stagger-children">
+      <!-- Stat 1 -->
+      <div class="bounce-in bg-white rounded-pill py-5 px-6 shadow-warm text-center shadow-warm-hover cursor-default">
+        <div class="text-3xl md:text-4xl font-bold text-coral mb-1">150+</div>
+        <div class="text-sm text-brown-500 font-medium">Completed Trials</div>
+      </div>
+      <!-- Stat 2 -->
+      <div class="bounce-in bg-white rounded-pill py-5 px-6 shadow-warm text-center shadow-warm-hover cursor-default">
+        <div class="text-3xl md:text-4xl font-bold text-coral mb-1">40+</div>
+        <div class="text-sm text-brown-500 font-medium">Sponsor Partners</div>
+      </div>
+      <!-- Stat 3 -->
+      <div class="bounce-in bg-white rounded-pill py-5 px-6 shadow-warm text-center shadow-warm-hover cursor-default">
+        <div class="text-3xl md:text-4xl font-bold text-coral mb-1">25+</div>
+        <div class="text-sm text-brown-500 font-medium">Years Experience</div>
+      </div>
+      <!-- Stat 4 -->
+      <div class="bounce-in bg-white rounded-pill py-5 px-6 shadow-warm text-center shadow-warm-hover cursor-default">
+        <div class="text-3xl md:text-4xl font-bold text-coral mb-1">98%</div>
+        <div class="text-sm text-brown-500 font-medium">Retention Rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section id="services" class="py-24 lg:py-32 px-6 relative" aria-label="Our services">
+  <div class="max-w-7xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16 fade-in">
+      <div class="section-bar mx-auto mb-6"></div>
+      <h2 class="text-4xl md:text-5xl font-bold text-brown-700 mb-4">What We Do Best</h2>
+      <p class="text-lg text-brown-500 max-w-2xl mx-auto">End-to-end cardiovascular trial expertise, from first protocol draft to final regulatory submission.</p>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
+      <!-- Service 1 -->
+      <div class="bounce-in bg-white rounded-2xl p-8 shadow-warm shadow-warm-hover">
+        <div class="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 14l2 2 4-4" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-brown-700 mb-3">Clinical Trial Management</h3>
+        <p class="text-brown-500 leading-relaxed">Full-service trial oversight from site selection through database lock, with dedicated cardiovascular project teams ensuring timelines and quality at every stage.</p>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="bounce-in bg-white rounded-2xl p-8 shadow-warm shadow-warm-hover">
+        <div class="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-brown-700 mb-3">Regulatory Strategy</h3>
+        <p class="text-brown-500 leading-relaxed">Navigate FDA, EMA, and global regulatory pathways with confidence. Our team crafts submission strategies tailored to cardiovascular therapeutic endpoints.</p>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="bounce-in bg-white rounded-2xl p-8 shadow-warm shadow-warm-hover">
+        <div class="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-brown-700 mb-3">Cardiac Safety & Monitoring</h3>
+        <p class="text-brown-500 leading-relaxed">Centralized ECG analysis, DSMB coordination, and cardiac adjudication with real-time monitoring dashboards built for cardiovascular risk assessment.</p>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="bounce-in bg-white rounded-2xl p-8 shadow-warm shadow-warm-hover">
+        <div class="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke="#e8634a" stroke-width="2"/>
+            <path d="M3 9h18M9 21V9" stroke="#e8634a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-brown-700 mb-3">Biostatistics & Data Management</h3>
+        <p class="text-brown-500 leading-relaxed">CDISC-compliant data pipelines and advanced statistical modeling for MACE endpoints, survival analysis, and adaptive cardiovascular trial designs.</p>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="bounce-in bg-white rounded-2xl p-8 shadow-warm shadow-warm-hover">
+        <div class="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="7" r="4" stroke="#e8634a" stroke-width="2"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-brown-700 mb-3">Site Network & Patient Recruitment</h3>
+        <p class="text-brown-500 leading-relaxed">Proprietary cardiovascular site network spanning 200+ clinical centers. Data-driven enrollment strategies to accelerate recruitment while meeting diversity goals.</p>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="bounce-in bg-white rounded-2xl p-8 shadow-warm shadow-warm-hover">
+        <div class="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mb-6">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 12l2 2 4-4" stroke="#e8634a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-brown-700 mb-3">Medical Affairs & Publications</h3>
+        <p class="text-brown-500 leading-relaxed">KOL engagement, medical writing, and publication strategy ensuring your cardiovascular data reaches the right journals and clinical audiences.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ABOUT ========== -->
+<section id="about" class="py-24 lg:py-32 px-6 bg-brown-100" aria-label="About CardioVera">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Image -->
+      <div class="fade-in">
+        <div class="relative rounded-3xl overflow-hidden shadow-warm-lg aspect-[4/3]">
+          <!-- Placeholder image with warm gradient -->
+          <div class="absolute inset-0 bg-gradient-to-br from-coral/20 via-amber/30 to-sage/20"></div>
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 600 450" aria-hidden="true">
+            <!-- Abstract heart/medical illustration -->
+            <circle cx="300" cy="200" r="120" fill="#e8634a" opacity="0.15"/>
+            <circle cx="250" cy="180" r="60" fill="#e8634a" opacity="0.2"/>
+            <circle cx="350" cy="180" r="60" fill="#e8634a" opacity="0.2"/>
+            <path d="M300 300 L250 240 Q200 180 250 140 Q280 120 300 160 Q320 120 350 140 Q400 180 350 240 Z" fill="#e8634a" opacity="0.25"/>
+            <!-- People silhouettes -->
+            <circle cx="160" cy="370" r="20" fill="#3d3027" opacity="0.15"/>
+            <rect x="145" y="390" width="30" height="40" rx="8" fill="#3d3027" opacity="0.15"/>
+            <circle cx="300" cy="360" r="22" fill="#3d3027" opacity="0.15"/>
+            <rect x="283" y="382" width="34" height="44" rx="8" fill="#3d3027" opacity="0.15"/>
+            <circle cx="440" cy="370" r="20" fill="#3d3027" opacity="0.15"/>
+            <rect x="425" y="390" width="30" height="40" rx="8" fill="#3d3027" opacity="0.15"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="fade-in">
+        <div class="section-bar mb-6"></div>
+        <h2 class="text-4xl md:text-5xl font-bold text-brown-700 mb-6 leading-tight">Built for Cardiovascular Complexity</h2>
+        <p class="text-lg text-brown-500 mb-8 leading-relaxed">
+          Cardiovascular trials demand specialized expertise. From complex MACE endpoint adjudication to adaptive dose-finding designs, CardioVera was founded by cardiologists and clinical researchers who understand the unique challenges of heart-focused drug development.
+        </p>
+        <p class="text-brown-500 mb-10 leading-relaxed">
+          We bring together deep therapeutic knowledge, operational excellence, and a genuine commitment to improving patient outcomes in every trial we run.
+        </p>
+
+        <!-- Checkmark items -->
+        <div class="space-y-5">
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 bg-coral/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" stroke="#e8634a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <span class="font-bold text-brown-700">Cardiology-First Approach</span>
+              <p class="text-brown-500 text-sm mt-1">Every protocol reviewed by board-certified cardiologists before activation.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 bg-coral/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" stroke="#e8634a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <span class="font-bold text-brown-700">Regulatory Track Record</span>
+              <p class="text-brown-500 text-sm mt-1">24 successful FDA cardiovascular submissions in the last five years.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 bg-coral/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" stroke="#e8634a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <span class="font-bold text-brown-700">Global Site Network</span>
+              <p class="text-brown-500 text-sm mt-1">200+ cardiovascular-specialized centers across 18 countries.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 bg-coral/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" stroke="#e8634a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <span class="font-bold text-brown-700">Patient-Centered Design</span>
+              <p class="text-brown-500 text-sm mt-1">Decentralized and hybrid trial capabilities to reduce patient burden.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TESTIMONIALS ========== -->
+<section id="testimonials" class="py-24 lg:py-32 px-6 bg-brown-100" aria-label="Testimonials">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16 fade-in">
+      <div class="section-bar mx-auto mb-6"></div>
+      <h2 class="text-4xl md:text-5xl font-bold text-brown-700 mb-4">What Our Partners Say</h2>
+    </div>
+
+    <!-- Testimonial Carousel -->
+    <div id="testimonialCarousel" class="relative">
+      <!-- Testimonial 1 -->
+      <div class="testimonial-slide fade-in">
+        <div class="bg-white rounded-3xl p-10 md:p-14 shadow-warm relative">
+          <div class="absolute left-10 md:left-14 top-10 md:top-14 w-1 h-16 bg-coral rounded-pill"></div>
+          <blockquote class="pl-8">
+            <p class="text-xl md:text-2xl text-brown-700 italic leading-relaxed mb-8">
+              "CardioVera transformed our Phase III heart failure program. Their deep understanding of cardiovascular endpoints and regulatory nuance saved us months of back-and-forth with the FDA. They feel less like a vendor and more like an extension of our team."
+            </p>
+            <footer class="text-center">
+              <div class="font-bold text-brown-700 text-lg">Dr. Sarah Chen</div>
+              <div class="text-brown-500 text-sm">VP of Clinical Development, NovaCor Therapeutics</div>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-slide fade-in hidden">
+        <div class="bg-white rounded-3xl p-10 md:p-14 shadow-warm relative">
+          <div class="absolute left-10 md:left-14 top-10 md:top-14 w-1 h-16 bg-coral rounded-pill"></div>
+          <blockquote class="pl-8">
+            <p class="text-xl md:text-2xl text-brown-700 italic leading-relaxed mb-8">
+              "What sets CardioVera apart is their ability to anticipate regulatory challenges before they become roadblocks. Their cardiac safety monitoring infrastructure is genuinely best-in-class, and the team's responsiveness is remarkable."
+            </p>
+            <footer class="text-center">
+              <div class="font-bold text-brown-700 text-lg">Dr. James Rivera</div>
+              <div class="text-brown-500 text-sm">Chief Medical Officer, Aorta Biosciences</div>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- Navigation dots -->
+      <div class="flex items-center justify-center gap-3 mt-8">
+        <button class="testimonial-dot w-3 h-3 rounded-full bg-coral transition-all" data-index="0" aria-label="View testimonial 1"></button>
+        <button class="testimonial-dot w-3 h-3 rounded-full bg-brown-300 transition-all" data-index="1" aria-label="View testimonial 2"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TEAM ========== -->
+<section id="team" class="py-24 lg:py-32 px-6" aria-label="Our team">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 fade-in">
+      <div class="section-bar mx-auto mb-6"></div>
+      <h2 class="text-4xl md:text-5xl font-bold text-brown-700 mb-4">Meet Our Leaders</h2>
+      <p class="text-lg text-brown-500 max-w-2xl mx-auto">Cardiologists, trialists, and clinical scientists united by a shared mission to advance heart health.</p>
+    </div>
+
+    <!-- Team Grid -->
+    <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto stagger-children">
+      <!-- Team Member 1 -->
+      <div class="bounce-in bg-white rounded-3xl p-10 shadow-warm shadow-warm-hover">
+        <div class="flex flex-col items-center text-center">
+          <!-- Avatar -->
+          <div class="team-avatar w-24 h-24 rounded-full flex items-center justify-center mb-6 cursor-pointer" style="background: #3d3027;">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="24" cy="18" r="9" fill="#e8634a"/>
+              <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#e8634a"/>
+              <text x="24" y="22" text-anchor="middle" fill="#3d3027" font-size="11" font-weight="700" font-family="DM Sans">LM</text>
+              <text x="24" y="42" text-anchor="middle" fill="#3d3027" font-size="1" font-weight="700" font-family="DM Sans"></text>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-brown-700 mb-1">Dr. Lucia Marchetti</h3>
+          <div class="text-coral font-medium text-sm mb-4">Chief Executive Officer</div>
+          <p class="text-brown-500 text-sm leading-relaxed">Board-certified interventional cardiologist with 20+ years directing global cardiovascular programs. Former clinical lead at two top-10 pharma companies. Passionate about translating science into patient impact.</p>
+        </div>
+      </div>
+
+      <!-- Team Member 2 -->
+      <div class="bounce-in bg-white rounded-3xl p-10 shadow-warm shadow-warm-hover">
+        <div class="flex flex-col items-center text-center">
+          <div class="team-avatar w-24 h-24 rounded-full flex items-center justify-center mb-6 cursor-pointer" style="background: #3d3027;">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="24" cy="18" r="9" fill="#e8634a"/>
+              <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#e8634a"/>
+              <text x="24" y="22" text-anchor="middle" fill="#3d3027" font-size="11" font-weight="700" font-family="DM Sans">CO</text>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-brown-700 mb-1">Dr. Chidi Okafor</h3>
+          <div class="text-coral font-medium text-sm mb-4">Chief Medical Officer</div>
+          <p class="text-brown-500 text-sm leading-relaxed">Cardiac electrophysiologist and clinical pharmacologist. Led safety monitoring for 30+ cardiovascular trials across four continents. Expert in MACE endpoint adjudication and cardiac safety signal detection.</p>
+        </div>
+      </div>
+
+      <!-- Team Member 3 -->
+      <div class="bounce-in bg-white rounded-3xl p-10 shadow-warm shadow-warm-hover">
+        <div class="flex flex-col items-center text-center">
+          <div class="team-avatar w-24 h-24 rounded-full flex items-center justify-center mb-6 cursor-pointer" style="background: #3d3027;">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="24" cy="18" r="9" fill="#e8634a"/>
+              <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#e8634a"/>
+              <text x="24" y="22" text-anchor="middle" fill="#3d3027" font-size="11" font-weight="700" font-family="DM Sans">EL</text>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-brown-700 mb-1">Dr. Erik Lindqvist</h3>
+          <div class="text-coral font-medium text-sm mb-4">VP of Regulatory Affairs</div>
+          <p class="text-brown-500 text-sm leading-relaxed">15 years of regulatory strategy experience across FDA, EMA, and PMDA. Specializes in cardiovascular device-drug combination products and breakthrough therapy designations for novel cardiac therapies.</p>
+        </div>
+      </div>
+
+      <!-- Team Member 4 -->
+      <div class="bounce-in bg-white rounded-3xl p-10 shadow-warm shadow-warm-hover">
+        <div class="flex flex-col items-center text-center">
+          <div class="team-avatar w-24 h-24 rounded-full flex items-center justify-center mb-6 cursor-pointer" style="background: #3d3027;">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="24" cy="18" r="9" fill="#e8634a"/>
+              <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#e8634a"/>
+              <text x="24" y="22" text-anchor="middle" fill="#3d3027" font-size="11" font-weight="700" font-family="DM Sans">PV</text>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-brown-700 mb-1">Dr. Priya Venkatesh</h3>
+          <div class="text-coral font-medium text-sm mb-4">Head of Biostatistics</div>
+          <p class="text-brown-500 text-sm leading-relaxed">PhD in biostatistics from Johns Hopkins. Pioneered adaptive trial designs for cardiovascular outcomes research. Published 40+ papers on survival analysis and Bayesian methods for cardiac clinical trials.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section id="contact" class="py-24 lg:py-32 px-6" aria-label="Contact us">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-16">
+      <!-- Left: Info -->
+      <div class="fade-in">
+        <div class="section-bar mb-6"></div>
+        <h2 class="text-4xl md:text-5xl font-bold text-brown-700 mb-6 leading-tight">Let's Start a Conversation</h2>
+        <p class="text-lg text-brown-500 mb-10 leading-relaxed">
+          Whether you're planning a Phase I proof-of-concept or a global Phase III outcomes trial, we'd love to learn about your program and explore how CardioVera can help.
+        </p>
+
+        <div class="space-y-6">
+          <!-- Address -->
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-coral/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="#e8634a" stroke-width="2"/>
+                <circle cx="12" cy="10" r="3" stroke="#e8634a" stroke-width="2"/>
+              </svg>
+            </div>
+            <div>
+              <div class="font-bold text-brown-700 mb-1">Visit Us</div>
+              <p class="text-brown-500">200 Cardiac Research Boulevard, Suite 400<br>Boston, MA 02115</p>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-coral/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="#e8634a" stroke-width="2"/>
+                <path d="M22 7l-10 7L2 7" stroke="#e8634a" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="font-bold text-brown-700 mb-1">Email</div>
+              <a href="mailto:partnerships@cardiovera.com" class="text-coral hover:text-coral-dark transition-colors">partnerships@cardiovera.com</a>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-coral/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="#e8634a" stroke-width="2"/>
+              </svg>
+            </div>
+            <div>
+              <div class="font-bold text-brown-700 mb-1">Call</div>
+              <a href="tel:+16175550142" class="text-coral hover:text-coral-dark transition-colors">+1 (617) 555-0142</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="fade-in">
+        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-warm-lg">
+          <form id="contactForm" novalidate>
+            <div class="grid sm:grid-cols-2 gap-5 mb-5">
+              <div>
+                <label for="firstName" class="block text-sm font-medium text-brown-700 mb-2">First Name</label>
+                <input type="text" id="firstName" name="firstName" class="pill-input" placeholder="Your first name" required aria-required="true">
+              </div>
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-brown-700 mb-2">Last Name</label>
+                <input type="text" id="lastName" name="lastName" class="pill-input" placeholder="Your last name" required aria-required="true">
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <label for="email" class="block text-sm font-medium text-brown-700 mb-2">Email</label>
+              <input type="email" id="email" name="email" class="pill-input" placeholder="you@company.com" required aria-required="true">
+            </div>
+
+            <div class="mb-5">
+              <label for="company" class="block text-sm font-medium text-brown-700 mb-2">Company</label>
+              <input type="text" id="company" name="company" class="pill-input" placeholder="Your organization">
+            </div>
+
+            <div class="mb-5">
+              <label for="service" class="block text-sm font-medium text-brown-700 mb-2">Service of Interest</label>
+              <select id="service" name="service" class="pill-input appearance-none cursor-pointer" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236b5e55%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 1.5rem center;">
+                <option value="">Select a service...</option>
+                <option value="clinical-trial">Clinical Trial Management</option>
+                <option value="regulatory">Regulatory Strategy</option>
+                <option value="cardiac-safety">Cardiac Safety & Monitoring</option>
+                <option value="biostatistics">Biostatistics & Data Management</option>
+                <option value="recruitment">Site Network & Recruitment</option>
+                <option value="medical-affairs">Medical Affairs & Publications</option>
+              </select>
+            </div>
+
+            <div class="mb-8">
+              <label for="message" class="block text-sm font-medium text-brown-700 mb-2">Tell Us About Your Program</label>
+              <textarea id="message" name="message" rows="4" class="pill-input resize-none" placeholder="Briefly describe your trial or program..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-ripple w-full bg-coral text-white font-bold py-4 rounded-pill text-lg hover:bg-coral-dark transition-all shadow-warm-lg hover:shadow-xl">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="bg-brown-700 py-16 px-6" role="contentinfo">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-4 gap-12 mb-12">
+      <!-- Brand -->
+      <div class="md:col-span-1">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 bg-coral rounded-xl flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#fff"/>
+              <path d="M6 11h2l1.5-3 2 6 1.5-3H18" stroke="#e8634a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <span class="text-xl font-bold text-white tracking-tight">CardioVera</span>
+        </div>
+        <p class="text-brown-400 text-sm leading-relaxed">Advancing cardiovascular therapeutics through specialized clinical research partnerships.</p>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <h4 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Services</h4>
+        <ul class="space-y-3">
+          <li><a href="#services" class="text-brown-400 text-sm hover:text-coral transition-colors">Clinical Trial Management</a></li>
+          <li><a href="#services" class="text-brown-400 text-sm hover:text-coral transition-colors">Regulatory Strategy</a></li>
+          <li><a href="#services" class="text-brown-400 text-sm hover:text-coral transition-colors">Cardiac Safety</a></li>
+          <li><a href="#services" class="text-brown-400 text-sm hover:text-coral transition-colors">Biostatistics</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h4 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Company</h4>
+        <ul class="space-y-3">
+          <li><a href="#about" class="text-brown-400 text-sm hover:text-coral transition-colors">About Us</a></li>
+          <li><a href="#team" class="text-brown-400 text-sm hover:text-coral transition-colors">Leadership</a></li>
+          <li><a href="#testimonials" class="text-brown-400 text-sm hover:text-coral transition-colors">Testimonials</a></li>
+          <li><a href="#" class="text-brown-400 text-sm hover:text-coral transition-colors">Careers</a></li>
+        </ul>
+      </div>
+
+      <!-- Connect -->
+      <div>
+        <h4 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Connect</h4>
+        <ul class="space-y-3">
+          <li><a href="#contact" class="text-brown-400 text-sm hover:text-coral transition-colors">Contact Us</a></li>
+          <li><a href="mailto:partnerships@cardiovera.com" class="text-brown-400 text-sm hover:text-coral transition-colors">partnerships@cardiovera.com</a></li>
+          <li><a href="tel:+16175550142" class="text-brown-400 text-sm hover:text-coral transition-colors">+1 (617) 555-0142</a></li>
+        </ul>
+        <!-- Social -->
+        <div class="flex items-center gap-3 mt-6">
+          <a href="#" class="w-10 h-10 bg-brown-600/50 rounded-full flex items-center justify-center hover:bg-coral transition-colors" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/>
+            </svg>
+          </a>
+          <a href="#" class="w-10 h-10 bg-brown-600/50 rounded-full flex items-center justify-center hover:bg-coral transition-colors" aria-label="Twitter">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-brown-600/30 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-brown-400 text-sm">&copy; 2026 CardioVera Research. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="#" class="text-brown-400 text-sm hover:text-coral transition-colors">Privacy Policy</a>
+        <a href="#" class="text-brown-400 text-sm hover:text-coral transition-colors">Terms of Service</a>
+        <a href="#" class="text-brown-400 text-sm hover:text-coral transition-colors">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== SCRIPTS ========== -->
+<script>
+(function() {
+  'use strict';
+
+  // ---- Mobile Navigation ----
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  const mobileClose = document.getElementById('mobileClose');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  function openMobileNav() {
+    mobileNav.classList.add('open');
+    mobileToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileNav() {
+    mobileNav.classList.remove('open');
+    mobileToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  mobileToggle.addEventListener('click', openMobileNav);
+  mobileClose.addEventListener('click', closeMobileNav);
+  mobileLinks.forEach(link => link.addEventListener('click', closeMobileNav));
+
+  // ---- Scroll Animations (IntersectionObserver) ----
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // If the element is a section-bar, activate it
+        const bar = entry.target.querySelector('.section-bar');
+        if (bar) bar.classList.add('active');
+        // Also check if the element itself is a section-bar
+        if (entry.target.classList.contains('section-bar')) {
+          entry.target.classList.add('active');
+        }
+      }
+    });
+  }, observerOptions);
+
+  // Observe fade-in and bounce-in elements
+  document.querySelectorAll('.fade-in, .bounce-in').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Observe section bars
+  document.querySelectorAll('.section-bar').forEach(el => {
+    observer.observe(el);
+  });
+
+  // ---- Testimonial Carousel ----
+  const slides = document.querySelectorAll('.testimonial-slide');
+  const dots = document.querySelectorAll('.testimonial-dot');
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('hidden', i !== index);
+      if (i === index) {
+        slide.querySelector('.bg-white').style.opacity = '0';
+        slide.querySelector('.bg-white').style.transform = 'translateY(20px)';
+        requestAnimationFrame(() => {
+          slide.querySelector('.bg-white').style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          slide.querySelector('.bg-white').style.opacity = '1';
+          slide.querySelector('.bg-white').style.transform = 'translateY(0)';
+        });
+      }
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('bg-coral', i === index);
+      dot.classList.toggle('bg-brown-300', i !== index);
+      dot.style.width = i === index ? '24px' : '12px';
+      dot.style.borderRadius = '999px';
+    });
+    currentSlide = index;
+  }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      showSlide(parseInt(dot.dataset.index));
+    });
+  });
+
+  // Auto-rotate testimonials
+  setInterval(() => {
+    showSlide((currentSlide + 1) % slides.length);
+  }, 7000);
+
+  // Initialize first dot width
+  if (dots[0]) {
+    dots[0].style.width = '24px';
+    dots[0].style.borderRadius = '999px';
+  }
+
+  // ---- Floating Warm Particles ----
+  const particleContainer = document.getElementById('particles');
+  const particleCount = 15;
+  const particleColors = ['#e8634a', '#f2cc8f', '#81b29a', '#d4c8b8'];
+
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+    const size = Math.random() * 4 + 3;
+    const color = particleColors[Math.floor(Math.random() * particleColors.length)];
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+    particle.style.background = color;
+    particle.style.left = Math.random() * 100 + 'vw';
+    particle.style.top = Math.random() * 100 + 'vh';
+    particle.style.opacity = '0';
+
+    const duration = Math.random() * 20 + 15;
+    const delay = Math.random() * 10;
+    particle.style.animation = `particleFloat ${duration}s ${delay}s ease-in-out infinite`;
+
+    particleContainer.appendChild(particle);
+  }
+
+  // Add particle animation keyframes dynamically
+  const particleStyle = document.createElement('style');
+  particleStyle.textContent = `
+    @keyframes particleFloat {
+      0%, 100% {
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      10% { opacity: 0.15; }
+      50% {
+        transform: translate(${Math.random() > 0.5 ? '' : '-'}${Math.random() * 100 + 50}px, -${Math.random() * 200 + 100}px);
+        opacity: 0.2;
+      }
+      90% { opacity: 0.1; }
+    }
+  `;
+  document.head.appendChild(particleStyle);
+
+  // Re-randomize each particle animation
+  document.querySelectorAll('.particle').forEach(p => {
+    const dx = (Math.random() - 0.5) * 200;
+    const dy = -(Math.random() * 300 + 100);
+    const dur = Math.random() * 25 + 15;
+    const del = Math.random() * 15;
+    p.style.animation = 'none';
+    p.offsetHeight; // reflow
+    const keyframeName = 'pf' + Math.random().toString(36).substr(2, 5);
+    const kf = document.createElement('style');
+    kf.textContent = `
+      @keyframes ${keyframeName} {
+        0%, 100% { transform: translate(0, 0); opacity: 0; }
+        15% { opacity: 0.15; }
+        50% { transform: translate(${dx}px, ${dy}px); opacity: 0.2; }
+        85% { opacity: 0.1; }
+      }
+    `;
+    document.head.appendChild(kf);
+    p.style.animation = `${keyframeName} ${dur}s ${del}s ease-in-out infinite`;
+  });
+
+  // ---- Button Ripple Effect ----
+  document.querySelectorAll('.btn-ripple').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const ripple = document.createElement('span');
+      ripple.style.cssText = `
+        position: absolute;
+        width: 0; height: 0;
+        background: rgba(255,255,255,0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        left: ${x}px; top: ${y}px;
+        pointer-events: none;
+      `;
+      this.appendChild(ripple);
+
+      requestAnimationFrame(() => {
+        ripple.style.transition = 'width 0.6s ease, height 0.6s ease, opacity 0.6s ease';
+        ripple.style.width = '300px';
+        ripple.style.height = '300px';
+        ripple.style.opacity = '0';
+      });
+
+      setTimeout(() => ripple.remove(), 700);
+    });
+  });
+
+  // ---- Contact Form ----
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    let valid = true;
+
+    // Simple validation
+    [firstName, lastName, email].forEach((val, i) => {
+      const fields = ['firstName', 'lastName', 'email'];
+      const el = document.getElementById(fields[i]);
+      if (!val) {
+        el.style.borderColor = '#e8634a';
+        valid = false;
+      } else {
+        el.style.borderColor = '#e8e0d6';
+      }
+    });
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      document.getElementById('email').style.borderColor = '#e8634a';
+      valid = false;
+    }
+
+    if (valid) {
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.textContent = 'Message Sent!';
+      btn.style.background = '#81b29a';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+        form.reset();
+      }, 3000);
+    }
+  });
+
+  // ---- Navbar background on scroll ----
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      nav.style.boxShadow = '0 4px 24px rgba(61, 48, 39, 0.08)';
+    } else {
+      nav.style.boxShadow = 'none';
+    }
+  });
+
+})();
+</script>
+
+<!-- Theme Switcher -->
+<style>
+#themeSwitcher{position:fixed;right:1.25rem;top:50%;transform:translateY(-50%);z-index:10001;display:flex;flex-direction:column;align-items:center;gap:0.4rem;padding:0.75rem 0.5rem;background:rgba(250,248,245,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(232,99,74,0.12);border-radius:100px;box-shadow:0 4px 24px rgba(45,36,32,0.06)}
+#themeSwitcher a{text-decoration:none;display:flex;align-items:center;justify-content:center}
+.ts-home{width:28px;height:28px;color:#b5a593;transition:color 0.3s cubic-bezier(0.34,1.56,0.64,1),transform 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.ts-home:hover{color:#e8634a;transform:scale(1.1)}
+.ts-home svg{width:14px;height:14px}
+.ts-sep{width:14px;height:1px;background:rgba(232,99,74,0.15)}
+.ts-dot{width:28px;height:28px;position:relative;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+.ts-dot:hover{transform:scale(1.1)}
+.ts-dot-inner{width:10px;height:10px;border-radius:50%;border:1px solid rgba(45,36,32,0.1);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s}
+.ts-dot:hover .ts-dot-inner{transform:scale(1.35)}
+.ts-dot.active .ts-dot-inner{transform:scale(1.5);box-shadow:0 0 0 2.5px rgba(232,99,74,0.25)}
+.ts-tip{position:absolute;right:calc(100% + 10px);white-space:nowrap;font-family:'DM Sans',system-ui,sans-serif;font-size:0.6rem;font-weight:500;letter-spacing:0.02em;color:#2d2420;background:rgba(250,248,245,0.98);padding:4px 10px;border-radius:999px;box-shadow:0 2px 10px rgba(45,36,32,0.08);opacity:0;transform:translateX(4px) scale(0.95);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none}
+.ts-dot:hover .ts-tip{opacity:1;transform:translateX(0) scale(1)}
+@media(max-width:768px){#themeSwitcher{right:0.6rem;padding:0.5rem 0.3rem;gap:0.25rem}.ts-dot{width:24px;height:24px}.ts-dot-inner{width:8px;height:8px}.ts-tip{display:none}.ts-home{width:24px;height:24px}.ts-home svg{width:12px;height:12px}}
+</style>
+<nav id="themeSwitcher" aria-label="Theme switcher">
+  <a href="index.html" class="ts-home" title="Back to Gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></a>
+  <div class="ts-sep"></div>
+  <a href="theme1-corporate.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#1e3a5f 50%,#c9a84c 50%)"></span><span class="ts-tip">01 — Precision & Prestige</span></a>
+  <a href="theme2-biotech.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0f172a 50%,#06b6d4 50%)"></span><span class="ts-tip">02 — Digital Pulse</span></a>
+  <a href="theme3-warm.html" class="ts-dot active"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#faf8f5 50%,#e8634a 50%)"></span><span class="ts-tip">03 — Organic Flow</span></a>
+  <a href="theme4-brutalist.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0a0a0a 50%,#ff2d2d 50%)"></span><span class="ts-tip">04 — Raw & Bold</span></a>
+  <a href="theme5-bioluminescent.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#06060f 50%,#00ff87 50%)"></span><span class="ts-tip">05 — Living Light</span></a>
+</nav>
+</body>
+</html>
