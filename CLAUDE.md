@@ -26,7 +26,7 @@ CardioVera Research — a cardiovascular CRO (Contract Research Organization) ma
   - **Design**: Deep navy #0A1628 + crimson #C41E3A + green #00FF88, Cormorant Garamond + IBM Plex Mono
   - **Features**: Cardiac lattice visualization, data timeline, core lab services, glassmorphism
   - **Content**: Uses Tracescribe Research branding (founded 1997) for this specific implementation
-- `theme3-warm.html` — "Organic Flow" (coral #e8634a on cream #faf8f5, DM Sans, floating blobs, spring animations)
+- `theme3-warm.html` — "Organic Flow" (coral #e8634a + amber #f2cc8f + sage #81b29a on cream #faf8f5, DM Sans, enhanced morphing blobs with SVG filter turbulence, smooth parallax scroll effects (slow/medium/fast layers), magnetic button effects with 90px pull radius, 3D card tilt with perspective, smooth cursor glow with requestAnimationFrame interpolation, spring physics easing (cubic-bezier 0.34, 1.56, 0.64, 1), refined stagger animations (120ms delays), paper texture overlay, advanced glassmorphism nav (24px blur + saturate), enhanced shadow system, floating particles with organic motion. Polished to match execution quality of themes 1, 2, & 5.)
 - `theme4-brutalist.html` — "Raw & Bold" (black + red #ff2d2d, Instrument Serif + Azeret Mono, zero border-radius, marquee, glitch text)
 - `5/` — **"Natural Authority"** (multi-file architecture)
   - `5/index.html` — Main HTML (490+ lines)
@@ -55,8 +55,8 @@ Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and J
 - `IntersectionObserver` for scroll-triggered fade/bounce animations
 - Mobile nav toggle with `aria-expanded`
 - Contact form with `preventDefault`, validation, button text feedback, and reset
-- `requestAnimationFrame` loops for continuous animations (cursor effects in theme1, theme5)
-- Theme1 specific: magnetic button effects (cursor distance tracking), enhanced 3D card tilt (mousemove perspective rotation)
+- `requestAnimationFrame` loops for continuous animations (cursor glow in theme1, theme3, theme5; parallax in theme3)
+- **Theme1 & Theme3 specific**: magnetic button effects (cursor distance tracking with strength-based pull), enhanced 3D card tilt (mousemove perspective rotation with rotateX/rotateY), smooth cursor glow interpolation (lerp-based tracking)
 
 **Theme Switcher (`#themeSwitcher`)** — a floating vertical nav fixed to the right edge of every theme page:
 - Grid icon links back to `index.html` (or `../index.html` for themes in subfolders), 5 split-gradient dots link to each theme
@@ -73,6 +73,7 @@ Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and J
 - All themes use inline SVG icons (no icon libraries)
 - **Theme2 ("Clinical Evidence")**: Multi-file structure in `/2/` folder, deep navy + crimson + green, Cormorant Garamond serif + IBM Plex Mono, cardiac lattice visualization, data timeline section, grain texture overlay. Uses Tracescribe Research branding in content.
 - **Theme5 ("Natural Authority")**: Multi-file structure in `/5/` folder, warm cream canvas + teal + terracotta, DM Serif Display + Manrope + IBM Plex Mono, 3D tilt cards, magnetic button effects, parallax mesh animations, paper texture grain overlay, floating hero panel. Uses Tracescribe Research branding in content.
+- **Theme3 ("Organic Flow")**: Single-file architecture, warm cream canvas #faf8f5 + coral #e8634a + amber #f2cc8f + sage #81b29a, DM Sans only, enhanced morphing blobs with SVG filter turbulence and organic border-radius keyframes (42% 58% → 60% 40% cycling), 3-layer parallax scroll system (slow 0.15x, medium 0.25x, fast 0.4x), paper texture overlay (body::before with mix-blend-mode multiply), advanced glassmorphism nav (24px backdrop-blur + saturate(160%)), magnetic button effects (90px radius pull with 0.35 strength), 3D card tilt (perspective 1000px with mousemove rotation), smooth cursor glow with `requestAnimationFrame` interpolation (0.18 lerp), spring physics easing (cubic-bezier 0.34, 1.56, 0.64, 1), refined stagger animations (120ms increments), stat pulse animation (3s infinite scale), enhanced testimonial carousel with spring transitions, 18 floating organic particles with randomized trajectories, gradient section bars (coral → coral-light), enhanced shadow system (warm-lg with layered rgba shadows). Polished to match execution quality of themes 1, 2, & 5.
 - Theme1 hero uses local AI-generated image `img1.png` (dark cinematic doctor with gold lighting, no external URL)
 - Theme1 team avatars use inline SVG monograms (Playfair Display initials, navy bg, gold text)
 - Section IDs available: `services`, `about`, `testimonials`, `team`, `contact`. Theme2 has `id="hero"`, `id="leadership"`, `id="core-lab"`, `id="data-timeline"`, `id="quality"`, `id="contact-form"`, `id="stats"`.
@@ -86,7 +87,7 @@ Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and J
 All pages are mobile-responsive with progressive breakpoints:
 - **Theme1**: Full `sm:` / `md:` / `lg:` stepping — nav at `md:`, hero side-by-side at `md:`, bento grid `md:grid-cols-2` → `lg:grid-cols-3`, stats `md:grid-cols-3` → `lg:grid-cols-6`
 - **Theme2 ("Clinical Evidence")**: Vanilla CSS with breakpoints at 768px, 640px, 480px. Mobile menu slides in from right, hero grid collapses to single column, timeline switches from 6-col to 3-col to 2-col, metrics grid responsive. Theme switcher scales down on mobile.
-- **Theme3**: Already had good `md:` coverage — no gaps
+- **Theme3 ("Organic Flow")**: Full responsive coverage with `sm:` / `md:` / `lg:` breakpoints. Hero text scaling (2.5rem → 5xl → 6xl → 7xl → 8xl), stats/services/team grid responsive, enhanced mobile blob sizing (320px/280px/300px with 60px blur), improved spacing and typography hierarchy. Cursor glow and parallax effects disabled on touch devices.
 - **Theme4**: Already had good `md:` coverage — no gaps
 - **Theme5 ("Natural Authority")**: Vanilla CSS with breakpoints at 1120px, 920px, 680px. Hero grid collapses at 920px, metrics/leadership/commitments go 6→3→2→1 col, mobile menu dropdown at 920px, 3D tilt effects disabled on coarse pointers. Theme switcher scales down on mobile.
 - **Index**: Vanilla CSS (no Tailwind) with three breakpoints: 1024px (tablet), 768px (mobile), 400px (small phones). Cursor glow disabled on touch devices.
