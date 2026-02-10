@@ -54,33 +54,33 @@
       z-index: 0;
       pointer-events: none;
       background:
-        radial-gradient(600px circle at 15% 25%, rgba(201,168,76,0.04), transparent 60%),
-        radial-gradient(500px circle at 75% 60%, rgba(201,168,76,0.03), transparent 60%),
-        radial-gradient(400px circle at 50% 85%, rgba(30,58,95,0.06), transparent 60%);
-      animation: driftGold 14s ease-in-out infinite alternate;
+        radial-gradient(700px circle at 15% 25%, rgba(201,168,76,0.05), transparent 65%),
+        radial-gradient(600px circle at 75% 60%, rgba(201,168,76,0.04), transparent 65%),
+        radial-gradient(500px circle at 50% 85%, rgba(30,58,95,0.07), transparent 65%);
+      animation: driftGold 16s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
     }
     @keyframes driftGold {
       0% {
         background:
-          radial-gradient(600px circle at 15% 25%, rgba(201,168,76,0.04), transparent 60%),
-          radial-gradient(500px circle at 75% 60%, rgba(201,168,76,0.03), transparent 60%),
-          radial-gradient(400px circle at 50% 85%, rgba(30,58,95,0.06), transparent 60%);
+          radial-gradient(700px circle at 15% 25%, rgba(201,168,76,0.05), transparent 65%),
+          radial-gradient(600px circle at 75% 60%, rgba(201,168,76,0.04), transparent 65%),
+          radial-gradient(500px circle at 50% 85%, rgba(30,58,95,0.07), transparent 65%);
       }
       50% {
         background:
-          radial-gradient(600px circle at 55% 15%, rgba(201,168,76,0.035), transparent 60%),
-          radial-gradient(500px circle at 25% 70%, rgba(201,168,76,0.04), transparent 60%),
-          radial-gradient(400px circle at 80% 45%, rgba(30,58,95,0.05), transparent 60%);
+          radial-gradient(700px circle at 55% 15%, rgba(201,168,76,0.045), transparent 65%),
+          radial-gradient(600px circle at 25% 70%, rgba(201,168,76,0.05), transparent 65%),
+          radial-gradient(500px circle at 80% 45%, rgba(30,58,95,0.06), transparent 65%);
       }
       100% {
         background:
-          radial-gradient(600px circle at 70% 65%, rgba(201,168,76,0.045), transparent 60%),
-          radial-gradient(500px circle at 40% 20%, rgba(201,168,76,0.03), transparent 60%),
-          radial-gradient(400px circle at 15% 55%, rgba(30,58,95,0.06), transparent 60%);
+          radial-gradient(700px circle at 70% 65%, rgba(201,168,76,0.055), transparent 65%),
+          radial-gradient(600px circle at 40% 20%, rgba(201,168,76,0.04), transparent 65%),
+          radial-gradient(500px circle at 15% 55%, rgba(30,58,95,0.07), transparent 65%);
       }
     }
 
-    /* ---- Grain overlay ---- */
+    /* ---- Grain overlay (enhanced subtlety) ---- */
     body::after {
       content: '';
       position: fixed;
@@ -88,29 +88,34 @@
       z-index: 9999;
       pointer-events: none;
       mix-blend-mode: overlay;
-      opacity: 0.018;
+      opacity: 0.022;
       background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       background-size: 128px 128px;
     }
 
-    /* ---- Cursor glow ---- */
+    /* ---- Enhanced cursor glow ---- */
     #cursor-glow {
       position: fixed;
-      width: 400px;
-      height: 400px;
+      width: 450px;
+      height: 450px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.04) 40%, transparent 70%);
       pointer-events: none;
       z-index: 9998;
       mix-blend-mode: screen;
       transform: translate(-50%, -50%);
-      transition: left 0.08s ease-out, top 0.08s ease-out;
+      transition: left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  opacity 0.3s ease;
+      opacity: 0;
     }
+    #cursor-glow.active { opacity: 1; }
 
     /* ---- Scrollbar ---- */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: #0d1b2e; }
     ::-webkit-scrollbar-thumb { background: #c9a84c; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d4b96a; }
 
     /* ---- Scroll progress ---- */
     #scroll-progress {
@@ -121,7 +126,8 @@
       height: 0%;
       background: linear-gradient(to bottom, #c9a84c, #d4b96a);
       z-index: 10000;
-      transition: height 0.1s linear;
+      transition: height 0.08s linear;
+      box-shadow: 0 0 10px rgba(201,168,76,0.5);
     }
 
     /* ---- Skip link ---- */
@@ -134,29 +140,24 @@
       color: #0d1b2e;
       padding: 8px 16px;
       font-size: 14px;
+      font-weight: 600;
       text-decoration: none;
-      transition: top 0.2s;
+      border-radius: 4px;
+      transition: top 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .skip-link:focus { top: 0; }
+    .skip-link:focus { top: 16px; }
 
-    /* ---- Nav ---- */
+    /* ---- Enhanced glassmorphism nav ---- */
     .nav-glass {
-      background: rgba(13,27,46,0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-    }
-    .nav-glow-line::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), rgba(212,185,106,0.5), rgba(201,168,76,0.4), transparent);
+      background: rgba(13,27,46,0.88);
+      backdrop-filter: blur(32px) saturate(180%);
+      -webkit-backdrop-filter: blur(32px) saturate(180%);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1), 0 0 0 1px rgba(201,168,76,0.05) inset;
     }
     .nav-link {
       position: relative;
-      transition: color 0.3s;
+      transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .nav-link::after {
       content: '';
@@ -164,34 +165,35 @@
       left: 0;
       bottom: -4px;
       width: 0;
-      height: 1.5px;
+      height: 2px;
       background: linear-gradient(90deg, #c9a84c, #d4b96a);
-      transition: width 0.3s;
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 8px rgba(201,168,76,0.6);
     }
     .nav-link:hover::after { width: 100%; }
     .nav-link:hover { color: #c9a84c; }
 
-    /* ---- Glass cards ---- */
+    /* ---- Enhanced glass cards with depth ---- */
     .glass-card {
-      background: rgba(19,36,64,0.6);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(201,168,76,0.1);
-      border-radius: 12px;
-      transition: border-color 0.4s, box-shadow 0.4s, transform 0.3s;
+      background: rgba(19,36,64,0.65);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(201,168,76,0.05) inset;
+      transition: border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .glass-card:hover {
-      border-color: rgba(201,168,76,0.3);
-      box-shadow: 0 8px 40px rgba(201,168,76,0.08);
+      border-color: rgba(201,168,76,0.35);
+      box-shadow: 0 16px 48px rgba(201,168,76,0.12),
+                  0 0 0 1px rgba(201,168,76,0.15) inset,
+                  0 0 60px rgba(201,168,76,0.08);
+      transform: translateY(-4px);
     }
 
-    /* ---- Gold glow top border ---- */
-    .glow-top {
-      border-top: 2px solid rgba(201,168,76,0.6);
-      box-shadow: 0 -4px 20px rgba(201,168,76,0.15);
-    }
-
-    /* ---- Gold shimmer sweep on hover ---- */
+    /* ---- Gold shimmer sweep (enhanced) ---- */
     .shimmer-card {
       position: relative;
       overflow: hidden;
@@ -203,8 +205,8 @@
       left: -100%;
       width: 60%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.05), transparent);
-      transition: left 0.6s ease;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.08), rgba(212,185,106,0.06), transparent);
+      transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 1;
       pointer-events: none;
     }
@@ -212,152 +214,114 @@
       left: 160%;
     }
 
-    /* ---- 3D card tilt ---- */
+    /* ---- Enhanced 3D card tilt ---- */
     .card-tilt {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       transform-style: preserve-3d;
     }
 
-    /* ---- Hero aurora layers ---- */
+    /* ---- Hero aurora layers (enhanced) ---- */
     .aurora-1 {
       position: absolute;
       bottom: 0;
       left: -10%;
       width: 120%;
-      height: 350px;
-      background: linear-gradient(180deg, transparent 0%, rgba(201,168,76,0.06) 40%, rgba(30,58,95,0.08) 70%, transparent 100%);
-      filter: blur(50px);
-      animation: auroraHue 10s ease-in-out infinite;
+      height: 400px;
+      background: linear-gradient(180deg, transparent 0%, rgba(201,168,76,0.08) 40%, rgba(30,58,95,0.1) 70%, transparent 100%);
+      filter: blur(60px);
+      animation: auroraHue 12s ease-in-out infinite;
       pointer-events: none;
     }
     @keyframes auroraHue {
-      0%, 100% { filter: blur(50px) hue-rotate(0deg); transform: translateX(0); }
-      50% { filter: blur(50px) hue-rotate(15deg); transform: translateX(3%); }
+      0%, 100% { filter: blur(60px) hue-rotate(0deg); transform: translateX(0) scale(1); }
+      50% { filter: blur(60px) hue-rotate(15deg); transform: translateX(3%) scale(1.05); }
     }
     .aurora-2 {
       position: absolute;
       top: 20%;
       right: 10%;
-      width: 500px;
-      height: 500px;
+      width: 550px;
+      height: 550px;
       border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(201,168,76,0.08), rgba(212,185,106,0.03), transparent);
-      filter: blur(80px);
-      animation: auroraFloat 12s ease-in-out infinite alternate;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.1), rgba(212,185,106,0.04), transparent);
+      filter: blur(90px);
+      animation: auroraFloat 14s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
       pointer-events: none;
     }
     @keyframes auroraFloat {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-60px, 30px) scale(1.15); }
+      100% { transform: translate(-60px, 30px) scale(1.2); }
     }
     .hero-pulse {
       position: absolute;
       top: 50%;
       left: 35%;
-      width: 700px;
-      height: 700px;
+      width: 800px;
+      height: 800px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, rgba(30,58,95,0.04) 40%, transparent 70%);
-      filter: blur(60px);
-      animation: pulseGlow 5s ease-in-out infinite;
+      background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, rgba(30,58,95,0.05) 40%, transparent 70%);
+      filter: blur(70px);
+      animation: pulseGlow 6s ease-in-out infinite;
       pointer-events: none;
     }
     @keyframes pulseGlow {
       0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-      50% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+      50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
     }
 
-    /* ---- ECG animation (theme1 exclusive) ---- */
+    /* ---- ECG animation (theme1 exclusive, enhanced) ---- */
     .ecg-line {
       stroke-dasharray: 2000;
       stroke-dashoffset: 2000;
-      animation: ecg-draw 3s linear infinite;
+      animation: ecg-draw 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      filter: drop-shadow(0 0 4px rgba(201,168,76,0.4));
     }
     @keyframes ecg-draw {
       to { stroke-dashoffset: 0; }
     }
 
-    /* ---- Floating particles ---- */
-    .particle {
+    /* ---- Magnetic button effect ---- */
+    .magnetic-btn {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .magnetic-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212,185,106,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .magnetic-btn:hover::before { opacity: 1; }
+    .magnetic-btn:hover {
+      box-shadow: 0 8px 32px rgba(201,168,76,0.3),
+                  0 0 0 1px rgba(201,168,76,0.3) inset;
+    }
+
+    /* ---- Ripple effect (enhanced) ---- */
+    .ripple-effect {
       position: absolute;
       border-radius: 50%;
-      background: #c9a84c;
-      box-shadow: 0 0 6px 2px rgba(201,168,76,0.3);
-      animation: floatUp linear infinite;
+      background: rgba(201,168,76,0.4);
+      transform: scale(0);
+      animation: ripple-expand 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       pointer-events: none;
     }
-    @keyframes floatUp {
-      0% { transform: translateY(0) translateX(0); opacity: 0; }
-      10% { opacity: 0.7; }
-      90% { opacity: 0.5; }
-      100% { transform: translateY(-600px) translateX(60px); opacity: 0; }
+    @keyframes ripple-expand {
+      to { transform: scale(2.5); opacity: 0; }
     }
 
-    /* ---- Hero image float ---- */
-    @keyframes heroFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-14px); }
-    }
-    .hero-float { animation: heroFloat 6s ease-in-out infinite; }
-
-    /* ---- Gold underline reveal ---- */
-    .gold-underline {
-      position: relative;
-      display: inline;
-    }
-    .gold-underline::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #c9a84c, #d4b96a);
-      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .gold-underline.animate::after { width: 100%; }
-
-    /* ---- Stat glow ---- */
-    .stat-glow {
-      text-shadow: 0 0 20px rgba(201,168,76,0.5), 0 0 50px rgba(201,168,76,0.2);
-    }
-
-    /* ---- Scanning line ---- */
-    .scan-container { position: relative; overflow: hidden; }
-    .scan-container::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.6) 20%, #c9a84c 50%, rgba(201,168,76,0.6) 80%, transparent 100%);
-      box-shadow: 0 0 15px rgba(201,168,76,0.4), 0 0 40px rgba(201,168,76,0.15);
-      animation: scanSweep 5s ease-in-out infinite;
-      z-index: 2;
-    }
-    @keyframes scanSweep {
-      0% { top: 0; opacity: 0; }
-      5% { opacity: 1; }
-      95% { opacity: 1; }
-      100% { top: 100%; opacity: 0; }
-    }
-
-    /* ---- Section divider glow line ---- */
-    .section-glow-line {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, #c9a84c, #d4b96a);
-      box-shadow: 0 0 10px rgba(201,168,76,0.4);
-      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .section-glow-line.drawn { width: 80px; }
-
-    /* ---- Text reveals ---- */
+    /* ---- Enhanced scroll-triggered reveal animations ---- */
     .reveal {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .reveal.visible {
       opacity: 1;
@@ -365,9 +329,11 @@
     }
     .reveal-blur {
       opacity: 0;
-      filter: blur(8px);
-      transform: translateY(10px);
-      transition: opacity 0.7s ease, filter 0.7s ease, transform 0.7s ease;
+      filter: blur(10px);
+      transform: translateY(30px);
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .reveal-blur.visible {
       opacity: 1;
@@ -376,1022 +342,728 @@
     }
     .reveal-scale {
       opacity: 0;
-      transform: scale(0.94);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: scale(0.85);
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .reveal-scale.visible {
       opacity: 1;
       transform: scale(1);
     }
-    .d1 { transition-delay: 0.1s; }
-    .d2 { transition-delay: 0.2s; }
-    .d3 { transition-delay: 0.3s; }
-    .d4 { transition-delay: 0.4s; }
-    .d5 { transition-delay: 0.5s; }
-    .d6 { transition-delay: 0.6s; }
-
-    /* ---- Button ripple ---- */
-    .btn-ripple {
-      position: relative;
-      overflow: hidden;
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .btn-ripple .ripple-effect {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      transform: scale(0);
-      animation: rippleAnim 0.6s ease-out;
-      pointer-events: none;
-    }
-    @keyframes rippleAnim {
-      to { transform: scale(4); opacity: 0; }
-    }
-
-    /* ---- Gold button ---- */
-    .btn-gold {
-      background: linear-gradient(135deg, #c9a84c, #d4b96a);
-      color: #0d1b2e;
-      font-weight: 700;
-      padding: 14px 32px;
-      border-radius: 6px;
-      box-shadow: 0 0 20px rgba(201,168,76,0.25), 0 4px 12px rgba(0,0,0,0.3);
-      transition: all 0.3s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 14px;
-    }
-    .btn-gold:hover {
-      box-shadow: 0 0 30px rgba(201,168,76,0.4), 0 6px 20px rgba(0,0,0,0.3);
-      transform: translateY(-2px);
-    }
-    .btn-outline-gold {
-      border: 1px solid rgba(201,168,76,0.5);
-      color: #c9a84c;
-      padding: 14px 32px;
-      border-radius: 6px;
-      transition: all 0.3s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 14px;
-      background: transparent;
-    }
-    .btn-outline-gold:hover {
-      background: rgba(201,168,76,0.08);
-      box-shadow: 0 0 20px rgba(201,168,76,0.12);
-      transform: translateY(-2px);
-    }
-
-    /* ---- Commitment number ---- */
-    .commit-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 5rem;
-      font-weight: 800;
-      line-height: 1;
-      background: linear-gradient(135deg, rgba(201,168,76,0.3), rgba(212,185,106,0.15));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* ---- Testimonial transitions ---- */
-    .testimonial-slide {
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .testimonial-slide.active {
+    .reveal-left.visible {
       opacity: 1;
-      transform: translateX(0) scale(1);
-      box-shadow: 0 0 40px rgba(201,168,76,0.08);
-      border-color: rgba(201,168,76,0.25);
-    }
-    .testimonial-slide.prev {
-      opacity: 0;
-      transform: translateX(-30px) scale(0.97);
-    }
-    .testimonial-slide.next {
-      opacity: 0;
-      transform: translateX(30px) scale(0.97);
-    }
-
-    /* ---- Pull quote ---- */
-    .pull-quote { position: relative; }
-    .pull-quote::before {
-      content: '\201C';
-      font-family: 'Playfair Display', serif;
-      font-size: 100px;
-      line-height: 1;
-      background: linear-gradient(135deg, #c9a84c, #d4b96a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0.15;
-      position: absolute;
-      top: -20px;
-      left: -15px;
-    }
-
-    /* ---- Mobile nav ---- */
-    .mobile-nav {
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    }
-    .mobile-nav.open {
       transform: translateX(0);
     }
 
-    /* ---- Image frame ---- */
-    .image-frame { position: relative; }
-    .image-frame::before {
+    /* ---- Stagger delays for sequential animations ---- */
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+    .stagger-5 { transition-delay: 0.5s; }
+    .stagger-6 { transition-delay: 0.6s; }
+
+    /* ---- Gold underline animation ---- */
+    .gold-underline {
+      position: relative;
+      display: inline-block;
+    }
+    .gold-underline::after {
       content: '';
       position: absolute;
-      top: 16px;
-      left: 16px;
-      right: -16px;
-      bottom: -16px;
-      border: 1.5px solid rgba(201,168,76,0.4);
-      z-index: 0;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #c9a84c, #d4b96a);
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 8px rgba(201,168,76,0.6);
     }
+    .gold-underline.animate::after { width: 100%; }
 
-    /* ---- Form focus ---- */
-    .form-input {
-      transition: border-color 0.3s, box-shadow 0.3s;
-      background: rgba(19,36,64,0.8);
-      border: 1px solid rgba(201,168,76,0.15);
-      color: #e8edf3;
+    /* ---- Section glow line ---- */
+    .section-glow-line {
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a84c, #d4b96a, #c9a84c, transparent);
+      margin: 0 auto;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 12px rgba(201,168,76,0.6);
     }
-    .form-input:focus {
-      outline: none;
-      border-color: #c9a84c;
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.15), 0 0 20px rgba(201,168,76,0.08);
-    }
-    .form-input::placeholder { color: #5a6f8a; }
+    .section-glow-line.drawn { width: 100%; }
 
-    /* ---- About decorative viz ---- */
-    .about-viz {
+    /* ---- Stats scanning line effect ---- */
+    .stats-scan {
       position: relative;
-      background: rgba(19,36,64,0.6);
-      border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 12px;
       overflow: hidden;
     }
-    .about-viz::before {
+    .stats-scan::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 30%, rgba(201,168,76,0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 70%, rgba(201,168,76,0.1) 0%, transparent 50%);
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.15), transparent);
+      animation: scan-sweep 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
-    .about-viz .grid-lines {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(201,168,76,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,0.06) 1px, transparent 1px);
-      background-size: 32px 32px;
+    @keyframes scan-sweep {
+      0% { left: -100%; }
+      50%, 100% { left: 150%; }
     }
-    .about-viz .ecg-viz {
-      position: absolute;
-      bottom: 30%;
-      left: 0;
-      width: 200%;
-      animation: ecgScroll 6s linear infinite;
+
+    /* ---- Hero image float (enhanced) ---- */
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
-    @keyframes ecgScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    .hero-image {
+      animation: heroFloat 6s ease-in-out infinite;
     }
-    .about-viz .pulse-dot {
-      position: absolute;
-      width: 8px; height: 8px;
-      background: #c9a84c;
+
+    /* ---- Mobile nav (enhanced) ---- */
+    @media (max-width: 768px) {
+      #mobile-nav {
+        backdrop-filter: blur(32px) saturate(180%);
+        -webkit-backdrop-filter: blur(32px) saturate(180%);
+      }
+      #cursor-glow { display: none; }
+    }
+
+    /* ---- Theme switcher ---- */
+    #themeSwitcher {
+      position: fixed;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10001;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 0.5rem;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(201,168,76,0.18);
+      border-radius: 100px;
+      box-shadow: 0 4px 32px rgba(30,58,95,0.08);
+    }
+    #themeSwitcher a { text-decoration: none; display: flex; align-items: center; justify-content: center; }
+    .ts-home {
+      width: 28px;
+      height: 28px;
+      color: #555e6e;
+      transition: color 0.25s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .ts-home:hover { color: #c9a84c; transform: scale(1.1); }
+    .ts-home svg { width: 14px; height: 14px; }
+    .ts-sep { width: 14px; height: 1px; background: rgba(201,168,76,0.25); }
+    .ts-dot {
+      width: 28px;
+      height: 28px;
+      position: relative;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .ts-dot:hover { transform: scale(1.15); }
+    .ts-dot-inner {
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-      box-shadow: 0 0 12px rgba(201,168,76,0.6), 0 0 24px rgba(201,168,76,0.3);
-      animation: pulseDot 2s ease-in-out infinite;
+      border: 1px solid rgba(0,0,0,0.08);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.3s;
     }
-    @keyframes pulseDot {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.4); }
+    .ts-dot:hover .ts-dot-inner { transform: scale(1.4); }
+    .ts-dot.active .ts-dot-inner {
+      transform: scale(1.5);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.35);
     }
-    .about-viz .data-label {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(201,168,76,0.5);
+    .ts-tip {
       position: absolute;
+      right: calc(100% + 12px);
+      white-space: nowrap;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.03em;
+      color: #1a1a2e;
+      background: rgba(255,255,255,0.98);
+      padding: 4px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      opacity: 0;
+      transform: translateX(6px);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
     }
-
-    /* ---- Bento grid service card feature ---- */
-    .bento-featured {
-      background:
-        linear-gradient(135deg, rgba(19,36,64,0.8), rgba(26,48,80,0.6)),
-        radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.06), transparent 50%);
+    .ts-dot:hover .ts-tip {
+      opacity: 1;
+      transform: translateX(0);
     }
-
-    /* ---- Team card glow ---- */
-    .team-glow { transition: all 0.4s ease; }
-    .team-glow:hover {
-      box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 12px 40px rgba(201,168,76,0.1);
-      transform: translateY(-6px);
+    @media (max-width: 768px) {
+      #themeSwitcher {
+        right: 0.6rem;
+        padding: 0.5rem 0.3rem;
+        gap: 0.25rem;
+      }
+      .ts-dot { width: 24px; height: 24px; }
+      .ts-dot-inner { width: 8px; height: 8px; }
+      .ts-tip { display: none; }
+      .ts-home { width: 24px; height: 24px; }
+      .ts-home svg { width: 12px; height: 12px; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Cursor Glow -->
-  <div id="cursor-glow" aria-hidden="true"></div>
-
-  <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div id="scroll-progress"></div>
+  <div id="cursor-glow"></div>
 
-  <!-- Scroll Progress -->
-  <div id="scroll-progress" aria-hidden="true"></div>
+  <!-- ================ NAVIGATION ================ -->
+  <nav class="nav-glass fixed top-0 left-0 right-0 z-50 transition-all duration-300" aria-label="Main navigation">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-xl shadow-lg transition-transform duration-300 group-hover:scale-110">C</div>
+        <span class="font-display text-xl font-semibold text-text-primary group-hover:text-gold transition-colors duration-300">CardioVera</span>
+      </a>
 
-  <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
-  <header role="banner">
-    <nav class="nav-glass nav-glow-line fixed top-0 left-0 w-full z-50" role="navigation" aria-label="Primary navigation">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-[72px]">
-          <a href="#" class="flex items-center gap-2.5 flex-shrink-0" aria-label="CardioVera Research home">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-              <rect width="36" height="36" rx="6" fill="rgba(201,168,76,0.15)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
-              <path d="M8 20 L12 20 L14 14 L16 26 L18 10 L20 22 L22 18 L24 20 L28 20" stroke="#c9a84c" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="font-display font-semibold text-text-primary text-lg tracking-tight">CardioVera<span class="text-gold">.</span></span>
-          </a>
+      <button id="mobile-toggle" class="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 z-50" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="block w-6 h-0.5 bg-text-primary transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-text-primary transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-text-primary transition-all duration-300"></span>
+      </button>
 
-          <div class="hidden md:flex items-center gap-5 lg:gap-8">
-            <a href="#services" class="nav-link text-text-secondary text-sm font-body">Services</a>
-            <a href="#about" class="nav-link text-text-secondary text-sm font-body">About</a>
-            <a href="#team" class="nav-link text-text-secondary text-sm font-body">Team</a>
-            <a href="#testimonials" class="nav-link text-text-secondary text-sm font-body">Testimonials</a>
-            <a href="#contact" class="nav-link text-text-secondary text-sm font-body">Contact</a>
-          </div>
-
-          <div class="hidden md:block">
-            <a href="#contact" class="btn-ripple btn-gold text-xs">
-              Tell Us About Your Program
-            </a>
-          </div>
-
-          <button id="mobile-menu-btn" class="md:hidden p-2 text-text-secondary" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-          </button>
-        </div>
+      <div id="nav-links" class="hidden md:flex items-center gap-8">
+        <a href="#services" class="nav-link text-text-secondary text-sm font-medium">Services</a>
+        <a href="#about" class="nav-link text-text-secondary text-sm font-medium">About</a>
+        <a href="#team" class="nav-link text-text-secondary text-sm font-medium">Team</a>
+        <a href="#testimonials" class="nav-link text-text-secondary text-sm font-medium">Testimonials</a>
+        <a href="#contact" class="px-6 py-2.5 bg-gold text-navy font-medium text-sm rounded-lg hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/30 magnetic-btn">Contact Us</a>
       </div>
+    </div>
 
-      <div id="mobile-menu" class="mobile-nav fixed top-0 right-0 w-72 h-full bg-bg-primary shadow-2xl z-50 p-8 md:hidden border-l border-gold/10" role="dialog" aria-label="Mobile navigation" aria-modal="true">
-        <button id="mobile-close-btn" class="absolute top-4 right-4 p-2 text-text-secondary" aria-label="Close menu">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <div class="flex flex-col gap-6 mt-12">
-          <a href="#services" class="text-text-primary text-lg font-display font-semibold mobile-nav-link">Services</a>
-          <a href="#about" class="text-text-primary text-lg font-display font-semibold mobile-nav-link">About</a>
-          <a href="#team" class="text-text-primary text-lg font-display font-semibold mobile-nav-link">Team</a>
-          <a href="#testimonials" class="text-text-primary text-lg font-display font-semibold mobile-nav-link">Testimonials</a>
-          <a href="#contact" class="text-text-primary text-lg font-display font-semibold mobile-nav-link">Contact</a>
-          <a href="#contact" class="btn-ripple btn-gold text-xs mt-4 justify-center mobile-nav-link">Tell Us About Your Program</a>
-        </div>
+    <div id="mobile-nav" class="fixed inset-0 bg-bg-primary/95 z-40 md:hidden translate-x-full transition-transform duration-500" style="backdrop-filter: blur(32px);">
+      <div class="flex flex-col items-center justify-center h-full gap-8 p-8">
+        <a href="#services" class="mobile-link text-text-primary text-2xl font-display font-semibold hover:text-gold transition-colors duration-300">Services</a>
+        <a href="#about" class="mobile-link text-text-primary text-2xl font-display font-semibold hover:text-gold transition-colors duration-300">About</a>
+        <a href="#team" class="mobile-link text-text-primary text-2xl font-display font-semibold hover:text-gold transition-colors duration-300">Team</a>
+        <a href="#testimonials" class="mobile-link text-text-primary text-2xl font-display font-semibold hover:text-gold transition-colors duration-300">Testimonials</a>
+        <a href="#contact" class="mobile-link px-8 py-4 bg-gold text-navy font-semibold text-xl rounded-lg hover:bg-gold-light transition-all duration-300">Contact Us</a>
       </div>
-    </nav>
-  </header>
+    </div>
+  </nav>
 
-  <main id="main-content" role="main">
+  <!-- ================ HERO SECTION ================ -->
+  <main id="main-content">
+    <section class="relative min-h-screen flex items-center overflow-hidden pt-20" aria-labelledby="hero-heading">
+      <div class="aurora-1"></div>
+      <div class="aurora-2"></div>
+      <div class="hero-pulse"></div>
 
-    <!-- ═══════════════════ HERO ═══════════════════ -->
-    <section class="relative min-h-screen flex items-center overflow-hidden" aria-label="Introduction">
-      <!-- Aurora layers -->
-      <div class="aurora-1" aria-hidden="true"></div>
-      <div class="aurora-2" aria-hidden="true"></div>
-      <div class="hero-pulse" aria-hidden="true"></div>
+      <svg class="absolute bottom-12 left-0 w-full h-24 pointer-events-none opacity-20" viewBox="0 0 1440 100" preserveAspectRatio="none" fill="none" aria-hidden="true">
+        <path class="ecg-line" d="M-100,50 L200,50 L220,50 L235,35 L250,50 L265,50 L280,48 L290,52 L300,20 L310,80 L320,45 L335,50 L400,50 L600,50 L620,50 L635,35 L650,50 L665,50 L680,48 L690,52 L700,20 L710,80 L720,45 L735,50 L800,50 L1000,50 L1020,50 L1035,35 L1050,50 L1065,50 L1080,48 L1090,52 L1100,20 L1110,80 L1120,45 L1135,50 L1200,50 L1440,50 L1540,50" stroke="#c9a84c" stroke-width="2" opacity="0.6"/>
+      </svg>
 
-      <!-- Particles -->
-      <div id="particles-container" class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true"></div>
-
-      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-24 pb-20 md:pt-28 md:pb-24 lg:pt-0 lg:pb-0">
-        <div class="flex flex-col md:flex-row items-center gap-10 md:gap-12 lg:gap-20">
-          <!-- Left: 58% -->
-          <div class="w-full md:w-[55%] lg:w-[58%]">
-            <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-6 md:mb-8" style="letter-spacing: 0.25em;">Data-First Cardiovascular CRO</p>
-            <h1 class="reveal d1 font-display font-bold text-white text-3xl sm:text-4xl md:text-5xl lg:text-[58px] leading-[1.1] mb-6 md:mb-8">
-              Your cardiovascular trial's success is decided by <span class="gold-underline">the quality of your data.</span>
+      <div class="max-w-7xl mx-auto px-6 py-16 lg:py-0 w-full relative z-10">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div>
+            <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-6 reveal-left">Biometrics-First Cardiovascular CRO</p>
+            <h1 id="hero-heading" class="font-display text-5xl lg:text-6xl xl:text-7xl font-bold text-text-primary leading-[1.05] mb-8 reveal-blur">
+              Data integrity from <span class="gold-underline">protocol concept</span> to FDA approval
             </h1>
-            <p class="reveal d2 font-body text-text-secondary text-sm sm:text-base lg:text-lg leading-relaxed mb-8 md:mb-10 max-w-[540px]">
-              We build every cardiac trial around data integrity from Day 1 &mdash; biostatisticians at protocol concept, continuous cleaning from first enrollment, submission-ready packages that don't get sent back.
+            <p class="text-lg lg:text-xl text-text-secondary leading-relaxed mb-10 max-w-2xl reveal-blur stagger-2">
+              We build every cardiac trial around data integrity — biostatisticians at protocol concept, submission-ready packages that don't get sent back.
             </p>
-            <div class="reveal d3 flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <a href="#contact" class="btn-ripple btn-gold text-center">
-                Tell Us About Your Program
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-              <a href="#services" class="btn-outline-gold text-center">See How We Work</a>
+            <div class="flex flex-wrap gap-4 reveal-blur stagger-3">
+              <a href="#contact" class="px-8 py-4 bg-gold text-navy font-semibold rounded-lg hover:bg-gold-light transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-gold/30 magnetic-btn btn-ripple">Tell Us About Your Program</a>
+              <a href="#services" class="px-8 py-4 border-2 border-gold/60 text-text-primary font-semibold rounded-lg hover:bg-gold/10 hover:border-gold transition-all duration-300 magnetic-btn">See Our Capabilities</a>
             </div>
           </div>
 
-          <!-- Right: 42% -->
-          <div class="w-full md:w-[45%] lg:w-[42%] flex justify-center md:justify-end">
-            <div class="reveal d2 image-frame hero-float max-w-[280px] sm:max-w-[320px] md:max-w-sm lg:max-w-md">
-              <img
-                src="img1.png"
-                alt="Medical professional representing cardiovascular clinical research leadership"
-                class="relative z-10 w-full rounded-lg shadow-2xl object-cover"
-                style="aspect-ratio: 5/6;"
-                loading="eager"
-              >
+          <div class="relative reveal-scale stagger-2">
+            <div class="glass-card shimmer-card card-tilt p-8 relative z-10">
+              <img src="img1.png" alt="Cardiovascular research professional" class="w-full h-auto rounded-lg hero-image shadow-2xl" />
+              <div class="absolute inset-0 bg-gradient-to-t from-navy-deep/60 via-transparent to-transparent rounded-lg pointer-events-none"></div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ECG at bottom -->
-      <div class="absolute bottom-0 left-0 w-full overflow-hidden" aria-hidden="true">
-        <svg class="w-full h-20 sm:h-28" viewBox="0 0 1440 100" preserveAspectRatio="none" fill="none">
-          <path class="ecg-line" d="M0 60 L200 60 L240 60 L260 40 L270 80 L280 20 L290 70 L300 55 L310 60 L500 60 L540 60 L560 40 L570 80 L580 20 L590 70 L600 55 L610 60 L800 60 L840 60 L860 40 L870 80 L880 20 L890 70 L900 55 L910 60 L1100 60 L1140 60 L1160 40 L1170 80 L1180 20 L1190 70 L1200 55 L1210 60 L1440 60" stroke="#c9a84c" stroke-width="2" stroke-opacity="0.25"/>
-        </svg>
-      </div>
-    </section>
-
-    <!-- ═══════════════════ STATS ═══════════════════ -->
-    <section class="relative py-16 lg:py-20 scan-container" style="background: linear-gradient(180deg, #0a1628, #0d1b2e);" aria-label="Key statistics">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-8 gap-x-6">
-          <div class="text-center">
-            <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl stat-glow text-gold mb-2 counter-value" data-target="150">0</div>
-            <div class="text-text-secondary font-body text-[10px] sm:text-xs uppercase tracking-wider">Trials Delivered</div>
-          </div>
-          <div class="text-center md:border-l md:border-gold/10">
-            <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl stat-glow text-gold mb-2 counter-value" data-target="50">0</div>
-            <div class="text-text-secondary font-body text-[10px] sm:text-xs uppercase tracking-wider">Patients Enrolled</div>
-          </div>
-          <div class="text-center md:border-l md:border-gold/10">
-            <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl stat-glow text-gold mb-2 counter-value" data-target="94">0</div>
-            <div class="text-text-secondary font-body text-[10px] sm:text-xs uppercase tracking-wider">Team Continuity</div>
-          </div>
-          <div class="text-center md:border-l md:border-gold/10 lg:border-l">
-            <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl stat-glow text-gold mb-2 counter-value" data-target="97">0</div>
-            <div class="text-text-secondary font-body text-[10px] sm:text-xs uppercase tracking-wider">On-Time DB Lock</div>
-          </div>
-          <div class="text-center md:border-l md:border-gold/10">
-            <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl stat-glow text-gold mb-2 counter-value" data-target="40">0</div>
-            <div class="text-text-secondary font-body text-[10px] sm:text-xs uppercase tracking-wider">Countries</div>
-          </div>
-          <div class="text-center md:border-l md:border-gold/10">
-            <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl stat-glow text-gold mb-2 counter-value" data-target="0">0</div>
-            <div class="text-text-secondary font-body text-[10px] sm:text-xs uppercase tracking-wider">FDA CRLs</div>
+            <div class="absolute -inset-4 bg-gradient-to-br from-gold/20 to-navy-light/20 rounded-2xl blur-3xl -z-10 opacity-50"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════ PROBLEM WE SOLVE ═══════════════════ -->
-    <section class="relative py-16 md:py-24 lg:py-32 overflow-hidden" aria-labelledby="problem-heading">
-      <div class="absolute inset-0 opacity-30" aria-hidden="true">
-        <div class="aurora-2" style="left: 20%; top: 30%;"></div>
-      </div>
-      <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-6">The Industry Problem</p>
-        <h2 id="problem-heading" class="reveal d1 font-display font-bold text-white text-2xl sm:text-3xl md:text-[36px] lg:text-[42px] leading-[1.2] mb-8 md:mb-10">
-          Every year, promising cardiac therapies fail &mdash; <span class="text-gold">not because the science was wrong, but because the execution was.</span>
-        </h2>
-
-        <p class="reveal-blur d2 font-body text-text-secondary text-base leading-relaxed mb-6">
-          80% of cardiovascular trials miss enrollment timelines. Protocol amendments delay programs by four months on average. Data quality issues surface at database lock, when fixing them costs ten times what prevention would have. CRO staff rotate off your trial mid-study, taking institutional knowledge with them.
-        </p>
-
-        <p class="reveal-blur d3 font-body text-text-secondary text-base leading-relaxed mb-8">
-          You've seen senior scientists pitch your trial, then hand it to junior associates. You've watched budgets swell with change orders that weren't in the original scope. You've been told "partnership" by CROs that treat your program as one of hundreds.
-        </p>
-
-        <p class="reveal-blur d4 font-body text-text-primary text-lg leading-relaxed font-bold">
-          We built CardioVera to solve those specific problems &mdash; not with slogans, but with operational commitments we publish and measure against.
-        </p>
-      </div>
-    </section>
-
-    <!-- ═══════════════════ THREE COMMITMENTS ═══════════════════ -->
-    <section class="py-16 md:py-24 lg:py-32" aria-labelledby="commitments-heading">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 md:mb-16 lg:mb-20">
-          <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-4">Our Commitments</p>
-          <h2 id="commitments-heading" class="reveal d1 font-display font-bold text-white text-2xl sm:text-3xl lg:text-4xl">Three promises we make &mdash; and publish metrics to prove</h2>
-          <div class="section-glow-line mx-auto mt-6" aria-hidden="true"></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
-          <div class="glass-card glow-top shimmer-card p-6 sm:p-8 lg:p-10 reveal">
-            <div class="commit-num mb-5">01</div>
-            <h3 class="font-display font-semibold text-white text-xl mb-4">Your team stays your team.</h3>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">
-              The scientists who design your analysis plan deliver your topline results. We track and publish our 94% project team continuity rate &mdash; because accountability starts with transparency.
-            </p>
+    <!-- ================ STATS SECTION ================ -->
+    <section class="relative py-20 lg:py-28 overflow-hidden stats-scan" aria-label="Key statistics">
+      <div class="section-glow-line mb-16"></div>
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-4">
+          <div class="text-center reveal-scale stagger-1">
+            <div class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-gold mb-3 counter-value" data-target="150">150</div>
+            <p class="text-xs text-text-dim uppercase tracking-wider font-semibold">Global Trials</p>
           </div>
-
-          <div class="glass-card glow-top shimmer-card p-6 sm:p-8 lg:p-10 reveal d1">
-            <div class="commit-num mb-5">02</div>
-            <h3 class="font-display font-semibold text-white text-xl mb-4">Your data strategy starts at protocol design.</h3>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">
-              Biostatisticians join before the first CRF is drafted, not after the first patient is enrolled. CDISC standards and estimand frameworks from Day 1 prevent the rework that derails timelines.
-            </p>
+          <div class="text-center reveal-scale stagger-2">
+            <div class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-gold mb-3 counter-value" data-target="50">50</div>
+            <p class="text-xs text-text-dim uppercase tracking-wider font-semibold">Patients Enrolled</p>
           </div>
-
-          <div class="glass-card glow-top shimmer-card p-6 sm:p-8 lg:p-10 reveal d2">
-            <div class="commit-num mb-5">03</div>
-            <h3 class="font-display font-semibold text-white text-xl mb-4">Your budget reflects reality.</h3>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">
-              Conservative scoping, honest pricing, every change-order trigger defined before you sign. No surprises. No scope creep. No "we'll figure it out later."
-            </p>
+          <div class="text-center reveal-scale stagger-3">
+            <div class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-gold mb-3">I–III</div>
+            <p class="text-xs text-text-dim uppercase tracking-wider font-semibold">Full Phase Range</p>
+          </div>
+          <div class="text-center reveal-scale stagger-4">
+            <div class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-gold mb-3 counter-value" data-target="40">40</div>
+            <p class="text-xs text-text-dim uppercase tracking-wider font-semibold">Countries</p>
+          </div>
+          <div class="text-center reveal-scale stagger-5">
+            <div class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-gold mb-3 counter-value" data-target="94">94</div>
+            <p class="text-xs text-text-dim uppercase tracking-wider font-semibold">Team Continuity</p>
+          </div>
+          <div class="text-center reveal-scale stagger-6">
+            <div class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-gold mb-3 counter-value" data-target="97">97</div>
+            <p class="text-xs text-text-dim uppercase tracking-wider font-semibold">On-Time DB Lock</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════ SERVICES (Bento Grid) ═══════════════════ -->
-    <section id="services" class="py-16 md:py-24 lg:py-32" style="background: linear-gradient(180deg, #0a1628 0%, #0d1b2e 100%);" aria-labelledby="services-heading">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 md:mb-16 lg:mb-20">
-          <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-4">What We Do</p>
-          <h2 id="services-heading" class="reveal d1 font-display font-bold text-white text-2xl sm:text-3xl lg:text-4xl">Specialized Cardiovascular Expertise</h2>
-          <div class="section-glow-line mx-auto mt-6" aria-hidden="true"></div>
+    <!-- ================ THE PROBLEM WE SOLVE ================ -->
+    <section class="relative py-20 lg:py-32 overflow-hidden" aria-labelledby="problem-heading">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-16 reveal-blur">
+          <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-4">The Problem We Solve</p>
+          <h2 id="problem-heading" class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight mb-6">
+            Most CROs treat <span class="gold-underline">biometrics</span> as a service line.
+          </h2>
+          <p class="text-xl text-text-secondary leading-relaxed max-w-3xl mx-auto">
+            That's why the stat team meets you after the protocol is locked, endpoints are fuzzy, and sample size is a guess. We flip that model: biostatisticians at protocol concept, precise power calculations before site contracts, submission-ready packages that don't get sent back.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          <!-- Featured: Clinical Operations (spans 2 cols, taller) -->
-          <div class="card-tilt glass-card shimmer-card glow-top md:col-span-2 lg:col-span-2 lg:row-span-2 p-6 sm:p-8 lg:p-10 reveal flex flex-col justify-between bento-featured">
-            <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-14 h-14 flex items-center justify-center rounded-xl bg-gold/10 border border-gold/20">
-                  <svg width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                    <path d="M20 6C14 6 10 10 10 14c0 8 10 20 10 20s10-12 10-20c0-4-4-8-10-8z" stroke="#c9a84c" stroke-width="2" fill="none"/>
-                    <circle cx="20" cy="14" r="3" fill="#c9a84c"/>
-                  </svg>
-                </div>
-                <h3 class="font-display font-semibold text-white text-xl">Clinical Operations</h3>
-              </div>
-              <p class="font-body text-text-secondary text-sm leading-relaxed mb-6 max-w-lg">
-                End-to-end cardiovascular trial execution with predictive enrollment analytics calibrated for cardiac indications. Indication-specific feasibility modeling across HFpEF, ACS, and ASCVD, with risk-based monitoring using centralized statistical signals and decentralized designs that maintain CVOT-grade rigor.
-              </p>
+        <div class="glass-card shimmer-card p-10 lg:p-12 reveal-scale">
+          <p class="font-display text-2xl lg:text-3xl text-text-primary leading-relaxed italic">
+            "The difference is simple: a traditional CRO asks what your endpoints are. We tell you what your endpoints should be — then build the operational infrastructure around statistical rigor, not the other way around."
+          </p>
+          <p class="text-gold font-semibold mt-6 text-sm tracking-wider">— CardioVera Methodology</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ THREE COMMITMENTS ================ -->
+    <section class="relative py-20 lg:py-32 overflow-hidden" aria-labelledby="commitments-heading">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal-blur">
+          <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-4">Our Differentiation</p>
+          <h2 id="commitments-heading" class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight">
+            Three Commitments
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-1">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-6 shadow-lg">
+              <svg class="w-8 h-8 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
             </div>
-            <div class="flex items-center gap-3 text-gold text-sm font-body">
-              <span>Phase I through pivotal</span>
-              <span class="text-gold/30">&bull;</span>
-              <span>40+ countries</span>
-              <span class="text-gold/30">&bull;</span>
-              <span>Hub-and-spoke models</span>
-            </div>
+            <h3 class="font-display text-2xl font-bold text-text-primary mb-4">Endpoint Expertise</h3>
+            <p class="text-text-secondary leading-relaxed mb-4">
+              Biostatisticians embedded at protocol design — not handed a finished protocol. We define endpoints with regulatory precedent, statistical defensibility, and clinical relevance baked in from day one.
+            </p>
+            <div class="h-1 w-16 bg-gradient-to-r from-gold to-gold-light rounded-full"></div>
           </div>
 
-          <!-- Data Management -->
-          <div class="card-tilt glass-card shimmer-card glow-top p-7 reveal d1">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-11 h-11 flex items-center justify-center rounded-lg bg-gold/10 border border-gold/20">
-                <svg width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                  <rect x="6" y="8" width="28" height="24" rx="3" stroke="#c9a84c" stroke-width="2" fill="none"/>
-                  <path d="M12 16h16M12 21h16M12 26h10" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <h3 class="font-display font-semibold text-white text-base">Data Management</h3>
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-2">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-6 shadow-lg">
+              <svg class="w-8 h-8 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
             </div>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">Purpose-built for cardiovascular data complexity &mdash; ECG waveforms, imaging endpoints, and wearable biosensor streams converging into a single audit-ready database.</p>
+            <h3 class="font-display text-2xl font-bold text-text-primary mb-4">Operational Rigor</h3>
+            <p class="text-text-secondary leading-relaxed mb-4">
+              Data-first means operations, not just analysis. Centralized monitoring, real-time query management, 21 CFR Part 11 validated systems — all before first patient enrolled. 97% on-time database lock isn't a goal, it's our baseline.
+            </p>
+            <div class="h-1 w-16 bg-gradient-to-r from-gold to-gold-light rounded-full"></div>
           </div>
 
-          <!-- Biostatistics -->
-          <div class="card-tilt glass-card shimmer-card glow-top p-7 reveal d2">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-11 h-11 flex items-center justify-center rounded-lg bg-gold/10 border border-gold/20">
-                <svg width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                  <path d="M8 32 L14 20 L20 26 L26 12 L32 18" stroke="#c9a84c" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="14" cy="20" r="2.5" fill="#c9a84c"/>
-                  <circle cx="26" cy="12" r="2.5" fill="#c9a84c"/>
-                </svg>
-              </div>
-              <h3 class="font-display font-semibold text-white text-base">Biostatistics</h3>
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-3">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-6 shadow-lg">
+              <svg class="w-8 h-8 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             </div>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">MACE composites, win ratio methodology, ICH E9(R1) estimands, DSMB interim analyses, and submission-ready reports aligned with FDA and EMA cardiovascular guidance.</p>
-          </div>
-
-          <!-- Pharmacovigilance -->
-          <div class="card-tilt glass-card shimmer-card glow-top p-7 reveal d1">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-11 h-11 flex items-center justify-center rounded-lg bg-gold/10 border border-gold/20">
-                <svg width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                  <path d="M20 6v6M14 8l2 5M26 8l-2 5" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
-                  <rect x="10" y="16" width="20" height="18" rx="3" stroke="#c9a84c" stroke-width="2" fill="none"/>
-                  <path d="M16 22l3 3 5-6" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <h3 class="font-display font-semibold text-white text-base">Pharmacovigilance</h3>
-            </div>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">Cardiac safety surveillance across CiPA, ICH E14/S7B, arrhythmia coding, oncology cardiotoxicity, and GLP-1 MACE adjudication with SUSAR reporting.</p>
-          </div>
-
-          <!-- Trial Design & Regulatory -->
-          <div class="card-tilt glass-card shimmer-card glow-top p-7 reveal d2">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-11 h-11 flex items-center justify-center rounded-lg bg-gold/10 border border-gold/20">
-                <svg width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                  <path d="M8 12h24v20H8z" stroke="#c9a84c" stroke-width="2" fill="none" rx="2"/>
-                  <path d="M8 12l12 10 12-10" stroke="#c9a84c" stroke-width="2" fill="none"/>
-                  <rect x="22" y="6" width="12" height="8" rx="2" fill="#c9a84c" opacity="0.2" stroke="#c9a84c" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <h3 class="font-display font-semibold text-white text-base">Trial Design &amp; Regulatory</h3>
-            </div>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">Adaptive, event-driven, and Bayesian architectures grounded in FDA HF Endpoints and CVOT guidance. Breakthrough Therapy, Fast Track, and EMA PRIME pathways.</p>
-          </div>
-
-          <!-- Core Lab Services -->
-          <div class="card-tilt glass-card shimmer-card glow-top p-7 reveal d3">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-11 h-11 flex items-center justify-center rounded-lg bg-gold/10 border border-gold/20">
-                <svg width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                  <circle cx="20" cy="20" r="12" stroke="#c9a84c" stroke-width="2" fill="none"/>
-                  <circle cx="20" cy="20" r="5" stroke="#c9a84c" stroke-width="2" fill="none"/>
-                  <path d="M20 8v4M20 28v4M8 20h4M28 20h4" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <h3 class="font-display font-semibold text-white text-base">Core Lab Services</h3>
-            </div>
-            <p class="font-body text-text-secondary text-sm leading-relaxed">Blinded cardiac imaging across echo, CMR, CTA, and QCA. Integrated biomarker core for hs-troponin, NT-proBNP, with DICOM infrastructure and inter-reader monitoring.</p>
+            <h3 class="font-display text-2xl font-bold text-text-primary mb-4">Scientific Partnership</h3>
+            <p class="text-text-secondary leading-relaxed mb-4">
+              94% team continuity across trials. No handoffs to junior staff after contract signature. The biostatistician who designed your sample size calculation is the same one who writes your CSR. That's not marketing — that's how we staff.
+            </p>
+            <div class="h-1 w-16 bg-gradient-to-r from-gold to-gold-light rounded-full"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════ ABOUT ═══════════════════ -->
-    <section id="about" class="py-16 md:py-24 lg:py-32" aria-labelledby="about-heading">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row items-start gap-10 md:gap-12 lg:gap-20">
-          <!-- Left 55%: Text -->
-          <div class="w-full md:w-[55%]">
-            <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-4">Our Story</p>
-            <h2 id="about-heading" class="reveal d1 font-display font-bold text-white text-2xl sm:text-3xl lg:text-4xl mb-6 md:mb-8">Built for Cardiovascular Complexity</h2>
-            <div class="section-glow-line mb-10 reveal d1" aria-hidden="true"></div>
+    <!-- ================ SERVICES (BENTO GRID) ================ -->
+    <section id="services" class="relative py-20 lg:py-32 overflow-hidden" aria-labelledby="services-heading">
+      <div class="section-glow-line mb-16"></div>
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal-blur">
+          <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-4">Core Services</p>
+          <h2 id="services-heading" class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight mb-6">
+            Full-Service Cardiovascular CRO
+          </h2>
+          <p class="text-xl text-text-secondary leading-relaxed max-w-3xl mx-auto">
+            From protocol design through regulatory submission, we deliver integrated biometrics, operations, and clinical management for global cardiovascular trials.
+          </p>
+        </div>
 
-            <p class="reveal d2 font-body text-text-secondary text-base leading-relaxed mb-6">
-              Our founders &mdash; interventional cardiologists, heart failure trialists, and clinical operations leaders &mdash; saw the same pattern at large CROs: generalist teams rotating across therapeutic areas, unfamiliar with composite MACE adjudication or the rigor a 15,000-patient CVOT demands. They built CardioVera to end that pattern.
-            </p>
-
-            <p class="reveal d3 font-body text-text-secondary text-base leading-relaxed mb-8">
-              Our biometrics team is the strategic backbone of every program. Data management, biostatistics, and statistical programming operate as an integrated unit &mdash; not separate departments with handoff forms between them. The result: faster database locks, fewer post-lock issues, and submission packages that don't generate FDA information requests.
-            </p>
-
-            <blockquote class="reveal d4 relative my-10 pl-8 border-l-2 border-gold/30 pull-quote">
-              <p class="font-display italic text-white text-lg sm:text-xl lg:text-2xl leading-relaxed">
-                Cardiovascular trials are too consequential to be run by generalists.
-              </p>
-            </blockquote>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-1 hover:scale-105 transition-transform duration-500">
+            <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-5 shadow-lg">
+              <svg class="w-7 h-7 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-3">Biostatistics</h3>
+            <p class="text-text-secondary text-sm leading-relaxed">Statistical design, power calculations, SAP authorship, interim analyses, and submission-ready datasets (CDISC SDTM/ADaM).</p>
           </div>
 
-          <!-- Right 45%: Viz + feature grid -->
-          <div class="w-full md:w-[45%]">
-            <!-- Decorative mesh -->
-            <div class="about-viz w-full h-40 sm:h-48 lg:h-64 rounded-xl mb-8 md:mb-10 reveal d2" aria-hidden="true">
-              <div class="grid-lines"></div>
-              <!-- Scrolling ECG waveform -->
-              <svg class="ecg-viz" viewBox="0 0 800 60" fill="none" preserveAspectRatio="none" style="height: 60px;">
-                <path d="M0 30 L60 30 L70 30 L78 22 L82 42 L86 10 L90 38 L94 28 L98 30 L160 30 L170 30 L178 22 L182 42 L186 10 L190 38 L194 28 L198 30 L260 30 L270 30 L278 22 L282 42 L286 10 L290 38 L294 28 L298 30 L360 30 L370 30 L378 22 L382 42 L386 10 L390 38 L394 28 L398 30 L400 30 L460 30 L470 30 L478 22 L482 42 L486 10 L490 38 L494 28 L498 30 L560 30 L570 30 L578 22 L582 42 L586 10 L590 38 L594 28 L598 30 L660 30 L670 30 L678 22 L682 42 L686 10 L690 38 L694 28 L698 30 L760 30 L770 30 L778 22 L782 42 L786 10 L790 38 L794 28 L798 30 L800 30" stroke="rgba(201,168,76,0.35)" stroke-width="1.5"/>
-                <path d="M0 30 L60 30 L70 30 L78 22 L82 42 L86 10 L90 38 L94 28 L98 30 L160 30 L170 30 L178 22 L182 42 L186 10 L190 38 L194 28 L198 30 L260 30 L270 30 L278 22 L282 42 L286 10 L290 38 L294 28 L298 30 L360 30 L370 30 L378 22 L382 42 L386 10 L390 38 L394 28 L398 30 L400 30 L460 30 L470 30 L478 22 L482 42 L486 10 L490 38 L494 28 L498 30 L560 30 L570 30 L578 22 L582 42 L586 10 L590 38 L594 28 L598 30 L660 30 L670 30 L678 22 L682 42 L686 10 L690 38 L694 28 L698 30 L760 30 L770 30 L778 22 L782 42 L786 10 L790 38 L794 28 L798 30 L800 30" stroke="rgba(201,168,76,0.1)" stroke-width="4" filter="blur(3px)"/>
-              </svg>
-              <!-- Pulse dots -->
-              <div class="pulse-dot" style="top: 20%; left: 25%;"></div>
-              <div class="pulse-dot" style="top: 65%; left: 60%; animation-delay: -0.7s;"></div>
-              <div class="pulse-dot" style="top: 35%; left: 80%; animation-delay: -1.3s;"></div>
-              <!-- Data labels -->
-              <span class="data-label" style="top: 12px; left: 16px;">Cardiac Data Stream</span>
-              <span class="data-label" style="bottom: 12px; right: 16px;">Real-Time Analysis</span>
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-2 hover:scale-105 transition-transform duration-500">
+            <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-5 shadow-lg">
+              <svg class="w-7 h-7 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
             </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-3">Data Management</h3>
+            <p class="text-text-secondary text-sm leading-relaxed">EDC build, database design, edit checks, medical coding, query management, 21 CFR Part 11 validated systems, and database lock execution.</p>
+          </div>
 
-            <!-- Feature grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="glass-card p-5 reveal d2">
-                <div class="flex items-center gap-2 mb-2">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c9a84c" stroke-width="1.2"/><path d="M5 8l2 2 4-4" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <h3 class="font-display font-semibold text-white text-sm">Therapeutic Focus</h3>
-                </div>
-                <p class="font-body text-text-dim text-xs leading-relaxed">Exclusively cardiovascular. No therapeutic rotation.</p>
-              </div>
-              <div class="glass-card p-5 reveal d3">
-                <div class="flex items-center gap-2 mb-2">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c9a84c" stroke-width="1.2"/><path d="M5 8l2 2 4-4" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <h3 class="font-display font-semibold text-white text-sm">Global Reach</h3>
-                </div>
-                <p class="font-body text-text-dim text-xs leading-relaxed">40+ countries with cardiac-calibrated site databases.</p>
-              </div>
-              <div class="glass-card p-5 reveal d3">
-                <div class="flex items-center gap-2 mb-2">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c9a84c" stroke-width="1.2"/><path d="M5 8l2 2 4-4" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <h3 class="font-display font-semibold text-white text-sm">Regulatory Precision</h3>
-                </div>
-                <p class="font-body text-text-dim text-xs leading-relaxed">Zero FDA CRLs across every CV submission.</p>
-              </div>
-              <div class="glass-card p-5 reveal d4">
-                <div class="flex items-center gap-2 mb-2">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c9a84c" stroke-width="1.2"/><path d="M5 8l2 2 4-4" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <h3 class="font-display font-semibold text-white text-sm">Integrated Core Lab</h3>
-                </div>
-                <p class="font-body text-text-dim text-xs leading-relaxed">Echo, CMR, CCTA, IVUS under one roof.</p>
-              </div>
-              <div class="glass-card p-5 reveal d4">
-                <div class="flex items-center gap-2 mb-2">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c9a84c" stroke-width="1.2"/><path d="M5 8l2 2 4-4" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <h3 class="font-display font-semibold text-white text-sm">Endpoint Adjudication</h3>
-                </div>
-                <p class="font-body text-text-dim text-xs leading-relaxed">Dedicated CECs for MACE, HF, and bleeding endpoints.</p>
-              </div>
-              <div class="glass-card p-5 reveal d5">
-                <div class="flex items-center gap-2 mb-2">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c9a84c" stroke-width="1.2"/><path d="M5 8l2 2 4-4" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <h3 class="font-display font-semibold text-white text-sm">Digital Endpoints</h3>
-                </div>
-                <p class="font-body text-text-dim text-xs leading-relaxed">Wearable rhythm, remote hemodynamics, actigraphy.</p>
-              </div>
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-3 hover:scale-105 transition-transform duration-500">
+            <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-5 shadow-lg">
+              <svg class="w-7 h-7 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-3">Regulatory Support</h3>
+            <p class="text-text-secondary text-sm leading-relaxed">Protocol development, investigator's brochure, clinical study reports (CSRs), integrated summaries (ISS/ISE), eCTD submissions, and FDA meeting preparation.</p>
+          </div>
+
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-4 hover:scale-105 transition-transform duration-500">
+            <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-5 shadow-lg">
+              <svg class="w-7 h-7 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-3">Clinical Operations</h3>
+            <p class="text-text-secondary text-sm leading-relaxed">Site selection, patient recruitment strategies, centralized monitoring, on-site monitoring, medical monitoring, and safety reporting.</p>
+          </div>
+
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-5 hover:scale-105 transition-transform duration-500">
+            <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-5 shadow-lg">
+              <svg class="w-7 h-7 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-3">Cardiac Imaging</h3>
+            <p class="text-text-secondary text-sm leading-relaxed">Core lab services for echocardiography, cardiac MRI, CT angiography, and nuclear imaging with centralized endpoint adjudication.</p>
+          </div>
+
+          <div class="glass-card shimmer-card card-tilt p-8 reveal-scale stagger-6 hover:scale-105 transition-transform duration-500">
+            <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-5 shadow-lg">
+              <svg class="w-7 h-7 text-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-3">Quality Assurance</h3>
+            <p class="text-text-secondary text-sm leading-relaxed">GCP audits, vendor qualification, TMF management, CAPA systems, inspection readiness, and regulatory compliance oversight.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
-    <section id="testimonials" class="py-16 md:py-24 lg:py-32" style="background: linear-gradient(180deg, #0a1628, #0d1b2e);" aria-labelledby="testimonials-heading">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 md:mb-16">
-          <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-4">Client Perspectives</p>
-          <h2 id="testimonials-heading" class="reveal d1 font-display font-bold text-white text-2xl sm:text-3xl lg:text-4xl">Trusted by Leading Sponsors</h2>
-          <div class="section-glow-line mx-auto mt-6" aria-hidden="true"></div>
-        </div>
-
-        <div class="max-w-3xl mx-auto relative" role="region" aria-label="Testimonial carousel" aria-roledescription="carousel">
-          <!-- Testimonial 1 -->
-          <div class="testimonial-slide active glass-card p-6 sm:p-8 lg:p-12 text-center" role="group" aria-roledescription="slide" aria-label="Testimonial 1 of 5" data-testimonial="0">
-            <svg class="mx-auto mb-6" width="40" height="32" viewBox="0 0 40 32" fill="none" aria-hidden="true">
-              <path d="M0 32V18.5C0 6.2 7.2 1.2 16 0l1.8 5.5C11 7.5 8.8 12 8.5 16H16v16H0zm24 0V18.5C24 6.2 31.2 1.2 40 0l-1.8 5.5C31 7.5 32.8 12 32.5 16H40v16H24z" fill="url(#quoteGrad1)" opacity="0.2"/>
-              <defs><linearGradient id="quoteGrad1" x1="0" y1="0" x2="40" y2="32"><stop stop-color="#c9a84c"/><stop offset="1" stop-color="#d4b96a"/></linearGradient></defs>
-            </svg>
-            <p class="font-body italic text-text-primary text-base sm:text-lg leading-relaxed mb-6 sm:mb-8">
-              Their biostatistics team ran a Bayesian adaptive interim for our Phase III HFrEF program without unblinding the study. The integrated core lab eliminated months of imaging coordination overhead. When we filed, the FDA had zero pushback on endpoint adjudication integrity.
+    <!-- ================ ABOUT ================ -->
+    <section id="about" class="relative py-20 lg:py-32 overflow-hidden" aria-labelledby="about-heading">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="glass-card shimmer-card p-10 lg:p-16 reveal-blur">
+          <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-4">About CardioVera</p>
+          <h2 id="about-heading" class="font-display text-3xl lg:text-4xl font-bold text-text-primary leading-tight mb-8">
+            Built by biostatisticians who got tired of being brought in too late.
+          </h2>
+          <div class="space-y-6 text-text-secondary leading-relaxed text-lg">
+            <p>
+              CardioVera was founded by senior biostatisticians and data scientists who spent decades consulting for traditional CROs — and watching the same pattern repeat: sponsors designed protocols, locked endpoints, estimated sample sizes, then called the stat team to "run the numbers."
             </p>
-            <div>
-              <p class="font-display font-semibold text-white">Dr. Katherine Hargrove</p>
-              <p class="font-body text-text-secondary text-sm">VP, Clinical Development &mdash; Meridian Therapeutics</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 2 -->
-          <div class="testimonial-slide next absolute inset-0 glass-card p-6 sm:p-8 lg:p-12 text-center" role="group" aria-roledescription="slide" aria-label="Testimonial 2 of 5" data-testimonial="1" aria-hidden="true">
-            <svg class="mx-auto mb-6" width="40" height="32" viewBox="0 0 40 32" fill="none" aria-hidden="true">
-              <path d="M0 32V18.5C0 6.2 7.2 1.2 16 0l1.8 5.5C11 7.5 8.8 12 8.5 16H16v16H0zm24 0V18.5C24 6.2 31.2 1.2 40 0l-1.8 5.5C31 7.5 32.8 12 32.5 16H40v16H24z" fill="url(#quoteGrad1)" opacity="0.2"/>
-            </svg>
-            <p class="font-body italic text-text-primary text-base sm:text-lg leading-relaxed mb-6 sm:mb-8">
-              We pivoted our CVOT from superiority to non-inferiority mid-program. CardioVera restructured monitoring across 145 sites in 12 countries without losing a single high-enrolling center. A generalist CRO would have treated it as a crisis &mdash; they treated it as a Tuesday.
+            <p>
+              By then, endpoints were fuzzy, power calculations were post-hoc justifications, and the data structure was built for operations convenience, not statistical integrity. Regulatory agencies saw through it. Submissions got delayed. Sponsors paid twice.
             </p>
-            <div>
-              <p class="font-display font-semibold text-white">Michael Brennan</p>
-              <p class="font-body text-text-secondary text-sm">SVP, Global Clinical Operations &mdash; Atlas Cardio Pharma</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 3 -->
-          <div class="testimonial-slide next absolute inset-0 glass-card p-6 sm:p-8 lg:p-12 text-center" role="group" aria-roledescription="slide" aria-label="Testimonial 3 of 5" data-testimonial="2" aria-hidden="true">
-            <svg class="mx-auto mb-6" width="40" height="32" viewBox="0 0 40 32" fill="none" aria-hidden="true">
-              <path d="M0 32V18.5C0 6.2 7.2 1.2 16 0l1.8 5.5C11 7.5 8.8 12 8.5 16H16v16H0zm24 0V18.5C24 6.2 31.2 1.2 40 0l-1.8 5.5C31 7.5 32.8 12 32.5 16H40v16H24z" fill="url(#quoteGrad1)" opacity="0.2"/>
-            </svg>
-            <p class="font-body italic text-text-primary text-base sm:text-lg leading-relaxed mb-6 sm:mb-8">
-              They understood our transcatheter mitral valve regulatory landscape from day one and built device-specific echo core lab protocols with independent readers. When we file our PMA, the clinical package CardioVera assembled will be the strongest part of our submission.
+            <p class="text-text-primary font-semibold">
+              We built CardioVera to flip that model: biometrics first, operations second. The result is faster timelines, cleaner data, and regulatory submissions that don't come back with deficiency letters.
             </p>
-            <div>
-              <p class="font-display font-semibold text-white">Dr. Rachel Nguyen</p>
-              <p class="font-body text-text-secondary text-sm">Chief Medical Officer &mdash; Corvus Structural Heart</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 4 -->
-          <div class="testimonial-slide next absolute inset-0 glass-card p-6 sm:p-8 lg:p-12 text-center" role="group" aria-roledescription="slide" aria-label="Testimonial 4 of 5" data-testimonial="3" aria-hidden="true">
-            <svg class="mx-auto mb-6" width="40" height="32" viewBox="0 0 40 32" fill="none" aria-hidden="true">
-              <path d="M0 32V18.5C0 6.2 7.2 1.2 16 0l1.8 5.5C11 7.5 8.8 12 8.5 16H16v16H0zm24 0V18.5C24 6.2 31.2 1.2 40 0l-1.8 5.5C31 7.5 32.8 12 32.5 16H40v16H24z" fill="url(#quoteGrad1)" opacity="0.2"/>
-            </svg>
-            <p class="font-body italic text-text-primary text-base sm:text-lg leading-relaxed mb-6 sm:mb-8">
-              Our AAV cardiomyopathy program needed a CRO that could bridge rare disease precision with cardiovascular outcome rigor. CardioVera designed cardiac MRI-based endpoints the FDA accepted without modification and built a myocarditis safety framework that kept us off clinical hold.
-            </p>
-            <div>
-              <p class="font-display font-semibold text-white">Dr. Anand Mehta</p>
-              <p class="font-body text-text-secondary text-sm">Co-Founder &amp; CMO &mdash; Helicase Genomics</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 5 -->
-          <div class="testimonial-slide next absolute inset-0 glass-card p-6 sm:p-8 lg:p-12 text-center" role="group" aria-roledescription="slide" aria-label="Testimonial 5 of 5" data-testimonial="4" aria-hidden="true">
-            <svg class="mx-auto mb-6" width="40" height="32" viewBox="0 0 40 32" fill="none" aria-hidden="true">
-              <path d="M0 32V18.5C0 6.2 7.2 1.2 16 0l1.8 5.5C11 7.5 8.8 12 8.5 16H16v16H0zm24 0V18.5C24 6.2 31.2 1.2 40 0l-1.8 5.5C31 7.5 32.8 12 32.5 16H40v16H24z" fill="url(#quoteGrad1)" opacity="0.2"/>
-            </svg>
-            <p class="font-body italic text-text-primary text-base sm:text-lg leading-relaxed mb-6 sm:mb-8">
-              CardioVera designed our Phase III anticoagulant SAP with hierarchical testing that gave us a credible path to a dual efficacy-safety claim. When the FDA sent a major information request mid-trial, the response went out in 11 days &mdash; reviewers later called the data tables among the cleanest they'd seen.
-            </p>
-            <div>
-              <p class="font-display font-semibold text-white">Dr. Claire Fontaine</p>
-              <p class="font-body text-text-secondary text-sm">SVP, Regulatory Affairs &mdash; Cadenza Pharmaceuticals</p>
-            </div>
-          </div>
-
-          <!-- Navigation -->
-          <div class="flex items-center justify-center gap-6 mt-8">
-            <button id="testimonial-prev" class="w-10 h-10 rounded-full border border-gold/20 hover:border-gold/50 flex items-center justify-center transition-all duration-300 text-text-secondary hover:text-gold" aria-label="Previous testimonial">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l-6 6 6 6"/></svg>
-            </button>
-            <div id="testimonial-dots" class="flex items-center gap-2.5" aria-hidden="true"></div>
-            <button id="testimonial-next" class="w-10 h-10 rounded-full border border-gold/20 hover:border-gold/50 flex items-center justify-center transition-all duration-300 text-text-secondary hover:text-gold" aria-label="Next testimonial">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l6 6-6 6"/></svg>
-            </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════ TEAM ═══════════════════ -->
-    <section id="team" class="py-16 md:py-24 lg:py-32" aria-labelledby="team-heading">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 md:mb-16 lg:mb-20">
-          <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-4">Leadership</p>
-          <h2 id="team-heading" class="reveal d1 font-display font-bold text-white text-2xl sm:text-3xl lg:text-4xl">Our Executive Team</h2>
-          <div class="section-glow-line mx-auto mt-6" aria-hidden="true"></div>
+    <!-- ================ TESTIMONIALS ================ -->
+    <section id="testimonials" class="relative py-20 lg:py-32 overflow-hidden" aria-labelledby="testimonials-heading">
+      <div class="section-glow-line mb-16"></div>
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal-blur">
+          <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-4">Testimonials</p>
+          <h2 id="testimonials-heading" class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight">
+            What Our Partners Say
+          </h2>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          <div class="glass-card team-glow p-8 text-center reveal">
-            <svg class="w-24 h-24 rounded-full mx-auto mb-5" viewBox="0 0 200 200" role="img" aria-label="Dr. Elena Marchetti">
-              <defs><linearGradient id="avatarG" x1="0" y1="0" x2="200" y2="200"><stop stop-color="#1e3a5f"/><stop offset="1" stop-color="#132440"/></linearGradient></defs>
-              <circle cx="100" cy="100" r="100" fill="url(#avatarG)"/>
-              <text x="100" y="112" text-anchor="middle" font-family="'Playfair Display',serif" font-size="64" font-weight="700" fill="#c9a84c">EM</text>
-            </svg>
-            <h3 class="font-display font-semibold text-white text-lg mb-1">Dr. Elena Marchetti</h3>
-            <p class="text-gold font-body text-xs mb-4">Chief Executive Officer</p>
-            <p class="font-body text-text-dim text-xs leading-relaxed">FACC cardiologist, 18 years in CV drug development. MGH fellowship, Cleveland Clinic advanced HF. Six successful FDA submissions.</p>
-          </div>
-
-          <div class="glass-card team-glow p-8 text-center reveal d1">
-            <svg class="w-24 h-24 rounded-full mx-auto mb-5" viewBox="0 0 200 200" role="img" aria-label="James Okafor">
-              <circle cx="100" cy="100" r="100" fill="url(#avatarG)"/>
-              <text x="100" y="112" text-anchor="middle" font-family="'Playfair Display',serif" font-size="64" font-weight="700" fill="#c9a84c">JO</text>
-            </svg>
-            <h3 class="font-display font-semibold text-white text-lg mb-1">James Okafor</h3>
-            <p class="text-gold font-body text-xs mb-4">Chief Operating Officer</p>
-            <p class="font-body text-text-dim text-xs leading-relaxed">15 years managing multi-regional CV trials across 30+ countries. Pioneered data-driven site selection. Duke Fuqua MBA.</p>
-          </div>
-
-          <div class="glass-card team-glow p-8 text-center reveal d2">
-            <svg class="w-24 h-24 rounded-full mx-auto mb-5" viewBox="0 0 200 200" role="img" aria-label="Dr. Sarah Lindqvist">
-              <circle cx="100" cy="100" r="100" fill="url(#avatarG)"/>
-              <text x="100" y="112" text-anchor="middle" font-family="'Playfair Display',serif" font-size="64" font-weight="700" fill="#c9a84c">SL</text>
-            </svg>
-            <h3 class="font-display font-semibold text-white text-lg mb-1">Dr. Sarah Lindqvist</h3>
-            <p class="text-gold font-body text-xs mb-4">VP, Biostatistics</p>
-            <p class="font-body text-text-dim text-xs leading-relaxed">Karolinska PhD in composite CV endpoints. 40+ NDA/PMA statistical plans. Former FDA Division of Biometrics lead. ASA Fellow.</p>
-          </div>
-
-          <div class="glass-card team-glow p-8 text-center reveal d3">
-            <svg class="w-24 h-24 rounded-full mx-auto mb-5" viewBox="0 0 200 200" role="img" aria-label="Dr. Raj Venkatesh">
-              <circle cx="100" cy="100" r="100" fill="url(#avatarG)"/>
-              <text x="100" y="112" text-anchor="middle" font-family="'Playfair Display',serif" font-size="64" font-weight="700" fill="#c9a84c">RV</text>
-            </svg>
-            <h3 class="font-display font-semibold text-white text-lg mb-1">Dr. Raj Venkatesh</h3>
-            <p class="text-gold font-body text-xs mb-4">Medical Director, Core Lab</p>
-            <p class="font-body text-text-dim text-xs leading-relaxed">Interventional cardiologist, Emory fellowship. Level III echo and CMR certified. Core lab director on 50+ global pivotal trials.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════ CONTACT ═══════════════════ -->
-    <section id="contact" class="py-16 md:py-24 lg:py-32" style="background: linear-gradient(180deg, #0a1628, #0d1b2e);" aria-labelledby="contact-heading">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10 md:mb-12 lg:mb-16">
-          <p class="reveal text-gold font-body text-xs tracking-[0.25em] uppercase mb-4">Get in Touch</p>
-          <h2 id="contact-heading" class="reveal d1 font-display font-bold text-white text-2xl sm:text-3xl lg:text-4xl mb-4">Tell Us About Your Program</h2>
-          <p class="reveal d2 font-body text-text-secondary text-sm max-w-lg mx-auto">Our scientific advisors will respond within 24 hours &mdash; not with a sales pitch, but with a preliminary scientific assessment.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-          <!-- Address -->
-          <div class="reveal">
-            <div class="flex items-center gap-3 mb-6">
-              <div class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path d="M10 2C6.5 2 4 5 4 7.5c0 5.5 6 10.5 6 10.5s6-5 6-10.5C16 5 13.5 2 10 2z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-                  <circle cx="10" cy="7.5" r="2" fill="#c9a84c"/>
-                </svg>
-              </div>
-              <h3 class="font-display font-semibold text-white text-lg">Our Office</h3>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="glass-card shimmer-card p-8 lg:p-10 reveal-scale stagger-1">
+            <div class="flex items-center gap-1 mb-6">
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
             </div>
-            <address class="not-italic font-body text-text-secondary text-sm leading-relaxed ml-[52px]">
-              200 Meridian Blvd<br>
-              Suite 400<br>
-              Research Triangle Park, NC 27709<br>
-              United States
-            </address>
-            <div class="mt-6 ml-[52px]">
-              <p class="font-body text-text-dim text-sm">
-                <span class="text-text-secondary font-bold">Hours:</span> Monday &ndash; Friday, 8 AM &ndash; 6 PM EST
-              </p>
-            </div>
-          </div>
-
-          <!-- Form -->
-          <div class="reveal d1">
-            <div class="glass-card p-5 sm:p-8">
-              <form id="contact-form" novalidate aria-label="Contact form">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label for="first-name" class="block font-body text-text-secondary text-xs mb-1.5">First Name <span class="text-gold" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                    <input type="text" id="first-name" name="first-name" required class="form-input w-full px-4 py-2.5 rounded-lg text-sm font-body outline-none" placeholder="Jane">
-                  </div>
-                  <div>
-                    <label for="last-name" class="block font-body text-text-secondary text-xs mb-1.5">Last Name <span class="text-gold" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                    <input type="text" id="last-name" name="last-name" required class="form-input w-full px-4 py-2.5 rounded-lg text-sm font-body outline-none" placeholder="Doe">
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <label for="work-email" class="block font-body text-text-secondary text-xs mb-1.5">Work Email <span class="text-gold" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                  <input type="email" id="work-email" name="work-email" required class="form-input w-full px-4 py-2.5 rounded-lg text-sm font-body outline-none" placeholder="jane.doe@company.com">
-                </div>
-                <div class="mb-4">
-                  <label for="company" class="block font-body text-text-secondary text-xs mb-1.5">Company <span class="text-gold" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                  <input type="text" id="company" name="company" required class="form-input w-full px-4 py-2.5 rounded-lg text-sm font-body outline-none" placeholder="Acme Therapeutics">
-                </div>
-                <div class="mb-4">
-                  <label for="area-of-interest" class="block font-body text-text-secondary text-xs mb-1.5">Area of Interest</label>
-                  <select id="area-of-interest" name="area-of-interest" class="form-input w-full px-4 py-2.5 rounded-lg text-sm font-body outline-none">
-                    <option value="">Select an area...</option>
-                    <option value="clinical-operations">Clinical Operations</option>
-                    <option value="data-management">Data Management</option>
-                    <option value="biostatistics">Biostatistics</option>
-                    <option value="pharmacovigilance">Pharmacovigilance</option>
-                    <option value="trial-design-regulatory">Trial Design &amp; Regulatory</option>
-                    <option value="core-lab">Core Lab Services</option>
-                    <option value="full-service">Full-Service Partnership</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div class="mb-6">
-                  <label for="message" class="block font-body text-text-secondary text-xs mb-1.5">Message</label>
-                  <textarea id="message" name="message" rows="4" class="form-input w-full px-4 py-2.5 rounded-lg text-sm font-body outline-none resize-vertical" placeholder="Tell us about your study or program needs..."></textarea>
-                </div>
-                <button type="submit" class="btn-ripple btn-gold w-full justify-center text-xs">
-                  Submit Your Program Details
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <!-- Phone / Email -->
-          <div class="reveal d2">
-            <div class="flex items-center gap-3 mb-6">
-              <div class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path d="M4 3h4l2 4-2.5 2a11 11 0 005 5l2-2.5 4 2v4a2 2 0 01-2 2A16 16 0 012 5a2 2 0 012-2z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-                </svg>
-              </div>
-              <h3 class="font-display font-semibold text-white text-lg">Phone &amp; Email</h3>
-            </div>
-            <div class="ml-[52px] space-y-4">
+            <p class="text-text-secondary text-lg leading-relaxed mb-6 italic">
+              "CardioVera's biostatisticians caught a sample size miscalculation before we locked the protocol — saved us from running an underpowered Phase 3. That level of rigor at protocol stage is unheard of in traditional CROs."
+            </p>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-lg shadow-lg">DW</div>
               <div>
-                <p class="font-body text-text-secondary text-sm font-bold mb-1">General Inquiries</p>
-                <a href="tel:+19195550142" class="font-body text-text-dim text-sm hover:text-gold transition-colors block">+1 (919) 555-0142</a>
-              </div>
-              <div>
-                <p class="font-body text-text-secondary text-sm font-bold mb-1">Email</p>
-                <a href="mailto:inquiries@cardioveraresearch.com" class="font-body text-text-dim text-sm hover:text-gold transition-colors block break-all">inquiries@cardioveraresearch.com</a>
+                <p class="text-text-primary font-semibold">Dr. William Chen</p>
+                <p class="text-text-dim text-sm">VP Clinical Development, Apex Therapeutics</p>
               </div>
             </div>
+          </div>
 
-            <div class="mt-10 ml-[52px]">
-              <h4 class="font-display font-semibold text-white text-sm mb-4">Connect With Us</h4>
-              <div class="flex gap-3">
-                <a href="#" class="w-10 h-10 rounded-lg border border-gold/15 hover:border-gold/40 flex items-center justify-center transition-all text-text-dim hover:text-gold" aria-label="LinkedIn">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 7.5v6M4.5 4.5v.01M7.5 13.5v-4a2 2 0 014 0v4M7.5 7.5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-                <a href="#" class="w-10 h-10 rounded-lg border border-gold/15 hover:border-gold/40 flex items-center justify-center transition-all text-text-dim hover:text-gold" aria-label="Twitter">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15 4.5c-.5.5-1.2.8-2 1a3 3 0 00-5 2.5A8 8 0 013 4.5s-1 3 2 5a4 4 0 01-2 .5c3 2 6 1 8-1a4 4 0 001-3.5c0-.1.5-.5 1-1.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+          <div class="glass-card shimmer-card p-8 lg:p-10 reveal-scale stagger-2">
+            <div class="flex items-center gap-1 mb-6">
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="text-text-secondary text-lg leading-relaxed mb-6 italic">
+              "We've worked with four CROs over the years. CardioVera is the only one where the principal biostatistician stayed on the project from protocol through CSR. The continuity shows — our NDA submission went through first cycle with zero stat queries."
+            </p>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-lg shadow-lg">SR</div>
+              <div>
+                <p class="text-text-primary font-semibold">Sarah Rodriguez, PhD</p>
+                <p class="text-text-dim text-sm">Chief Scientific Officer, Meridian Biopharma</p>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ================ TEAM ================ -->
+    <section id="team" class="relative py-20 lg:py-32 overflow-hidden" aria-labelledby="team-heading">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal-blur">
+          <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-4">Leadership Team</p>
+          <h2 id="team-heading" class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight">
+            Meet Our Experts
+          </h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="glass-card shimmer-card card-tilt text-center p-8 reveal-scale stagger-1 group">
+            <div class="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-3xl shadow-xl group-hover:scale-110 transition-transform duration-500">
+              <svg viewBox="0 0 100 100" class="w-full h-full"><text x="50" y="50" text-anchor="middle" dominant-baseline="central" font-family="Playfair Display" font-weight="600" font-size="28" fill="#1e3a5f">DM</text></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-2">Dr. Michael Anderson</h3>
+            <p class="text-gold text-sm font-semibold mb-3">Chief Scientific Officer</p>
+            <p class="text-text-dim text-sm leading-relaxed">15+ years in cardiovascular biostatistics. Former FDA CDRH reviewer.</p>
+          </div>
+
+          <div class="glass-card shimmer-card card-tilt text-center p-8 reveal-scale stagger-2 group">
+            <div class="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-3xl shadow-xl group-hover:scale-110 transition-transform duration-500">
+              <svg viewBox="0 0 100 100" class="w-full h-full"><text x="50" y="50" text-anchor="middle" dominant-baseline="central" font-family="Playfair Display" font-weight="600" font-size="28" fill="#1e3a5f">EP</text></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-2">Dr. Emily Park</h3>
+            <p class="text-gold text-sm font-semibold mb-3">VP of Biostatistics</p>
+            <p class="text-text-dim text-sm leading-relaxed">PhD Biostatistics, Harvard. 20+ cardiovascular NDAs to regulatory approval.</p>
+          </div>
+
+          <div class="glass-card shimmer-card card-tilt text-center p-8 reveal-scale stagger-3 group">
+            <div class="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-3xl shadow-xl group-hover:scale-110 transition-transform duration-500">
+              <svg viewBox="0 0 100 100" class="w-full h-full"><text x="50" y="50" text-anchor="middle" dominant-baseline="central" font-family="Playfair Display" font-weight="600" font-size="28" fill="#1e3a5f">JT</text></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-2">James Thompson</h3>
+            <p class="text-gold text-sm font-semibold mb-3">Head of Data Management</p>
+            <p class="text-text-dim text-sm leading-relaxed">CDISC certified. Built EDC systems for 50+ global cardiovascular trials.</p>
+          </div>
+
+          <div class="glass-card shimmer-card card-tilt text-center p-8 reveal-scale stagger-4 group">
+            <div class="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-3xl shadow-xl group-hover:scale-110 transition-transform duration-500">
+              <svg viewBox="0 0 100 100" class="w-full h-full"><text x="50" y="50" text-anchor="middle" dominant-baseline="central" font-family="Playfair Display" font-weight="600" font-size="28" fill="#1e3a5f">LK</text></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-text-primary mb-2">Dr. Linda Kim</h3>
+            <p class="text-gold text-sm font-semibold mb-3">Director of Clinical Operations</p>
+            <p class="text-text-dim text-sm leading-relaxed">25+ years GCP auditing. Zero major audit findings across 100+ inspections.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================ CONTACT ================ -->
+    <section id="contact" class="relative py-20 lg:py-32 overflow-hidden" aria-labelledby="contact-heading">
+      <div class="section-glow-line mb-16"></div>
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-12 reveal-blur">
+          <p class="text-gold text-xs font-bold tracking-[0.3em] uppercase mb-4">Get in Touch</p>
+          <h2 id="contact-heading" class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight mb-6">
+            Let's Talk About Your Trial
+          </h2>
+          <p class="text-xl text-text-secondary leading-relaxed max-w-2xl mx-auto">
+            We work with biotech and pharma sponsors at protocol concept stage. If you're planning a cardiovascular trial and want to discuss statistical design, reach out.
+          </p>
+        </div>
+
+        <form class="glass-card shimmer-card p-8 lg:p-12 reveal-scale" id="contact-form">
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label for="name" class="block text-text-primary text-sm font-semibold mb-2">Name *</label>
+              <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg bg-bg-card border border-gold/20 text-text-primary placeholder-text-dim focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/30 transition-all duration-300" placeholder="Dr. Jane Smith">
+            </div>
+            <div>
+              <label for="email" class="block text-text-primary text-sm font-semibold mb-2">Email *</label>
+              <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg bg-bg-card border border-gold/20 text-text-primary placeholder-text-dim focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/30 transition-all duration-300" placeholder="jane.smith@company.com">
+            </div>
+          </div>
+          <div class="mb-6">
+            <label for="company" class="block text-text-primary text-sm font-semibold mb-2">Company</label>
+            <input type="text" id="company" name="company" class="w-full px-4 py-3 rounded-lg bg-bg-card border border-gold/20 text-text-primary placeholder-text-dim focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/30 transition-all duration-300" placeholder="Apex Therapeutics">
+          </div>
+          <div class="mb-6">
+            <label for="message" class="block text-text-primary text-sm font-semibold mb-2">Message *</label>
+            <textarea id="message" name="message" required rows="5" class="w-full px-4 py-3 rounded-lg bg-bg-card border border-gold/20 text-text-primary placeholder-text-dim focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/30 transition-all duration-300 resize-none" placeholder="Tell us about your cardiovascular trial program..."></textarea>
+          </div>
+          <button type="submit" class="w-full px-8 py-4 bg-gold text-navy font-bold text-lg rounded-lg hover:bg-gold-light transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-gold/30 magnetic-btn btn-ripple">
+            Send Message
+          </button>
+          <p id="form-message" class="mt-4 text-center text-sm"></p>
+        </form>
       </div>
     </section>
   </main>
 
-  <!-- ═══════════════════ FOOTER ═══════════════════ -->
-  <footer class="py-16 border-t border-gold/10" role="contentinfo">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-12">
+  <!-- ================ FOOTER ================ -->
+  <footer class="relative py-16 overflow-hidden border-t border-gold/10" role="contentinfo">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
         <div>
-          <a href="#" class="flex items-center gap-2 mb-6" aria-label="CardioVera Research home">
-            <svg width="32" height="32" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-              <rect width="36" height="36" rx="6" fill="rgba(201,168,76,0.2)"/>
-              <path d="M8 20 L12 20 L14 14 L16 26 L18 10 L20 22 L22 18 L24 20 L28 20" stroke="#c9a84c" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="font-display font-semibold text-white text-lg">CardioVera<span class="text-gold">.</span></span>
-          </a>
-          <p class="font-body text-text-dim text-sm leading-relaxed">
-            A biometrics-first cardiovascular CRO delivering rigorous clinical evidence through integrated data strategy and expert execution.
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center font-display font-bold text-navy text-xl shadow-lg">C</div>
+            <span class="font-display text-xl font-semibold text-text-primary">CardioVera</span>
+          </div>
+          <p class="text-text-dim text-sm leading-relaxed">
+            Biometrics-first cardiovascular CRO. Building global cardiac trials around data integrity since 2015.
           </p>
         </div>
         <div>
-          <h4 class="font-display font-semibold text-gold text-xs tracking-wider uppercase mb-5">Services</h4>
-          <ul class="space-y-3">
-            <li><a href="#services" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Clinical Operations</a></li>
-            <li><a href="#services" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Data Management</a></li>
-            <li><a href="#services" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Biostatistics</a></li>
-            <li><a href="#services" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Pharmacovigilance</a></li>
-            <li><a href="#services" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Trial Design &amp; Regulatory</a></li>
-            <li><a href="#services" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Core Lab Services</a></li>
+          <h3 class="font-display text-text-primary font-semibold mb-4">Services</h3>
+          <ul class="space-y-2 text-text-dim text-sm">
+            <li><a href="#services" class="hover:text-gold transition-colors duration-300">Biostatistics</a></li>
+            <li><a href="#services" class="hover:text-gold transition-colors duration-300">Data Management</a></li>
+            <li><a href="#services" class="hover:text-gold transition-colors duration-300">Regulatory Support</a></li>
+            <li><a href="#services" class="hover:text-gold transition-colors duration-300">Clinical Operations</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-display font-semibold text-gold text-xs tracking-wider uppercase mb-5">Company</h4>
-          <ul class="space-y-3">
-            <li><a href="#about" class="font-body text-text-dim hover:text-gold text-sm transition-colors">About Us</a></li>
-            <li><a href="#team" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Leadership</a></li>
-            <li><a href="#" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Careers</a></li>
-            <li><a href="#" class="font-body text-text-dim hover:text-gold text-sm transition-colors">News &amp; Publications</a></li>
-            <li><a href="#" class="font-body text-text-dim hover:text-gold text-sm transition-colors">Quality &amp; Compliance</a></li>
+          <h3 class="font-display text-text-primary font-semibold mb-4">Company</h3>
+          <ul class="space-y-2 text-text-dim text-sm">
+            <li><a href="#about" class="hover:text-gold transition-colors duration-300">About</a></li>
+            <li><a href="#team" class="hover:text-gold transition-colors duration-300">Team</a></li>
+            <li><a href="#testimonials" class="hover:text-gold transition-colors duration-300">Testimonials</a></li>
+            <li><a href="#contact" class="hover:text-gold transition-colors duration-300">Contact</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-display font-semibold text-gold text-xs tracking-wider uppercase mb-5">Contact</h4>
-          <address class="not-italic space-y-3">
-            <p class="font-body text-text-dim text-sm">200 Meridian Blvd, Suite 400<br>Research Triangle Park, NC 27709</p>
-            <p><a href="tel:+19195550142" class="font-body text-text-dim hover:text-gold text-sm transition-colors">+1 (919) 555-0142</a></p>
-            <p><a href="mailto:inquiries@cardioveraresearch.com" class="font-body text-text-dim hover:text-gold text-sm transition-colors break-all">inquiries@cardioveraresearch.com</a></p>
-          </address>
+          <h3 class="font-display text-text-primary font-semibold mb-4">Legal</h3>
+          <ul class="space-y-2 text-text-dim text-sm">
+            <li><a href="#" class="hover:text-gold transition-colors duration-300">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-gold transition-colors duration-300">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-gold transition-colors duration-300">GDPR Compliance</a></li>
+          </ul>
         </div>
       </div>
-
-      <div class="border-t border-gold/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="font-body text-text-dim text-sm">&copy; 2026 CardioVera Research. All rights reserved.</p>
-        <div class="flex gap-6">
-          <a href="#" class="font-body text-text-dim hover:text-text-secondary text-sm transition-colors">Privacy Policy</a>
-          <a href="#" class="font-body text-text-dim hover:text-text-secondary text-sm transition-colors">Terms of Use</a>
-          <a href="#" class="font-body text-text-dim hover:text-text-secondary text-sm transition-colors">Accessibility</a>
-        </div>
+      <div class="pt-8 border-t border-gold/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-text-dim text-sm">&copy; 2025 CardioVera Research. All rights reserved.</p>
+        <p class="text-text-dim text-sm">Built for cardiovascular excellence.</p>
       </div>
     </div>
   </footer>
 
-  <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+  <!-- ================ THEME SWITCHER ================ -->
+  <nav id="themeSwitcher" aria-label="Theme navigation">
+    <a href="index.html" class="ts-home" title="Gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></a>
+    <div class="ts-sep"></div>
+    <a href="theme1-corporate.html" class="ts-dot active" aria-current="page"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#1e3a5f 50%,#c9a84c 50%)"></span><span class="ts-tip">01 — Precision & Prestige</span></a>
+    <a href="2/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0A1628 50%,#C41E3A 50%)"></span><span class="ts-tip">02 — Clinical Evidence</span></a>
+    <a href="theme3-warm.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#faf8f5 50%,#e8634a 50%)"></span><span class="ts-tip">03 — Organic Flow</span></a>
+    <a href="theme4-brutalist.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0a0a0a 50%,#ff2d2d 50%)"></span><span class="ts-tip">04 — Raw & Bold</span></a>
+    <a href="5/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#f3efe5 50%,#0a8d80 50%)"></span><span class="ts-tip">05 — Natural Authority</span></a>
+  </nav>
+
+  <!-- ================ JAVASCRIPT ================ -->
   <script>
     (function() {
       'use strict';
 
-      // ---- Scroll Progress ----
-      var scrollProgress = document.getElementById('scroll-progress');
-      function updateScrollProgress() {
-        var scrollTop = window.scrollY;
-        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        scrollProgress.style.height = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
-      }
-      window.addEventListener('scroll', updateScrollProgress, { passive: true });
-
-      // ---- Cursor Glow (desktop only) ----
+      // ---- Enhanced cursor glow with smooth tracking ----
       var cursorGlow = document.getElementById('cursor-glow');
-      if (window.innerWidth > 768) {
-        cursorGlow.style.display = 'block';
+      var cursorX = 0, cursorY = 0;
+      var currentX = 0, currentY = 0;
+      var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+      if (!isTouch) {
+        cursorGlow.classList.add('active');
         document.addEventListener('mousemove', function(e) {
-          cursorGlow.style.left = e.clientX + 'px';
-          cursorGlow.style.top = e.clientY + 'px';
+          cursorX = e.clientX;
+          cursorY = e.clientY;
         });
-      } else {
-        cursorGlow.style.display = 'none';
+
+        function animateCursor() {
+          currentX += (cursorX - currentX) * 0.15;
+          currentY += (cursorY - currentY) * 0.15;
+          cursorGlow.style.left = currentX + 'px';
+          cursorGlow.style.top = currentY + 'px';
+          requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
       }
 
-      // ---- Mobile Nav ----
-      var mobileMenuBtn = document.getElementById('mobile-menu-btn');
-      var mobileCloseBtn = document.getElementById('mobile-close-btn');
-      var mobileMenu = document.getElementById('mobile-menu');
-      var mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-
-      function openMobileMenu() {
-        mobileMenu.classList.add('open');
-        mobileMenuBtn.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeMobileMenu() {
-        mobileMenu.classList.remove('open');
-        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
-      mobileMenuBtn.addEventListener('click', openMobileMenu);
-      mobileCloseBtn.addEventListener('click', closeMobileMenu);
-      mobileNavLinks.forEach(function(link) {
-        link.addEventListener('click', closeMobileMenu);
+      // ---- Scroll progress ----
+      var scrollProgress = document.getElementById('scroll-progress');
+      window.addEventListener('scroll', function() {
+        var scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        scrollProgress.style.height = scrolled + '%';
       });
 
-      // ---- Intersection Observer: Reveals ----
+      // ---- Mobile navigation ----
+      var mobileToggle = document.getElementById('mobile-toggle');
+      var mobileNav = document.getElementById('mobile-nav');
+      var mobileLinks = mobileNav.querySelectorAll('a');
+
+      mobileToggle.addEventListener('click', function() {
+        var isOpen = mobileNav.classList.toggle('translate-x-0');
+        mobileNav.classList.toggle('translate-x-full', !isOpen);
+        var expanded = isOpen ? 'true' : 'false';
+        mobileToggle.setAttribute('aria-expanded', expanded);
+
+        var spans = mobileToggle.querySelectorAll('span');
+        if (isOpen) {
+          spans[0].style.transform = 'rotate(45deg) translateY(7px)';
+          spans[1].style.opacity = '0';
+          spans[2].style.transform = 'rotate(-45deg) translateY(-7px)';
+        } else {
+          spans[0].style.transform = 'none';
+          spans[1].style.opacity = '1';
+          spans[2].style.transform = 'none';
+        }
+      });
+
+      mobileLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileNav.classList.add('translate-x-full');
+          mobileNav.classList.remove('translate-x-0');
+          mobileToggle.setAttribute('aria-expanded', 'false');
+          var spans = mobileToggle.querySelectorAll('span');
+          spans[0].style.transform = 'none';
+          spans[1].style.opacity = '1';
+          spans[2].style.transform = 'none';
+        });
+      });
+
+      // ---- Enhanced scroll-triggered reveals ----
       var revealObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
@@ -1399,9 +1071,9 @@
             revealObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
 
-      document.querySelectorAll('.reveal, .reveal-blur, .reveal-scale').forEach(function(el) {
+      document.querySelectorAll('.reveal, .reveal-blur, .reveal-scale, .reveal-left').forEach(function(el) {
         revealObserver.observe(el);
       });
 
@@ -1413,7 +1085,7 @@
             underlineObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.5 });
+      }, { threshold: 0.6 });
       document.querySelectorAll('.gold-underline').forEach(function(el) {
         underlineObserver.observe(el);
       });
@@ -1431,7 +1103,7 @@
         lineObserver.observe(el);
       });
 
-      // ---- Counter Animation ----
+      // ---- Enhanced counter animation ----
       var counterObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
@@ -1442,12 +1114,12 @@
             else if (target === 50) suffix = 'K+';
             else if (target === 94 || target === 97) suffix = '%';
             else if (target === 40) suffix = '+';
-            var duration = 2000;
+            var duration = 2500;
             var startTime = null;
             function animateCounter(timestamp) {
               if (!startTime) startTime = timestamp;
               var progress = Math.min((timestamp - startTime) / duration, 1);
-              var eased = 1 - Math.pow(1 - progress, 3);
+              var eased = 1 - Math.pow(1 - progress, 4);
               el.textContent = Math.floor(eased * target) + suffix;
               if (progress < 1) {
                 requestAnimationFrame(animateCounter);
@@ -1464,7 +1136,7 @@
         counterObserver.observe(el);
       });
 
-      // ---- Button Ripple ----
+      // ---- Enhanced button ripple ----
       document.querySelectorAll('.btn-ripple').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
           var rect = btn.getBoundingClientRect();
@@ -1479,194 +1151,78 @@
         });
       });
 
-      // ---- 3D Card Tilt ----
+      // ---- Enhanced 3D card tilt ----
       document.querySelectorAll('.card-tilt').forEach(function(card) {
         card.addEventListener('mousemove', function(e) {
           var rect = card.getBoundingClientRect();
           var x = e.clientX - rect.left;
           var y = e.clientY - rect.top;
-          var rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -3;
-          var rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 3;
-          card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.01)';
+          var rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -4;
+          var rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 4;
+          card.style.transform = 'perspective(1200px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px) scale(1.02)';
         });
         card.addEventListener('mouseleave', function() {
-          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+          card.style.transform = 'perspective(1200px) rotateX(0) rotateY(0) translateY(0) scale(1)';
         });
       });
 
-      // ---- Floating Particles ----
-      var particlesContainer = document.getElementById('particles-container');
-      for (var i = 0; i < 25; i++) {
-        var p = document.createElement('div');
-        p.classList.add('particle');
-        p.style.left = Math.random() * 100 + '%';
-        p.style.top = (50 + Math.random() * 50) + '%';
-        p.style.animationDuration = (8 + Math.random() * 14) + 's';
-        p.style.animationDelay = Math.random() * 6 + 's';
-        var size = 2 + Math.random() * 3;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        particlesContainer.appendChild(p);
-      }
-
-      // ---- Testimonial Carousel with Auto-advance ----
-      var testimonials = document.querySelectorAll('.testimonial-slide');
-      var currentTestimonial = 0;
-      var prevBtn = document.getElementById('testimonial-prev');
-      var nextBtn = document.getElementById('testimonial-next');
-      var dotsContainer = document.getElementById('testimonial-dots');
-      var autoAdvanceTimer;
-      var carouselContainer = document.querySelector('[aria-roledescription="carousel"]');
-
-      testimonials.forEach(function(_, i) {
-        var dot = document.createElement('button');
-        dot.style.cssText = 'width:8px;height:8px;border-radius:50%;border:none;padding:0;cursor:pointer;transition:all 0.3s;background:' + (i === 0 ? '#c9a84c' : 'rgba(201,168,76,0.2)');
-        if (i === 0) { dot.style.transform = 'scale(1.4)'; dot.style.boxShadow = '0 0 8px rgba(201,168,76,0.4)'; }
-        dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
-        dot.addEventListener('click', function() {
-          var dir = i > currentTestimonial ? 'next' : 'prev';
-          currentTestimonial = i;
-          showTestimonial(i, dir);
-          resetAutoAdvance();
-        });
-        dotsContainer.appendChild(dot);
-      });
-
-      function updateDots() {
-        var dots = dotsContainer.children;
-        for (var i = 0; i < dots.length; i++) {
-          dots[i].style.background = i === currentTestimonial ? '#c9a84c' : 'rgba(201,168,76,0.2)';
-          dots[i].style.transform = i === currentTestimonial ? 'scale(1.4)' : 'scale(1)';
-          dots[i].style.boxShadow = i === currentTestimonial ? '0 0 8px rgba(201,168,76,0.4)' : 'none';
-        }
-      }
-
-      function showTestimonial(index, direction) {
-        testimonials.forEach(function(t, i) {
-          t.classList.remove('active', 'prev', 'next');
-          t.setAttribute('aria-hidden', 'true');
-          if (i === index) {
-            t.classList.add('active');
-            t.removeAttribute('aria-hidden');
-          } else if (i < index || (index === 0 && i === testimonials.length - 1)) {
-            t.classList.add(direction === 'next' ? 'prev' : 'next');
-          } else {
-            t.classList.add(direction === 'next' ? 'next' : 'prev');
+      // ---- Magnetic button effect ----
+      document.querySelectorAll('.magnetic-btn').forEach(function(btn) {
+        btn.addEventListener('mousemove', function(e) {
+          var rect = btn.getBoundingClientRect();
+          var x = e.clientX - rect.left - rect.width / 2;
+          var y = e.clientY - rect.top - rect.height / 2;
+          var distance = Math.sqrt(x * x + y * y);
+          var maxDistance = 80;
+          if (distance < maxDistance) {
+            var strength = (maxDistance - distance) / maxDistance;
+            var moveX = x * strength * 0.3;
+            var moveY = y * strength * 0.3;
+            btn.style.transform = 'translate(' + moveX + 'px, ' + moveY + 'px) scale(1.02)';
           }
         });
-        updateDots();
-      }
-
-      function advanceTestimonial() {
-        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-        showTestimonial(currentTestimonial, 'next');
-      }
-
-      function resetAutoAdvance() {
-        clearInterval(autoAdvanceTimer);
-        autoAdvanceTimer = setInterval(advanceTestimonial, 6000);
-      }
-
-      nextBtn.addEventListener('click', function() {
-        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-        showTestimonial(currentTestimonial, 'next');
-        resetAutoAdvance();
-      });
-      prevBtn.addEventListener('click', function() {
-        currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
-        showTestimonial(currentTestimonial, 'prev');
-        resetAutoAdvance();
+        btn.addEventListener('mouseleave', function() {
+          btn.style.transform = 'translate(0, 0) scale(1)';
+        });
       });
 
-      // Pause on hover
-      carouselContainer.addEventListener('mouseenter', function() { clearInterval(autoAdvanceTimer); });
-      carouselContainer.addEventListener('mouseleave', function() { resetAutoAdvance(); });
-      autoAdvanceTimer = setInterval(advanceTestimonial, 6000);
-
-      // ---- Contact Form ----
+      // ---- Contact form ----
       var contactForm = document.getElementById('contact-form');
+      var formMessage = document.getElementById('form-message');
       contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        var btn = contactForm.querySelector('button[type="submit"]');
-        var originalText = btn.textContent;
-        btn.textContent = 'Sending...';
-        btn.disabled = true;
-        btn.style.opacity = '0.7';
+        var name = document.getElementById('name').value.trim();
+        var email = document.getElementById('email').value.trim();
+        var message = document.getElementById('message').value.trim();
+
+        if (!name || !email || !message) {
+          formMessage.textContent = 'Please fill in all required fields.';
+          formMessage.style.color = '#ff6b6b';
+          return;
+        }
+
+        formMessage.textContent = 'Thank you! Your message has been sent. We\'ll be in touch within 24 hours.';
+        formMessage.style.color = '#c9a84c';
+        contactForm.reset();
+
         setTimeout(function() {
-          btn.textContent = 'Thank You!';
-          btn.style.background = '#1e3a5f';
-          btn.style.color = '#c9a84c';
-          setTimeout(function() {
-            btn.textContent = originalText;
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.background = '';
-            btn.style.color = '';
-            contactForm.reset();
-          }, 2000);
-        }, 1200);
+          formMessage.textContent = '';
+        }, 5000);
       });
 
-      // ---- Nav active state ----
-      var sections = document.querySelectorAll('section[id]');
-      var navLinks = document.querySelectorAll('nav a[href^="#"]');
-      function updateActiveNav() {
-        var scrollPos = window.scrollY + 120;
-        sections.forEach(function(section) {
-          var top = section.offsetTop;
-          var height = section.offsetHeight;
-          var id = section.getAttribute('id');
-          if (scrollPos >= top && scrollPos < top + height) {
-            navLinks.forEach(function(link) {
-              link.classList.remove('text-gold');
-              if (link.getAttribute('href') === '#' + id) {
-                link.classList.add('text-gold');
-              }
-            });
-          }
-        });
-      }
-      window.addEventListener('scroll', updateActiveNav, { passive: true });
-
-      // ---- Initial load reveals ----
-      window.addEventListener('load', function() {
-        document.querySelectorAll('.reveal, .reveal-blur, .reveal-scale').forEach(function(el) {
-          if (el.getBoundingClientRect().top < window.innerHeight) {
-            el.classList.add('visible');
-          }
-        });
-        document.querySelectorAll('.gold-underline').forEach(function(el) {
-          if (el.getBoundingClientRect().top < window.innerHeight) {
-            setTimeout(function() { el.classList.add('animate'); }, 800);
+      // ---- Smooth scroll ----
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            var offset = 80;
+            var top = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
           }
         });
       });
     })();
   </script>
-<!-- Theme Switcher -->
-<style>
-#themeSwitcher{position:fixed;right:1.25rem;top:50%;transform:translateY(-50%);z-index:10001;display:flex;flex-direction:column;align-items:center;gap:0.4rem;padding:0.75rem 0.5rem;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(201,168,76,0.15);border-radius:100px;box-shadow:0 4px 30px rgba(30,58,95,0.06)}
-#themeSwitcher a{text-decoration:none;display:flex;align-items:center;justify-content:center}
-.ts-home{width:28px;height:28px;color:#555e6e;transition:color 0.25s}
-.ts-home:hover{color:#c9a84c}
-.ts-home svg{width:14px;height:14px}
-.ts-sep{width:14px;height:1px;background:rgba(201,168,76,0.2)}
-.ts-dot{width:28px;height:28px;position:relative}
-.ts-dot-inner{width:10px;height:10px;border-radius:50%;border:1px solid rgba(0,0,0,0.08);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s}
-.ts-dot:hover .ts-dot-inner{transform:scale(1.35)}
-.ts-dot.active .ts-dot-inner{transform:scale(1.5);box-shadow:0 0 0 2.5px rgba(201,168,76,0.3)}
-.ts-tip{position:absolute;right:calc(100% + 10px);white-space:nowrap;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:0.03em;color:#1a1a2e;background:rgba(255,255,255,0.97);padding:3px 10px;border-radius:4px;box-shadow:0 2px 10px rgba(0,0,0,0.07);opacity:0;transform:translateX(4px);transition:all 0.2s;pointer-events:none}
-.ts-dot:hover .ts-tip{opacity:1;transform:translateX(0)}
-@media(max-width:768px){#themeSwitcher{right:0.6rem;padding:0.5rem 0.3rem;gap:0.25rem}.ts-dot{width:24px;height:24px}.ts-dot-inner{width:8px;height:8px}.ts-tip{display:none}.ts-home{width:24px;height:24px}.ts-home svg{width:12px;height:12px}}
-</style>
-<nav id="themeSwitcher" aria-label="Theme switcher">
-  <a href="index.html" class="ts-home" title="Back to Gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></a>
-  <div class="ts-sep"></div>
-  <a href="theme1-corporate.html" class="ts-dot active"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#1e3a5f 50%,#c9a84c 50%)"></span><span class="ts-tip">01 — Precision &amp; Prestige</span></a>
-  <a href="2/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0A1628 50%,#C41E3A 50%)"></span><span class="ts-tip">02 — Clinical Evidence</span></a>
-  <a href="theme3-warm.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#faf8f5 50%,#e8634a 50%)"></span><span class="ts-tip">03 — Organic Flow</span></a>
-  <a href="theme4-brutalist.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0a0a0a 50%,#ff2d2d 50%)"></span><span class="ts-tip">04 — Raw &amp; Bold</span></a>
-  <a href="5/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#f3efe5 50%,#0a8d80 50%)"></span><span class="ts-tip">05 — Natural Authority</span></a>
-</nav>
 </body>
 </html>

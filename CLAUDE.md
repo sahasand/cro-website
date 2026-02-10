@@ -17,7 +17,7 @@ CardioVera Research — a cardiovascular CRO (Contract Research Organization) ma
 ## File Structure
 
 - `index.html` — Sales-oriented gallery landing page linking to all 5 themes (Fraunces + Darker Grotesque fonts, dark editorial aesthetic, copy focused on AI search era / GEO / SEO)
-- `theme1-corporate.html` — "Precision & Prestige" (dark navy #0d1b2e + gold #c9a84c, Playfair Display, dark immersive design with gold aurora, cursor glow, glassmorphism, ECG heartbeat, grain overlay, bento services grid, AI-generated hero image `img1.png`)
+- `theme1-corporate.html` — "Precision & Prestige" (dark navy #0d1b2e + gold #c9a84c, Playfair Display + Libre Baskerville, dark immersive design with gold aurora, enhanced cursor glow with smooth tracking, advanced glassmorphism (32px blur + saturate), ECG heartbeat, grain overlay, magnetic button effects, 3D card tilt, refined scroll-triggered reveals with stagger delays, scanning line on stats, bento services grid, AI-generated hero image `img1.png`. Polished to match execution quality of themes 2 & 5.)
 - `2/` — **"Clinical Evidence"** (multi-file architecture)
   - `2/index.html` — Main HTML (610+ lines)
   - `2/styles.css` — Complete stylesheet (~2,350 lines)
@@ -55,7 +55,8 @@ Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and J
 - `IntersectionObserver` for scroll-triggered fade/bounce animations
 - Mobile nav toggle with `aria-expanded`
 - Contact form with `preventDefault`, validation, button text feedback, and reset
-- `requestAnimationFrame` loops for continuous animations (particles, cursor effects)
+- `requestAnimationFrame` loops for continuous animations (cursor effects in theme1, theme5)
+- Theme1 specific: magnetic button effects (cursor distance tracking), enhanced 3D card tilt (mousemove perspective rotation)
 
 **Theme Switcher (`#themeSwitcher`)** — a floating vertical nav fixed to the right edge of every theme page:
 - Grid icon links back to `index.html` (or `../index.html` for themes in subfolders), 5 split-gradient dots link to each theme
@@ -78,7 +79,7 @@ Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and J
 - Theme4 has `*, *::before, *::after { border-radius: 0 !important; }` — any new elements inherit square corners
 - Noise/grain overlays in theme1, theme2, theme4, theme5 use `z-index: 9999` with `pointer-events: none` — new floating UI needs `z-index: 10001+`
 - Theme1 copy sourced from `design.md` CRO copywriting framework — uses "Data-First" positioning, published metrics (94% team continuity, 97% on-time DB lock), Three Commitments structure
-- Theme1 design matches sophistication of themes 2 & 5: dark immersive bg, drifting ambient gold glow (body::before), cursor glow, glassmorphism cards, gold shimmer hovers, scanning line on stats, about section has animated cardiac data viz
+- Theme1 design polished to match sophistication of themes 2 & 5: dark immersive bg, drifting ambient gold glow (body::before with 16s animation), enhanced cursor glow with `requestAnimationFrame` interpolation, advanced glassmorphism (32px backdrop-blur + saturate(180%) + layered shadows), magnetic button effects (80px radius pull), enhanced 3D card tilt (perspective 1200px), gold shimmer sweeps, scanning line on stats, refined scroll-triggered reveals with stagger delays (0.1s-0.6s increments), bouncy cubic-bezier easing (`0.34, 1.56, 0.64, 1`). No floating particles.
 
 ## Responsive Design
 
