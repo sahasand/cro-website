@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Azeret+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Azeret+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,6 +31,7 @@
     }
   </script>
   <style>
+    /* ==== ZERO BORDER-RADIUS ENFORCEMENT ==== */
     *, *::before, *::after {
       border-radius: 0 !important;
     }
@@ -44,164 +45,299 @@
       background-color: #f0ece4;
       color: #0a0a0a;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* Noise texture overlay */
+    /* ==== NOISE TEXTURE OVERLAY ==== */
     body::before {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       pointer-events: none;
       z-index: 9999;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n1)'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
     }
 
-    /* Label style */
+    /* ==== SCANLINE OVERLAY ==== */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.045;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(10, 10, 10, 0) 0px,
+        rgba(10, 10, 10, 0) 1px,
+        rgba(10, 10, 10, 0.8) 1px,
+        rgba(10, 10, 10, 0.8) 2px
+      );
+      animation: scanlines 8s linear infinite;
+    }
+
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    /* ==== TYPOGRAPHY ==== */
     .label-mono {
       font-family: 'Azeret Mono', monospace;
       font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      font-weight: 500;
+      letter-spacing: 0.18em;
+      font-weight: 600;
     }
 
     .nav-link {
       font-family: 'Azeret Mono', monospace;
       font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 400;
+      letter-spacing: 0.14em;
+      font-weight: 500;
     }
 
-    /* Heading style */
     .heading-serif {
       font-family: 'Instrument Serif', serif;
       font-style: italic;
       font-weight: 400;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.05em;
     }
 
-    /* Body mono */
     .body-mono {
       font-family: 'Azeret Mono', monospace;
       font-weight: 300;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.025em;
+      line-height: 1.75;
     }
 
-    /* Marquee */
+    /* ==== ENHANCED MARQUEE ==== */
     @keyframes marquee-scroll {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
 
     .marquee-track {
-      animation: marquee-scroll 20s linear infinite;
+      animation: marquee-scroll 18s linear infinite;
+      will-change: transform;
     }
 
     .marquee-track:hover {
       animation-play-state: paused;
     }
 
-    /* Glitch effect */
+    /* ==== MULTI-LAYER ENHANCED GLITCH ==== */
     .glitch-text {
       cursor: crosshair;
       position: relative;
+      display: inline-block;
+    }
+
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+
+    .glitch-text:hover::before {
+      animation: glitch-layer-1 0.35s linear;
+      color: #ff2d2d;
+      z-index: -1;
+    }
+
+    .glitch-text:hover::after {
+      animation: glitch-layer-2 0.35s linear;
+      color: #00f0ff;
+      z-index: -2;
     }
 
     .glitch-text:hover {
-      animation: glitch 0.3s ease-in-out;
+      animation: glitch-main 0.35s linear;
     }
 
-    @keyframes glitch {
-      0% {
-        text-shadow: 2px 0 #ff2d2d, -2px 0 #00f0ff;
-        clip-path: inset(0 0 0 0);
+    @keyframes glitch-main {
+      0%, 100% {
+        transform: translate(0);
+        filter: hue-rotate(0deg);
+      }
+      10% {
+        transform: translate(-2px, 2px);
       }
       20% {
-        text-shadow: -3px 2px #ff2d2d, 3px -2px #00f0ff;
-        clip-path: inset(20% 0 40% 0);
+        transform: translate(3px, -1px);
+      }
+      30% {
+        transform: translate(-1px, -3px);
       }
       40% {
-        text-shadow: 3px -1px #ff2d2d, -3px 1px #00f0ff;
-        clip-path: inset(60% 0 10% 0);
+        transform: translate(2px, 1px);
+      }
+      50% {
+        transform: translate(-3px, 2px);
+        filter: hue-rotate(90deg);
       }
       60% {
-        text-shadow: -2px 3px #ff2d2d, 2px -3px #00f0ff;
-        clip-path: inset(10% 0 70% 0);
+        transform: translate(1px, -2px);
+      }
+      70% {
+        transform: translate(-2px, 3px);
       }
       80% {
-        text-shadow: 1px -2px #ff2d2d, -1px 2px #00f0ff;
-        clip-path: inset(40% 0 20% 0);
+        transform: translate(3px, -2px);
       }
-      100% {
-        text-shadow: none;
-        clip-path: inset(0 0 0 0);
+      90% {
+        transform: translate(-1px, 1px);
       }
     }
 
-    /* Card rotation & hover */
-    .service-card:nth-child(odd) {
-      transform: rotate(-0.3deg);
+    @keyframes glitch-layer-1 {
+      0%, 100% {
+        opacity: 0;
+        transform: translate(0);
+      }
+      20% {
+        opacity: 0.8;
+        transform: translate(-4px, 3px);
+      }
+      40% {
+        opacity: 0.9;
+        transform: translate(5px, -2px);
+      }
+      60% {
+        opacity: 0.7;
+        transform: translate(-3px, 4px);
+      }
+      80% {
+        opacity: 0.85;
+        transform: translate(4px, -3px);
+      }
     }
+
+    @keyframes glitch-layer-2 {
+      0%, 100% {
+        opacity: 0;
+        transform: translate(0);
+      }
+      25% {
+        opacity: 0.75;
+        transform: translate(3px, -4px);
+      }
+      45% {
+        opacity: 0.8;
+        transform: translate(-5px, 3px);
+      }
+      65% {
+        opacity: 0.7;
+        transform: translate(4px, -2px);
+      }
+      85% {
+        opacity: 0.75;
+        transform: translate(-4px, 4px);
+      }
+    }
+
+    /* ==== AGGRESSIVE CARD INTERACTIONS (HARD EDGES, NO SMOOTH) ==== */
+    .service-card {
+      transform: rotate(-0.3deg);
+      transition: transform 0.08s cubic-bezier(1, 0, 1, 1),
+                  box-shadow 0.08s cubic-bezier(1, 0, 1, 1);
+      will-change: transform, box-shadow;
+    }
+
     .service-card:nth-child(even) {
       transform: rotate(0.3deg);
     }
-    .service-card {
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
+
     .service-card:hover {
-      transform: translate(-3px, -3px) rotate(0deg) !important;
-      box-shadow: 6px 6px 0 0 #0a0a0a;
+      transform: translate(-4px, -4px) rotate(0deg) !important;
+      box-shadow: 8px 8px 0 0 #0a0a0a;
     }
 
-    /* Team avatar hover */
-    .team-avatar {
-      transition: border-color 0.2s ease;
+    /* ==== TERMINAL FLICKER ON STATS ==== */
+    .terminal-flicker {
+      animation: terminal-blink 4s cubic-bezier(1, 0, 1, 1) infinite;
     }
+
+    @keyframes terminal-blink {
+      0%, 98% { opacity: 1; }
+      99% { opacity: 0.7; }
+      99.5% { opacity: 1; }
+      100% { opacity: 1; }
+    }
+
+    /* ==== HARD-EDGED HOVER STATES ==== */
+    .brutal-hover {
+      transition: all 0.06s cubic-bezier(1, 0, 1, 1);
+    }
+
+    .brutal-hover:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 0 #ff2d2d;
+    }
+
+    /* ==== TEAM AVATAR AGGRESSIVE HOVER ==== */
+    .team-avatar {
+      transition: border-color 0.05s linear,
+                  transform 0.08s cubic-bezier(1, 0, 1, 1),
+                  box-shadow 0.08s cubic-bezier(1, 0, 1, 1);
+      will-change: transform, border-color, box-shadow;
+    }
+
     .team-avatar:hover {
       border-color: #ff2d2d !important;
+      border-width: 3px !important;
+      transform: translate(-3px, -3px);
+      box-shadow: 6px 6px 0 0 #ff2d2d;
     }
 
-    /* Input focus */
+    /* ==== BRUTAL INPUT ==== */
     .brutal-input {
       background: transparent;
       border: none;
       border-bottom: 2px solid #0a0a0a;
       outline: none;
       font-family: 'Azeret Mono', monospace;
-      font-weight: 300;
-      letter-spacing: 0.02em;
-      transition: border-color 0.2s ease;
-      padding: 0.5rem 0;
+      font-weight: 400;
+      letter-spacing: 0.025em;
+      transition: border-color 0.05s linear,
+                  border-width 0.05s linear;
+      padding: 0.6rem 0;
       width: 100%;
     }
+
     .brutal-input:focus {
       border-bottom-color: #ff2d2d;
-    }
-    .brutal-input::placeholder {
-      color: #999;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      border-bottom-width: 3px;
     }
 
-    /* Strikethrough section labels */
+    .brutal-input::placeholder {
+      color: #999;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* ==== STRIKETHROUGH SECTION LABELS ==== */
     .strike-label {
       text-decoration: line-through;
       text-decoration-color: #ff2d2d;
-      text-decoration-thickness: 2px;
+      text-decoration-thickness: 3px;
+      text-decoration-skip-ink: none;
     }
 
-
-    /* Stagger fade in */
-    @keyframes stagger-in {
+    /* ==== SHARP STAGGER ANIMATIONS (NO BOUNCE) ==== */
+    @keyframes stagger-in-hard {
       from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
       }
       to {
         opacity: 1;
@@ -211,289 +347,380 @@
 
     .stagger-animate {
       opacity: 0;
-      animation: stagger-in 0.6s ease forwards;
+      animation: stagger-in-hard 0.4s cubic-bezier(0.25, 0, 0.25, 1) forwards;
     }
 
-    .stagger-1 { animation-delay: 0.1s; }
-    .stagger-2 { animation-delay: 0.2s; }
-    .stagger-3 { animation-delay: 0.3s; }
-    .stagger-4 { animation-delay: 0.4s; }
-    .stagger-5 { animation-delay: 0.5s; }
-    .stagger-6 { animation-delay: 0.6s; }
+    .stagger-1 { animation-delay: 0.05s; }
+    .stagger-2 { animation-delay: 0.1s; }
+    .stagger-3 { animation-delay: 0.15s; }
+    .stagger-4 { animation-delay: 0.2s; }
+    .stagger-5 { animation-delay: 0.25s; }
+    .stagger-6 { animation-delay: 0.3s; }
 
-    /* Stat separator */
+    /* ==== HARD EDGE SHADOWS ==== */
+    .shadow-brutal {
+      box-shadow: 6px 6px 0 0 #0a0a0a;
+    }
+
+    .shadow-brutal-accent {
+      box-shadow: 6px 6px 0 0 #ff2d2d;
+    }
+
+    /* ==== STAT SEPARATOR ==== */
     .stat-item:not(:last-child) {
-      border-right: 1px solid rgba(240, 236, 228, 0.2);
+      border-right: 2px solid rgba(240, 236, 228, 0.15);
     }
 
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 8px;
+    /* ==== VHS DISTORTION EFFECT ==== */
+    @keyframes vhs-distort {
+      0%, 100% {
+        transform: translateX(0) scaleX(1);
+      }
+      25% {
+        transform: translateX(1px) scaleX(1.002);
+      }
+      50% {
+        transform: translateX(-1px) scaleX(0.998);
+      }
+      75% {
+        transform: translateX(0.5px) scaleX(1.001);
+      }
     }
+
+    .vhs-distort {
+      animation: vhs-distort 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    /* ==== SCROLLBAR STYLING ==== */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
     ::-webkit-scrollbar-track {
       background: #f0ece4;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #0a0a0a;
+      border-left: 2px solid #0a0a0a;
     }
 
-    /* Mobile nav */
+    ::-webkit-scrollbar-thumb {
+      background: #0a0a0a;
+      border: 2px solid #f0ece4;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff2d2d;
+    }
+
+    /* ==== MOBILE NAV ==== */
     .mobile-nav {
       display: none;
+      transition: none;
     }
+
     .mobile-nav.active {
       display: flex;
     }
 
-    /* Ghost text */
+    /* ==== GHOST TEXT ==== */
     .ghost-cv {
-      font-size: 40vw;
-      line-height: 1;
-      color: rgba(255, 255, 255, 0.03);
+      font-size: 42vw;
+      line-height: 0.9;
+      color: rgba(255, 255, 255, 0.025);
       font-family: 'Instrument Serif', serif;
       font-style: italic;
       font-weight: 400;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.06em;
       user-select: none;
       pointer-events: none;
     }
 
-    /* Testimonial border */
+    /* ==== TESTIMONIAL BORDER ==== */
     .testimonial-card {
-      border-left: 4px solid #ff2d2d;
+      border-left: 5px solid #ff2d2d;
+      transition: border-width 0.06s linear,
+                  padding-left 0.06s linear;
     }
 
-    /* Red accent on symbols */
+    .testimonial-card:hover {
+      border-left-width: 8px;
+      padding-left: 2.25rem;
+    }
+
+    /* ==== RED ACCENT ON SYMBOLS ==== */
     .stat-symbol {
       color: #ff2d2d;
+      font-weight: 700;
     }
 
-    /* Selection color */
+    /* ==== SELECTION COLOR ==== */
     ::selection {
       background: #ff2d2d;
       color: #f0ece4;
     }
+
+    /* ==== BRUTAL BUTTON ==== */
+    .brutal-btn {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.05s linear,
+                  box-shadow 0.05s linear;
+    }
+
+    .brutal-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 0 #0a0a0a;
+    }
+
+    .brutal-btn:active {
+      transform: translate(0, 0);
+      box-shadow: 0 0 0 0 #0a0a0a;
+    }
+
+    /* ==== CRT SCREEN CURVE EFFECT ==== */
+    .crt-curve {
+      animation: crt-flicker 0.15s infinite alternate;
+    }
+
+    @keyframes crt-flicker {
+      0% { opacity: 0.98; }
+      100% { opacity: 1; }
+    }
+
+    /* ==== ENHANCED MOBILE RESPONSIVENESS ==== */
+    @media (max-width: 640px) {
+      .heading-serif {
+        letter-spacing: -0.03em;
+      }
+      .ghost-cv {
+        font-size: 50vw;
+      }
+      .service-card {
+        transform: rotate(0deg);
+      }
+      .shadow-brutal {
+        box-shadow: 4px 4px 0 0 #0a0a0a;
+      }
+    }
   </style>
 </head>
-<body class="relative">
+<body class="relative crt-curve">
 
   <!-- ========== NAV ========== -->
-  <nav class="w-full bg-paper border-b-2 border-primary sticky top-0 z-50" role="navigation" aria-label="Main navigation">
+  <nav class="w-full bg-paper border-b-3 border-primary sticky top-0 z-50" role="navigation" aria-label="Main navigation" style="border-bottom-width: 3px;">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="#" class="heading-serif text-2xl text-primary" aria-label="CardioVera Research home">
+      <a href="#" class="heading-serif text-2xl md:text-3xl text-primary" aria-label="CardioVera Research home" data-text="CardioVera">
         CardioVera
       </a>
       <!-- Desktop Nav -->
       <div class="hidden md:flex items-center gap-8">
-        <a href="#services" class="nav-link text-primary hover:text-accent transition-colors">Services</a>
-        <a href="#about" class="nav-link text-primary hover:text-accent transition-colors">About</a>
-        <a href="#team" class="nav-link text-primary hover:text-accent transition-colors">Team</a>
-        <a href="#testimonials" class="nav-link text-primary hover:text-accent transition-colors">Proof</a>
-        <a href="#contact" class="nav-link text-primary hover:text-accent transition-colors">Contact</a>
+        <a href="#services" class="nav-link text-primary hover:text-accent transition-colors duration-75">Services</a>
+        <a href="#about" class="nav-link text-primary hover:text-accent transition-colors duration-75">About</a>
+        <a href="#team" class="nav-link text-primary hover:text-accent transition-colors duration-75">Team</a>
+        <a href="#testimonials" class="nav-link text-primary hover:text-accent transition-colors duration-75">Proof</a>
+        <a href="#contact" class="nav-link text-primary hover:text-accent transition-colors duration-75">Contact</a>
       </div>
       <!-- Mobile Menu Button -->
-      <button class="md:hidden flex flex-col gap-1.5 p-2" onclick="document.getElementById('mobileNav').classList.toggle('active')" aria-label="Toggle mobile menu" aria-expanded="false">
-        <span class="w-6 h-0.5 bg-primary block"></span>
-        <span class="w-6 h-0.5 bg-primary block"></span>
-        <span class="w-4 h-0.5 bg-primary block"></span>
+      <button class="md:hidden flex flex-col gap-2 p-2" onclick="document.getElementById('mobileNav').classList.toggle('active')" aria-label="Toggle mobile menu" aria-expanded="false">
+        <span class="w-7 h-0.5 bg-primary block"></span>
+        <span class="w-7 h-0.5 bg-primary block"></span>
+        <span class="w-5 h-0.5 bg-primary block"></span>
       </button>
     </div>
     <!-- Mobile Nav Panel -->
     <div id="mobileNav" class="mobile-nav flex-col bg-paper border-t-2 border-primary md:hidden">
-      <a href="#services" class="nav-link text-primary hover:text-accent px-6 py-3 border-b border-gray-300 transition-colors" onclick="document.getElementById('mobileNav').classList.remove('active')">Services</a>
-      <a href="#about" class="nav-link text-primary hover:text-accent px-6 py-3 border-b border-gray-300 transition-colors" onclick="document.getElementById('mobileNav').classList.remove('active')">About</a>
-      <a href="#team" class="nav-link text-primary hover:text-accent px-6 py-3 border-b border-gray-300 transition-colors" onclick="document.getElementById('mobileNav').classList.remove('active')">Team</a>
-      <a href="#testimonials" class="nav-link text-primary hover:text-accent px-6 py-3 border-b border-gray-300 transition-colors" onclick="document.getElementById('mobileNav').classList.remove('active')">Proof</a>
-      <a href="#contact" class="nav-link text-primary hover:text-accent px-6 py-3 transition-colors" onclick="document.getElementById('mobileNav').classList.remove('active')">Contact</a>
+      <a href="#services" class="nav-link text-primary hover:text-accent px-6 py-4 border-b-2 border-gray-300 transition-colors duration-75" onclick="document.getElementById('mobileNav').classList.remove('active')">Services</a>
+      <a href="#about" class="nav-link text-primary hover:text-accent px-6 py-4 border-b-2 border-gray-300 transition-colors duration-75" onclick="document.getElementById('mobileNav').classList.remove('active')">About</a>
+      <a href="#team" class="nav-link text-primary hover:text-accent px-6 py-4 border-b-2 border-gray-300 transition-colors duration-75" onclick="document.getElementById('mobileNav').classList.remove('active')">Team</a>
+      <a href="#testimonials" class="nav-link text-primary hover:text-accent px-6 py-4 border-b-2 border-gray-300 transition-colors duration-75" onclick="document.getElementById('mobileNav').classList.remove('active')">Proof</a>
+      <a href="#contact" class="nav-link text-primary hover:text-accent px-6 py-4 transition-colors duration-75" onclick="document.getElementById('mobileNav').classList.remove('active')">Contact</a>
     </div>
   </nav>
 
-  <!-- ========== RED MARQUEE STRIP ========== -->
-  <div class="w-full bg-accent overflow-hidden py-2" aria-hidden="true">
+  <!-- ========== ENHANCED RED MARQUEE STRIP ==== -->
+  <div class="w-full bg-accent overflow-hidden py-2.5 border-y-2 border-primary" aria-hidden="true">
     <div class="marquee-track whitespace-nowrap inline-flex">
-      <span class="nav-link text-inverse mx-8">CARDIOVASCULAR EXCELLENCE</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">PHASE 2-4 CLINICAL TRIALS</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">150+ COMPLETED STUDIES</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">40+ COUNTRIES</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">RIGOROUS SCIENCE</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">CARDIOVASCULAR EXCELLENCE</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">PHASE 2-4 CLINICAL TRIALS</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">150+ COMPLETED STUDIES</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">40+ COUNTRIES</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">RIGOROUS SCIENCE</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">CARDIOVASCULAR EXCELLENCE</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">PHASE 2-4 CLINICAL TRIALS</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">150+ COMPLETED STUDIES</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">40+ COUNTRIES</span>
-      <span class="text-inverse opacity-50">—</span>
-      <span class="nav-link text-inverse mx-8">RIGOROUS SCIENCE</span>
-      <span class="text-inverse opacity-50">—</span>
+      <span class="nav-link text-inverse mx-10">CARDIOVASCULAR EXCELLENCE</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">PHASE 2-4 CLINICAL TRIALS</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">150+ COMPLETED STUDIES</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">40+ COUNTRIES</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">RIGOROUS SCIENCE</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">CARDIOVASCULAR EXCELLENCE</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">PHASE 2-4 CLINICAL TRIALS</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">150+ COMPLETED STUDIES</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">40+ COUNTRIES</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">RIGOROUS SCIENCE</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">CARDIOVASCULAR EXCELLENCE</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">PHASE 2-4 CLINICAL TRIALS</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">150+ COMPLETED STUDIES</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">40+ COUNTRIES</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
+      <span class="nav-link text-inverse mx-10">RIGOROUS SCIENCE</span>
+      <span class="text-inverse opacity-60 font-bold">◆</span>
     </div>
   </div>
 
   <!-- ========== HERO ========== -->
-  <section class="relative bg-primary min-h-screen flex items-center overflow-hidden">
+  <section class="relative bg-primary min-h-screen flex items-center overflow-hidden border-b-3 border-accent" style="border-bottom-width: 3px;">
     <!-- Ghost CV -->
-    <div class="absolute inset-0 flex items-center justify-center ghost-cv select-none" aria-hidden="true">
+    <div class="absolute inset-0 flex items-center justify-center ghost-cv select-none vhs-distort" aria-hidden="true">
       CV
     </div>
     <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 md:py-40">
       <div class="stagger-animate stagger-1">
-        <p class="label-mono text-accent mb-6">Cardiovascular Contract Research Organization</p>
+        <p class="label-mono text-accent mb-8 tracking-widest">[ CARDIOVASCULAR CONTRACT RESEARCH ORGANIZATION ]</p>
       </div>
-      <h1 class="glitch-text heading-serif text-inverse stagger-animate stagger-2" style="font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1.05; max-width: 900px;">
+      <h1 class="glitch-text heading-serif text-inverse stagger-animate stagger-2" data-text="Advancing the Science of the Human Heart" style="font-size: clamp(2.8rem, 7.5vw, 6rem); line-height: 1.02; max-width: 1000px;">
         Advancing the Science of the Human Heart
       </h1>
-      <p class="body-mono text-gray-400 mt-8 max-w-md stagger-animate stagger-3" style="font-size: 0.8rem; line-height: 1.8;">
+      <p class="body-mono text-gray-400 mt-10 max-w-lg stagger-animate stagger-3" style="font-size: 0.85rem; line-height: 1.85;">
         CardioVera Research designs and executes Phase 2-4 cardiovascular clinical trials with uncompromising scientific rigor. We transform complex cardiac endpoints into clear regulatory outcomes.
       </p>
-      <div class="flex flex-wrap gap-4 mt-10 stagger-animate stagger-4">
-        <a href="#services" class="inline-block bg-accent text-inverse nav-link px-8 py-4 hover:bg-red-700 transition-colors">
-          Explore Services
+      <div class="flex flex-wrap gap-5 mt-12 stagger-animate stagger-4">
+        <a href="#services" class="brutal-btn inline-block bg-accent text-inverse nav-link px-10 py-5 hover:bg-red-700" style="transition-duration: 0.05s;">
+          EXPLORE SERVICES
         </a>
-        <a href="#contact" class="inline-block border-2 border-inverse text-inverse nav-link px-8 py-4 hover:bg-inverse hover:text-primary transition-colors">
-          Start a Trial
+        <a href="#contact" class="brutal-btn inline-block border-3 border-inverse text-inverse nav-link px-10 py-5 hover:bg-inverse hover:text-primary" style="border-width: 3px; transition-duration: 0.05s;">
+          START A TRIAL
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ========== STATS ========== -->
-  <section class="bg-primary border-t border-gray-800" aria-label="Key statistics">
-    <div class="max-w-7xl mx-auto px-6 py-16">
+  <!-- ========== STATS WITH TERMINAL FLICKER ==== -->
+  <section class="bg-primary border-b-3 border-gray-900" aria-label="Key statistics" style="border-bottom-width: 3px;">
+    <div class="max-w-7xl mx-auto px-6 py-20">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-0">
-        <div class="stat-item text-center py-8 px-4">
-          <div class="heading-serif text-inverse" style="font-size: clamp(2.5rem, 5vw, 4rem);">
+        <div class="stat-item text-center py-10 px-4 terminal-flicker">
+          <div class="heading-serif text-inverse" style="font-size: clamp(2.8rem, 5.5vw, 4.5rem);">
             150<span class="stat-symbol">+</span>
           </div>
-          <p class="label-mono text-gray-500 mt-2">Completed Studies</p>
+          <p class="label-mono text-gray-500 mt-3">COMPLETED STUDIES</p>
         </div>
-        <div class="stat-item text-center py-8 px-4">
-          <div class="heading-serif text-inverse" style="font-size: clamp(2.5rem, 5vw, 4rem);">
+        <div class="stat-item text-center py-10 px-4 terminal-flicker" style="animation-delay: 0.5s;">
+          <div class="heading-serif text-inverse" style="font-size: clamp(2.8rem, 5.5vw, 4.5rem);">
             98<span class="stat-symbol">%</span>
           </div>
-          <p class="label-mono text-gray-500 mt-2">Endpoint Success Rate</p>
+          <p class="label-mono text-gray-500 mt-3">ENDPOINT SUCCESS</p>
         </div>
-        <div class="stat-item text-center py-8 px-4">
-          <div class="heading-serif text-inverse" style="font-size: clamp(2.5rem, 5vw, 4rem);">
+        <div class="stat-item text-center py-10 px-4 terminal-flicker" style="animation-delay: 1s;">
+          <div class="heading-serif text-inverse" style="font-size: clamp(2.8rem, 5.5vw, 4.5rem);">
             40<span class="stat-symbol">+</span>
           </div>
-          <p class="label-mono text-gray-500 mt-2">Countries Active</p>
+          <p class="label-mono text-gray-500 mt-3">COUNTRIES ACTIVE</p>
         </div>
-        <div class="stat-item text-center py-8 px-4">
-          <div class="heading-serif text-inverse" style="font-size: clamp(2.5rem, 5vw, 4rem);">
+        <div class="stat-item text-center py-10 px-4 terminal-flicker" style="animation-delay: 1.5s;">
+          <div class="heading-serif text-inverse" style="font-size: clamp(2.8rem, 5.5vw, 4.5rem);">
             12<span class="stat-symbol">K</span>
           </div>
-          <p class="label-mono text-gray-500 mt-2">Patients Enrolled</p>
+          <p class="label-mono text-gray-500 mt-3">PATIENTS ENROLLED</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== SERVICES ========== -->
-  <section id="services" class="bg-paper py-24">
+  <!-- ========== SERVICES ==== -->
+  <section id="services" class="bg-paper py-28 border-b-3 border-primary" style="border-bottom-width: 3px;">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="mb-16">
-        <p class="label-mono text-accent mb-4">What We Do</p>
-        <h2 class="heading-serif text-primary strike-label" style="font-size: clamp(2rem, 4vw, 3.5rem);">
+      <div class="mb-20">
+        <p class="label-mono text-accent mb-5 tracking-widest">[ WHAT WE DO ]</p>
+        <h2 class="heading-serif text-primary strike-label" style="font-size: clamp(2.2rem, 4.5vw, 4rem);">
           Core Capabilities
         </h2>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
         <!-- Service 1 -->
-        <div class="service-card border-2 border-primary bg-paper p-8">
-          <div class="w-12 h-12 bg-primary flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <div class="service-card border-3 border-primary bg-paper p-10" style="border-width: 3px;">
+          <div class="w-14 h-14 bg-primary flex items-center justify-center mb-8">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
               <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-xl mb-3">Cardiac Safety Monitoring</h3>
+          <h3 class="heading-serif text-primary text-2xl mb-4 leading-tight">Cardiac Safety Monitoring</h3>
           <p class="body-mono text-muted text-xs leading-relaxed">
             Real-time centralized ECG monitoring, QTc analysis, and cardiac event adjudication across global trial sites with 24/7 cardiologist oversight.
           </p>
         </div>
         <!-- Service 2 -->
-        <div class="service-card border-2 border-primary bg-paper p-8">
-          <div class="w-12 h-12 bg-primary flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <div class="service-card border-3 border-primary bg-paper p-10" style="border-width: 3px;">
+          <div class="w-14 h-14 bg-primary flex items-center justify-center mb-8">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
               <rect x="2" y="3" width="20" height="14"/>
               <line x1="8" y1="21" x2="16" y2="21"/>
               <line x1="12" y1="17" x2="12" y2="21"/>
               <polyline points="6,10 9,7 12,10 15,7 18,10"/>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-xl mb-3">Endpoint Adjudication</h3>
+          <h3 class="heading-serif text-primary text-2xl mb-4 leading-tight">Endpoint Adjudication</h3>
           <p class="body-mono text-muted text-xs leading-relaxed">
             Independent Clinical Events Committee management for MACE, heart failure hospitalization, and composite cardiovascular endpoint adjudication.
           </p>
         </div>
         <!-- Service 3 -->
-        <div class="service-card border-2 border-primary bg-paper p-8">
-          <div class="w-12 h-12 bg-primary flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <div class="service-card border-3 border-primary bg-paper p-10" style="border-width: 3px;">
+          <div class="w-14 h-14 bg-primary flex items-center justify-center mb-8">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
               <circle cx="12" cy="12" r="10" stroke-linecap="round"/>
               <path d="M12 6v6l4 2"/>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-xl mb-3">Phase 2-4 Trial Management</h3>
+          <h3 class="heading-serif text-primary text-2xl mb-4 leading-tight">Phase 2-4 Trial Management</h3>
           <p class="body-mono text-muted text-xs leading-relaxed">
             Full-service clinical trial management from protocol design through database lock, specialized in cardiovascular outcomes trials.
           </p>
         </div>
         <!-- Service 4 -->
-        <div class="service-card border-2 border-primary bg-paper p-8">
-          <div class="w-12 h-12 bg-primary flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <div class="service-card border-3 border-primary bg-paper p-10" style="border-width: 3px;">
+          <div class="w-14 h-14 bg-primary flex items-center justify-center mb-8">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14,2 14,8 20,8"/>
               <line x1="16" y1="13" x2="8" y2="13"/>
               <line x1="16" y1="17" x2="8" y2="17"/>
-              <polyline points="10,9 9,9 8,9"/>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-xl mb-3">Regulatory Strategy</h3>
+          <h3 class="heading-serif text-primary text-2xl mb-4 leading-tight">Regulatory Strategy</h3>
           <p class="body-mono text-muted text-xs leading-relaxed">
             FDA and EMA cardiovascular regulatory pathway navigation, including REMS programs, adaptive trial designs, and breakthrough therapy designation support.
           </p>
         </div>
         <!-- Service 5 -->
-        <div class="service-card border-2 border-primary bg-paper p-8">
-          <div class="w-12 h-12 bg-primary flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <div class="service-card border-3 border-primary bg-paper p-10" style="border-width: 3px;">
+          <div class="w-14 h-14 bg-primary flex items-center justify-center mb-8">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
               <circle cx="9" cy="7" r="4"/>
               <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
               <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-xl mb-3">Site Network & Recruitment</h3>
+          <h3 class="heading-serif text-primary text-2xl mb-4 leading-tight">Site Network & Recruitment</h3>
           <p class="body-mono text-muted text-xs leading-relaxed">
             Proprietary network of 800+ cardiology investigator sites across 40 countries, with AI-powered patient identification and enrollment optimization.
           </p>
         </div>
         <!-- Service 6 -->
-        <div class="service-card border-2 border-primary bg-paper p-8">
-          <div class="w-12 h-12 bg-primary flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <div class="service-card border-3 border-primary bg-paper p-10" style="border-width: 3px;">
+          <div class="w-14 h-14 bg-primary flex items-center justify-center mb-8">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#ff2d2d" stroke-width="2.5" stroke-linecap="square" aria-hidden="true">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
               <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
               <line x1="12" y1="22.08" x2="12" y2="12"/>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-xl mb-3">Biostatistics & Data Sciences</h3>
+          <h3 class="heading-serif text-primary text-2xl mb-4 leading-tight">Biostatistics & Data Sciences</h3>
           <p class="body-mono text-muted text-xs leading-relaxed">
             Advanced cardiovascular biostatistics including Bayesian adaptive designs, CVOT analysis, and real-world evidence integration for cardiac endpoints.
           </p>
@@ -502,19 +729,19 @@
     </div>
   </section>
 
-  <!-- ========== ABOUT ========== -->
-  <section id="about" class="bg-paper py-24 border-t-2 border-primary">
+  <!-- ========== ABOUT ==== -->
+  <section id="about" class="bg-paper py-28 border-b-3 border-primary" style="border-bottom-width: 3px;">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         <div>
-          <p class="label-mono text-accent mb-4">Who We Are</p>
-          <h2 class="heading-serif text-primary strike-label mb-8" style="font-size: clamp(2rem, 4vw, 3.5rem);">
+          <p class="label-mono text-accent mb-5 tracking-widest">[ WHO WE ARE ]</p>
+          <h2 class="heading-serif text-primary strike-label mb-10" style="font-size: clamp(2.2rem, 4.5vw, 4rem);">
             Built for Cardiovascular Complexity
           </h2>
-          <p class="body-mono text-muted text-sm leading-loose mb-6">
+          <p class="body-mono text-muted text-sm leading-loose mb-7">
             CardioVera Research was founded on a single premise: cardiovascular clinical trials demand a different kind of CRO. One that thinks in heartbeats, not just data points.
           </p>
-          <p class="body-mono text-muted text-sm leading-loose mb-6">
+          <p class="body-mono text-muted text-sm leading-loose mb-7">
             Our team of cardiologists, biostatisticians, and regulatory strategists has designed and executed over 150 cardiovascular studies spanning heart failure, arrhythmia, atherosclerosis, hypertension, and structural heart disease.
           </p>
           <p class="body-mono text-muted text-sm leading-loose">
@@ -522,161 +749,161 @@
           </p>
         </div>
         <div class="relative">
-          <!-- Square image placeholder with border -->
-          <div class="border-2 border-primary aspect-square bg-primary relative overflow-hidden">
+          <!-- Square image placeholder with hard border -->
+          <div class="border-3 border-primary aspect-square bg-primary relative overflow-hidden shadow-brutal" style="border-width: 3px;">
             <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none" aria-hidden="true">
               <rect width="400" height="400" fill="#0a0a0a"/>
               <!-- Abstract heart shape -->
-              <path d="M200,300 C200,300 100,230 100,170 C100,130 130,110 160,110 C180,110 195,125 200,140 C205,125 220,110 240,110 C270,110 300,130 300,170 C300,230 200,300 200,300Z" stroke="#f0ece4" stroke-width="1" fill="none" opacity="0.08"/>
-              <text x="200" y="205" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="24" fill="#f0ece4" opacity="0.15">est. 2009</text>
+              <path d="M200,300 C200,300 100,230 100,170 C100,130 130,110 160,110 C180,110 195,125 200,140 C205,125 220,110 240,110 C270,110 300,130 300,170 C300,230 200,300 200,300Z" stroke="#f0ece4" stroke-width="1.5" fill="none" opacity="0.1"/>
+              <text x="200" y="210" text-anchor="middle" font-family="Azeret Mono, monospace" font-size="16" fill="#f0ece4" opacity="0.2" letter-spacing="3">EST. 2009</text>
             </svg>
           </div>
           <!-- Offset accent block -->
-          <div class="absolute -bottom-3 -right-3 w-24 h-24 bg-accent -z-10" aria-hidden="true"></div>
+          <div class="absolute -bottom-4 -right-4 w-28 h-28 bg-accent -z-10" aria-hidden="true"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== TESTIMONIALS ========== -->
-  <section id="testimonials" class="bg-primary py-24">
+  <!-- ========== TESTIMONIALS ==== -->
+  <section id="testimonials" class="bg-primary py-28 border-b-3 border-gray-900" style="border-bottom-width: 3px;">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="mb-16">
-        <p class="label-mono text-accent mb-4">What They Say</p>
-        <h2 class="heading-serif text-inverse strike-label" style="font-size: clamp(2rem, 4vw, 3.5rem);">
+      <div class="mb-20">
+        <p class="label-mono text-accent mb-5 tracking-widest">[ WHAT THEY SAY ]</p>
+        <h2 class="heading-serif text-inverse strike-label" style="font-size: clamp(2.2rem, 4.5vw, 4rem);">
           Proof of Concept
         </h2>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-14">
         <!-- Testimonial 1 -->
-        <div class="testimonial-card pl-8 py-2">
+        <div class="testimonial-card pl-10 py-3">
           <blockquote>
-            <p class="heading-serif text-inverse" style="font-size: 1.25rem; line-height: 1.6;">
+            <p class="heading-serif text-inverse" style="font-size: 1.35rem; line-height: 1.65;">
               "CardioVera's endpoint adjudication process was the most rigorous we have encountered in 20 years of cardiovascular drug development. Their attention to cardiac safety signals is unmatched."
             </p>
           </blockquote>
-          <div class="mt-6">
-            <p class="nav-link text-inverse">Dr. Helena Strauss</p>
-            <p class="label-mono text-gray-500 mt-1">VP Clinical Development, Meridian Therapeutics</p>
+          <div class="mt-8">
+            <p class="nav-link text-inverse">DR. HELENA STRAUSS</p>
+            <p class="label-mono text-gray-500 mt-2">VP CLINICAL DEVELOPMENT / MERIDIAN THERAPEUTICS</p>
           </div>
         </div>
         <!-- Testimonial 2 -->
-        <div class="testimonial-card pl-8 py-2">
+        <div class="testimonial-card pl-10 py-3">
           <blockquote>
-            <p class="heading-serif text-inverse" style="font-size: 1.25rem; line-height: 1.6;">
+            <p class="heading-serif text-inverse" style="font-size: 1.35rem; line-height: 1.65;">
               "We completed our Phase 3 heart failure trial four months ahead of schedule with CardioVera managing our 180-site global network. Their cardiology expertise fundamentally changed our regulatory strategy."
             </p>
           </blockquote>
-          <div class="mt-6">
-            <p class="nav-link text-inverse">James Caldwell, MBA</p>
-            <p class="label-mono text-gray-500 mt-1">CEO, Atrium BioSciences</p>
+          <div class="mt-8">
+            <p class="nav-link text-inverse">JAMES CALDWELL, MBA</p>
+            <p class="label-mono text-gray-500 mt-2">CEO / ATRIUM BIOSCIENCES</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== TEAM ========== -->
-  <section id="team" class="bg-paper py-24 border-t-2 border-primary">
+  <!-- ========== TEAM ==== -->
+  <section id="team" class="bg-paper py-28 border-b-3 border-primary" style="border-bottom-width: 3px;">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="mb-16">
-        <p class="label-mono text-accent mb-4">Leadership</p>
-        <h2 class="heading-serif text-primary strike-label" style="font-size: clamp(2rem, 4vw, 3.5rem);">
+      <div class="mb-20">
+        <p class="label-mono text-accent mb-5 tracking-widest">[ LEADERSHIP ]</p>
+        <h2 class="heading-serif text-primary strike-label" style="font-size: clamp(2.2rem, 4.5vw, 4rem);">
           The Team
         </h2>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
         <!-- Member 1: Marchetti -->
         <div class="text-center">
-          <div class="team-avatar border-2 border-primary aspect-square bg-primary mx-auto mb-5 relative overflow-hidden" style="max-width: 220px;">
+          <div class="team-avatar border-3 border-primary aspect-square bg-primary mx-auto mb-6 relative overflow-hidden" style="max-width: 220px; border-width: 3px;">
             <svg viewBox="0 0 200 200" class="w-full h-full" aria-label="Dr. Lucia Marchetti avatar">
               <rect width="200" height="200" fill="#0a0a0a"/>
-              <circle cx="100" cy="78" r="32" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <path d="M100,110 C70,110 45,135 45,165 L45,200 L155,200 L155,165 C155,135 130,110 100,110Z" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <text x="100" y="82" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="18" fill="#ff2d2d">LM</text>
+              <circle cx="100" cy="78" r="34" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <path d="M100,112 C68,112 42,138 42,170 L42,200 L158,200 L158,170 C158,138 132,112 100,112Z" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <text x="100" y="84" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="20" fill="#ff2d2d">LM</text>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-lg">Dr. Lucia Marchetti</h3>
-          <p class="label-mono text-muted mt-1">Chief Executive Officer</p>
+          <h3 class="heading-serif text-primary text-xl">Dr. Lucia Marchetti</h3>
+          <p class="label-mono text-muted mt-2">CHIEF EXECUTIVE OFFICER</p>
         </div>
         <!-- Member 2: Okafor -->
         <div class="text-center">
-          <div class="team-avatar border-2 border-primary aspect-square bg-primary mx-auto mb-5 relative overflow-hidden" style="max-width: 220px;">
+          <div class="team-avatar border-3 border-primary aspect-square bg-primary mx-auto mb-6 relative overflow-hidden" style="max-width: 220px; border-width: 3px;">
             <svg viewBox="0 0 200 200" class="w-full h-full" aria-label="Dr. Emeka Okafor avatar">
               <rect width="200" height="200" fill="#0a0a0a"/>
-              <circle cx="100" cy="78" r="32" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <path d="M100,110 C70,110 45,135 45,165 L45,200 L155,200 L155,165 C155,135 130,110 100,110Z" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <text x="100" y="82" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="18" fill="#ff2d2d">EO</text>
+              <circle cx="100" cy="78" r="34" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <path d="M100,112 C68,112 42,138 42,170 L42,200 L158,200 L158,170 C158,138 132,112 100,112Z" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <text x="100" y="84" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="20" fill="#ff2d2d">EO</text>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-lg">Dr. Emeka Okafor</h3>
-          <p class="label-mono text-muted mt-1">Chief Medical Officer</p>
+          <h3 class="heading-serif text-primary text-xl">Dr. Emeka Okafor</h3>
+          <p class="label-mono text-muted mt-2">CHIEF MEDICAL OFFICER</p>
         </div>
         <!-- Member 3: Lindqvist -->
         <div class="text-center">
-          <div class="team-avatar border-2 border-primary aspect-square bg-primary mx-auto mb-5 relative overflow-hidden" style="max-width: 220px;">
+          <div class="team-avatar border-3 border-primary aspect-square bg-primary mx-auto mb-6 relative overflow-hidden" style="max-width: 220px; border-width: 3px;">
             <svg viewBox="0 0 200 200" class="w-full h-full" aria-label="Astrid Lindqvist avatar">
               <rect width="200" height="200" fill="#0a0a0a"/>
-              <circle cx="100" cy="78" r="32" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <path d="M100,110 C70,110 45,135 45,165 L45,200 L155,200 L155,165 C155,135 130,110 100,110Z" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <text x="100" y="82" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="18" fill="#ff2d2d">AL</text>
+              <circle cx="100" cy="78" r="34" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <path d="M100,112 C68,112 42,138 42,170 L42,200 L158,200 L158,170 C158,138 132,112 100,112Z" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <text x="100" y="84" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="20" fill="#ff2d2d">AL</text>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-lg">Astrid Lindqvist</h3>
-          <p class="label-mono text-muted mt-1">VP Biostatistics</p>
+          <h3 class="heading-serif text-primary text-xl">Astrid Lindqvist</h3>
+          <p class="label-mono text-muted mt-2">VP BIOSTATISTICS</p>
         </div>
         <!-- Member 4: Venkatesh -->
         <div class="text-center">
-          <div class="team-avatar border-2 border-primary aspect-square bg-primary mx-auto mb-5 relative overflow-hidden" style="max-width: 220px;">
+          <div class="team-avatar border-3 border-primary aspect-square bg-primary mx-auto mb-6 relative overflow-hidden" style="max-width: 220px; border-width: 3px;">
             <svg viewBox="0 0 200 200" class="w-full h-full" aria-label="Dr. Ravi Venkatesh avatar">
               <rect width="200" height="200" fill="#0a0a0a"/>
-              <circle cx="100" cy="78" r="32" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <path d="M100,110 C70,110 45,135 45,165 L45,200 L155,200 L155,165 C155,135 130,110 100,110Z" fill="none" stroke="#ff2d2d" stroke-width="2"/>
-              <text x="100" y="82" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="18" fill="#ff2d2d">RV</text>
+              <circle cx="100" cy="78" r="34" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <path d="M100,112 C68,112 42,138 42,170 L42,200 L158,200 L158,170 C158,138 132,112 100,112Z" fill="none" stroke="#ff2d2d" stroke-width="2.5"/>
+              <text x="100" y="84" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="20" fill="#ff2d2d">RV</text>
             </svg>
           </div>
-          <h3 class="heading-serif text-primary text-lg">Dr. Ravi Venkatesh</h3>
-          <p class="label-mono text-muted mt-1">VP Regulatory Affairs</p>
+          <h3 class="heading-serif text-primary text-xl">Dr. Ravi Venkatesh</h3>
+          <p class="label-mono text-muted mt-2">VP REGULATORY AFFAIRS</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== CONTACT ========== -->
-  <section id="contact" class="bg-paper py-24 border-t-2 border-primary">
+  <!-- ========== CONTACT ==== -->
+  <section id="contact" class="bg-paper py-28 border-b-3 border-primary" style="border-bottom-width: 3px;">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="mb-16">
-        <p class="label-mono text-accent mb-4">Get in Touch</p>
-        <h2 class="heading-serif text-primary strike-label" style="font-size: clamp(2rem, 4vw, 3.5rem);">
+      <div class="mb-20">
+        <p class="label-mono text-accent mb-5 tracking-widest">[ GET IN TOUCH ]</p>
+        <h2 class="heading-serif text-primary strike-label" style="font-size: clamp(2.2rem, 4.5vw, 4rem);">
           Start Your Trial
         </h2>
       </div>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
         <!-- Left: Contact Info -->
         <div>
-          <div class="mb-10">
-            <p class="label-mono text-accent mb-3">General Inquiries</p>
-            <p class="body-mono text-primary text-sm">inquiries@cardiovera.com</p>
+          <div class="mb-12">
+            <p class="label-mono text-accent mb-4 tracking-widest">GENERAL INQUIRIES</p>
+            <p class="body-mono text-primary text-sm font-medium">inquiries@cardiovera.com</p>
           </div>
-          <div class="mb-10">
-            <p class="label-mono text-accent mb-3">Business Development</p>
-            <p class="body-mono text-primary text-sm">partnerships@cardiovera.com</p>
+          <div class="mb-12">
+            <p class="label-mono text-accent mb-4 tracking-widest">BUSINESS DEVELOPMENT</p>
+            <p class="body-mono text-primary text-sm font-medium">partnerships@cardiovera.com</p>
           </div>
-          <div class="mb-10">
-            <p class="label-mono text-accent mb-3">Headquarters</p>
-            <p class="body-mono text-primary text-sm">
+          <div class="mb-12">
+            <p class="label-mono text-accent mb-4 tracking-widest">HEADQUARTERS</p>
+            <p class="body-mono text-primary text-sm leading-relaxed">
               245 Cardiac Research Drive<br>
               Cambridge, MA 02142<br>
               United States
             </p>
           </div>
-          <div class="mb-10">
-            <p class="label-mono text-accent mb-3">Phone</p>
-            <p class="body-mono text-primary text-sm">+1 (617) 555-0192</p>
+          <div class="mb-12">
+            <p class="label-mono text-accent mb-4 tracking-widest">PHONE</p>
+            <p class="body-mono text-primary text-sm font-medium">+1 (617) 555-0192</p>
           </div>
           <div>
-            <p class="label-mono text-accent mb-3">European Office</p>
-            <p class="body-mono text-primary text-sm">
+            <p class="label-mono text-accent mb-4 tracking-widest">EUROPEAN OFFICE</p>
+            <p class="body-mono text-primary text-sm leading-relaxed">
               Bahnhofstrasse 44<br>
               8001 Zurich, Switzerland
             </p>
@@ -684,33 +911,33 @@
         </div>
         <!-- Right: Form -->
         <div>
-          <form onsubmit="event.preventDefault(); alert('Thank you. We will be in contact shortly.');" aria-label="Contact form">
-            <div class="mb-8">
-              <label for="name" class="label-mono text-muted block mb-2">Full Name</label>
-              <input type="text" id="name" name="name" class="brutal-input" placeholder="Your name" required autocomplete="name">
-            </div>
-            <div class="mb-8">
-              <label for="email" class="label-mono text-muted block mb-2">Email Address</label>
-              <input type="email" id="email" name="email" class="brutal-input" placeholder="you@company.com" required autocomplete="email">
-            </div>
-            <div class="mb-8">
-              <label for="company" class="label-mono text-muted block mb-2">Organization</label>
-              <input type="text" id="company" name="company" class="brutal-input" placeholder="Company name" autocomplete="organization">
-            </div>
-            <div class="mb-8">
-              <label for="indication" class="label-mono text-muted block mb-2">Therapeutic Indication</label>
-              <input type="text" id="indication" name="indication" class="brutal-input" placeholder="e.g., Heart Failure, Arrhythmia">
-            </div>
-            <div class="mb-8">
-              <label for="phase" class="label-mono text-muted block mb-2">Trial Phase</label>
-              <input type="text" id="phase" name="phase" class="brutal-input" placeholder="e.g., Phase 2, Phase 3">
+          <form onsubmit="handleFormSubmit(event)" aria-label="Contact form">
+            <div class="mb-10">
+              <label for="name" class="label-mono text-muted block mb-3 tracking-widest">FULL NAME</label>
+              <input type="text" id="name" name="name" class="brutal-input" placeholder="YOUR NAME" required autocomplete="name">
             </div>
             <div class="mb-10">
-              <label for="message" class="label-mono text-muted block mb-2">Project Details</label>
-              <textarea id="message" name="message" rows="4" class="brutal-input resize-none" placeholder="Tell us about your trial" style="border-bottom: 2px solid #0a0a0a;"></textarea>
+              <label for="email" class="label-mono text-muted block mb-3 tracking-widest">EMAIL ADDRESS</label>
+              <input type="email" id="email" name="email" class="brutal-input" placeholder="YOU@COMPANY.COM" required autocomplete="email">
             </div>
-            <button type="submit" class="bg-accent text-inverse nav-link px-10 py-4 w-full md:w-auto hover:bg-red-700 transition-colors">
-              Submit Inquiry
+            <div class="mb-10">
+              <label for="company" class="label-mono text-muted block mb-3 tracking-widest">ORGANIZATION</label>
+              <input type="text" id="company" name="company" class="brutal-input" placeholder="COMPANY NAME" autocomplete="organization">
+            </div>
+            <div class="mb-10">
+              <label for="indication" class="label-mono text-muted block mb-3 tracking-widest">THERAPEUTIC INDICATION</label>
+              <input type="text" id="indication" name="indication" class="brutal-input" placeholder="E.G., HEART FAILURE, ARRHYTHMIA">
+            </div>
+            <div class="mb-10">
+              <label for="phase" class="label-mono text-muted block mb-3 tracking-widest">TRIAL PHASE</label>
+              <input type="text" id="phase" name="phase" class="brutal-input" placeholder="E.G., PHASE 2, PHASE 3">
+            </div>
+            <div class="mb-12">
+              <label for="message" class="label-mono text-muted block mb-3 tracking-widest">PROJECT DETAILS</label>
+              <textarea id="message" name="message" rows="4" class="brutal-input resize-none" placeholder="TELL US ABOUT YOUR TRIAL" style="border-bottom: 2px solid #0a0a0a;"></textarea>
+            </div>
+            <button type="submit" class="brutal-btn bg-accent text-inverse nav-link px-12 py-5 w-full md:w-auto hover:bg-red-700">
+              SUBMIT INQUIRY
             </button>
           </form>
         </div>
@@ -718,54 +945,54 @@
     </div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
-  <footer class="bg-primary border-t-4 border-inverse" role="contentinfo">
-    <div class="max-w-7xl mx-auto px-6 py-16">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+  <!-- ========== FOOTER ==== -->
+  <footer class="bg-primary border-t-4 border-accent" role="contentinfo" style="border-top-width: 4px;">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-14 mb-20">
         <div class="md:col-span-2">
-          <a href="#" class="heading-serif text-inverse text-3xl">CardioVera</a>
-          <p class="body-mono text-gray-500 text-xs mt-4 max-w-sm leading-relaxed">
+          <a href="#" class="heading-serif text-inverse text-4xl">CardioVera</a>
+          <p class="body-mono text-gray-500 text-xs mt-6 max-w-sm leading-relaxed">
             A cardiovascular-focused contract research organization dedicated to advancing cardiac science through rigorous clinical trials.
           </p>
         </div>
         <div>
-          <p class="label-mono text-accent mb-4">Navigation</p>
-          <ul class="space-y-3">
-            <li><a href="#services" class="nav-link text-gray-400 hover:text-inverse transition-colors">Services</a></li>
-            <li><a href="#about" class="nav-link text-gray-400 hover:text-inverse transition-colors">About</a></li>
-            <li><a href="#team" class="nav-link text-gray-400 hover:text-inverse transition-colors">Team</a></li>
-            <li><a href="#testimonials" class="nav-link text-gray-400 hover:text-inverse transition-colors">Proof</a></li>
-            <li><a href="#contact" class="nav-link text-gray-400 hover:text-inverse transition-colors">Contact</a></li>
+          <p class="label-mono text-accent mb-6 tracking-widest">NAVIGATION</p>
+          <ul class="space-y-4">
+            <li><a href="#services" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">Services</a></li>
+            <li><a href="#about" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">About</a></li>
+            <li><a href="#team" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">Team</a></li>
+            <li><a href="#testimonials" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">Proof</a></li>
+            <li><a href="#contact" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">Contact</a></li>
           </ul>
         </div>
         <div>
-          <p class="label-mono text-accent mb-4">Compliance</p>
-          <ul class="space-y-3">
-            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors">ICH-GCP</a></li>
-            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors">ISO 14155</a></li>
-            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors">21 CFR Part 11</a></li>
-            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors">GDPR</a></li>
-            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors">Privacy Policy</a></li>
+          <p class="label-mono text-accent mb-6 tracking-widest">COMPLIANCE</p>
+          <ul class="space-y-4">
+            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">ICH-GCP</a></li>
+            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">ISO 14155</a></li>
+            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">21 CFR Part 11</a></li>
+            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">GDPR</a></li>
+            <li><a href="#" class="nav-link text-gray-400 hover:text-inverse transition-colors duration-75">Privacy Policy</a></li>
           </ul>
         </div>
       </div>
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-gray-800">
-        <p class="label-mono text-gray-600">
-          &copy; 2025 CardioVera Research. All rights reserved.
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pt-10 border-t-2 border-gray-800" style="border-top-width: 2px;">
+        <p class="label-mono text-gray-600 tracking-widest">
+          &copy; 2025 CARDIOVERA RESEARCH. ALL RIGHTS RESERVED.
         </p>
-        <p class="label-mono text-gray-600">
-          Cambridge, MA &mdash; Zurich, CH
+        <p class="label-mono text-gray-600 tracking-widest">
+          CAMBRIDGE, MA — ZURICH, CH
         </p>
       </div>
     </div>
   </footer>
 
-  <!-- ========== SCROLL ANIMATIONS ========== -->
+  <!-- ========== SCRIPTS ==== -->
   <script>
     // Intersection Observer for scroll-triggered animations
     const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+      threshold: 0.08,
+      rootMargin: '0px 0px -60px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -781,8 +1008,8 @@
     // Observe service cards, team members, and other sections
     document.querySelectorAll('.service-card, .team-avatar, .testimonial-card').forEach((el, index) => {
       el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = `opacity 0.5s ease ${index * 0.08}s, transform 0.5s ease ${index * 0.08}s`;
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = `opacity 0.4s cubic-bezier(0.25, 0, 0.25, 1) ${index * 0.06}s, transform 0.4s cubic-bezier(0.25, 0, 0.25, 1) ${index * 0.06}s`;
       observer.observe(el);
     });
 
@@ -799,19 +1026,16 @@
       });
     });
 
-    // Nav scroll effect — add subtle bg change
+    // Nav scroll effect
     const nav = document.querySelector('nav');
-    let lastScroll = 0;
     window.addEventListener('scroll', () => {
-      const currentScroll = window.scrollY;
-      if (currentScroll > 100) {
-        nav.style.backgroundColor = 'rgba(240, 236, 228, 0.95)';
-        nav.style.backdropFilter = 'blur(10px)';
+      if (window.scrollY > 100) {
+        nav.style.backgroundColor = 'rgba(240, 236, 228, 0.97)';
+        nav.style.backdropFilter = 'blur(8px)';
       } else {
         nav.style.backgroundColor = '#f0ece4';
         nav.style.backdropFilter = 'none';
       }
-      lastScroll = currentScroll;
     });
 
     // Aria-expanded toggle for mobile nav
@@ -822,31 +1046,51 @@
         mobileBtn.setAttribute('aria-expanded', !expanded);
       });
     }
+
+    // Form submission
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = '[ SUBMITTED ]';
+      submitBtn.style.background = '#0a0a0a';
+      submitBtn.style.color = '#00ff00';
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.style.background = '';
+        submitBtn.style.color = '';
+        submitBtn.disabled = false;
+        event.target.reset();
+      }, 2500);
+    }
   </script>
+
 <!-- Theme Switcher -->
 <style>
-#themeSwitcher{position:fixed;right:1.25rem;top:50%;transform:translateY(-50%);z-index:10001;display:flex;flex-direction:column;align-items:center;gap:0.4rem;padding:0.6rem 0.45rem;background:#f0ece4;border:2px solid #0a0a0a;box-shadow:4px 4px 0 #0a0a0a}
+#themeSwitcher{position:fixed;right:1.25rem;top:50%;transform:translateY(-50%);z-index:10001;display:flex;flex-direction:column;align-items:center;gap:0.4rem;padding:0.6rem 0.45rem;background:#f0ece4;border:3px solid #0a0a0a;box-shadow:5px 5px 0 #0a0a0a}
 #themeSwitcher a{text-decoration:none;display:flex;align-items:center;justify-content:center}
-.ts-home{width:28px;height:28px;color:#4a4a4a;transition:color 0.15s}
+.ts-home{width:28px;height:28px;color:#4a4a4a;transition:color 0.06s linear}
 .ts-home:hover{color:#ff2d2d}
-.ts-home svg{width:14px;height:14px}
-.ts-sep{width:14px;height:2px;background:#0a0a0a}
+.ts-home svg{width:14px;height:14px;stroke-width:2}
+.ts-sep{width:14px;height:3px;background:#0a0a0a}
 .ts-dot{width:28px;height:28px;position:relative}
-.ts-dot-inner{width:10px;height:10px;border:1.5px solid #0a0a0a;transition:transform 0.15s,box-shadow 0.15s}
-.ts-dot:hover .ts-dot-inner{transform:scale(1.35)}
-.ts-dot.active .ts-dot-inner{transform:scale(1.5);box-shadow:0 0 0 2px #ff2d2d}
-.ts-tip{position:absolute;right:calc(100% + 10px);white-space:nowrap;font-family:'Azeret Mono',monospace;font-size:0.55rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#f0ece4;background:#0a0a0a;padding:3px 8px;box-shadow:2px 2px 0 #ff2d2d;opacity:0;transform:translateX(4px);transition:all 0.15s;pointer-events:none}
+.ts-dot-inner{width:10px;height:10px;border:2px solid #0a0a0a;transition:transform 0.06s linear,box-shadow 0.06s linear}
+.ts-dot:hover .ts-dot-inner{transform:scale(1.4)}
+.ts-dot.active .ts-dot-inner{transform:scale(1.6);box-shadow:0 0 0 2.5px #ff2d2d}
+.ts-tip{position:absolute;right:calc(100% + 12px);white-space:nowrap;font-family:'Azeret Mono',monospace;font-size:0.5rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#f0ece4;background:#0a0a0a;padding:4px 10px;box-shadow:3px 3px 0 #ff2d2d;opacity:0;transform:translateX(5px);transition:all 0.06s linear;pointer-events:none}
 .ts-dot:hover .ts-tip{opacity:1;transform:translateX(0)}
-@media(max-width:768px){#themeSwitcher{right:0.6rem;padding:0.4rem 0.3rem;gap:0.25rem}.ts-dot{width:24px;height:24px}.ts-dot-inner{width:8px;height:8px}.ts-tip{display:none}.ts-home{width:24px;height:24px}.ts-home svg{width:12px;height:12px}}
+@media(max-width:768px){#themeSwitcher{right:0.6rem;padding:0.4rem 0.3rem;gap:0.25rem;border-width:2px;box-shadow:3px 3px 0 #0a0a0a}.ts-dot{width:24px;height:24px}.ts-dot-inner{width:8px;height:8px}.ts-tip{display:none}.ts-home{width:24px;height:24px}.ts-home svg{width:12px;height:12px}}
 </style>
 <nav id="themeSwitcher" aria-label="Theme switcher">
-  <a href="index.html" class="ts-home" title="Back to Gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></a>
+  <a href="index.html" class="ts-home" title="Back to Gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></a>
   <div class="ts-sep"></div>
-  <a href="theme1-corporate.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#1e3a5f 50%,#c9a84c 50%)"></span><span class="ts-tip">01 — Precision & Prestige</span></a>
-  <a href="2/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0A1628 50%,#C41E3A 50%)"></span><span class="ts-tip">02 — Clinical Evidence</span></a>
-  <a href="theme3-warm.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#faf8f5 50%,#e8634a 50%)"></span><span class="ts-tip">03 — Organic Flow</span></a>
-  <a href="theme4-brutalist.html" class="ts-dot active"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0a0a0a 50%,#ff2d2d 50%)"></span><span class="ts-tip">04 — Raw & Bold</span></a>
-  <a href="5/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#f3efe5 50%,#0a8d80 50%)"></span><span class="ts-tip">05 — Natural Authority</span></a>
+  <a href="theme1-corporate.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#1e3a5f 50%,#c9a84c 50%)"></span><span class="ts-tip">01 — Precision</span></a>
+  <a href="2/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0A1628 50%,#C41E3A 50%)"></span><span class="ts-tip">02 — Evidence</span></a>
+  <a href="theme3-warm.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#faf8f5 50%,#e8634a 50%)"></span><span class="ts-tip">03 — Organic</span></a>
+  <a href="theme4-brutalist.html" class="ts-dot active"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#0a0a0a 50%,#ff2d2d 50%)"></span><span class="ts-tip">04 — Brutal</span></a>
+  <a href="5/index.html" class="ts-dot"><span class="ts-dot-inner" style="background:linear-gradient(135deg,#f3efe5 50%,#0a8d80 50%)"></span><span class="ts-tip">05 — Authority</span></a>
 </nav>
 </body>
 </html>
