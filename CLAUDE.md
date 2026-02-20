@@ -13,6 +13,7 @@ CardioVera Research — a cardiovascular CRO (Contract Research Organization) ma
 - **Vanilla JavaScript** — no frameworks
 - **Google Fonts** — each theme has its own font pairing
 - Deploy anywhere as static files (no build step)
+- **Live site**: https://sites.tracescribe.com (hosted on Vercel, GitHub repo: `sahasand/cro-website`)
 
 ## File Structure
 
