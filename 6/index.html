@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arteris Therapeutics | Cardiovascular Innovation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="./heart_b64.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            background: #000;
+            color: #ffffff;
+            font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+            background-attachment: fixed;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(35, 10, 10, 0.4) 0%, #000 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .ui-layer {
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-panel {
+            background: rgba(15, 5, 5, 0.4);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 100, 100, 0.1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(255, 50, 50, 0.08) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(255, 100, 100, 0.25);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 100, 100, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .glass-panel:hover::after {
+            opacity: 1;
+        }
+
+        /* Magnetic Button */
+        .magnetic-btn-wrap {
+            display: inline-block;
+            padding: 20px;
+            margin: -20px;
+        }
+
+        /* Loading overlay */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: #050303;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .pulse-ring {
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(220, 40, 40, 0.3);
+            border-radius: 50%;
+            animation: pulseRing 1.5s ease-out infinite;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Loading screen -->
+    <div id="loader">
+        <div class="pulse-ring"></div>
+        <p class="text-xs tracking-[0.3em] uppercase text-white/30 mt-6">Loading Model</p>
+    </div>
+
+    <canvas id="webgl-canvas"></canvas>
+
+    <main class="ui-layer">
+
+        <!-- HERO -->
+        <section class="h-screen flex flex-col items-center justify-center px-6 text-center">
+            <p
+                class="text-xs md:text-sm tracking-[0.4em] uppercase text-red-500 mb-6 font-semibold opacity-80 title-anim">
+                Arteris Therapeutics</p>
+            <h1 class="text-6xl md:text-9xl font-black tracking-tighter mb-6 leading-[0.9] title-anim">
+                REWRITING<br>
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-br from-red-500 via-rose-300 to-red-900 drop-shadow-2xl">
+                    CARDIAC FATE
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl font-light leading-relaxed op-anim">
+                Precision gene therapies targeting the molecular drivers of heart failure. Not incremental improvements.
+                <strong class="text-white font-medium">Cures.</strong>
+            </p>
+            <div class="magnetic-btn-wrap op-anim">
+                <button
+                    class="magnetic-btn glass-panel px-10 py-5 rounded-full font-bold text-white tracking-[0.2em] uppercase text-xs cursor-pointer focus:outline-none">
+                    Explore Pipeline
+                </button>
+            </div>
+        </section>
+
+        <div class="h-24"></div>
+
+        <!-- THESIS — left -->
+        <section class="min-h-screen px-6 md:px-24 flex flex-col justify-center py-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="glass-panel p-10 md:p-16 rounded-[2rem] content-block">
+                    <p class="text-xs tracking-[0.25em] uppercase text-red-400/40 mb-4">The Problem</p>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">6.7 million.</h2>
+                    <p class="text-gray-400 leading-relaxed text-lg font-light">
+                        Americans living with heart failure today. Standard of care hasn't changed meaningfully in two
+                        decades. ACE inhibitors, beta blockers, diuretics — they manage symptoms, slow decline. They
+                        don't address root cause. We think that's a failure of ambition, not biology.
+                    </p>
+                </div>
+                <div class="hidden md:block"></div>
+            </div>
+        </section>
+
+        <!-- PLATFORM — right -->
+        <section class="min-h-screen px-6 md:px-24 flex flex-col justify-center py-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="hidden md:block"></div>
+                <div class="glass-panel p-10 md:p-16 rounded-[2rem] content-block">
+                    <p class="text-xs tracking-[0.25em] uppercase text-red-400/40 mb-4">Our Platform</p>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">CardioVector™</h2>
+                    <p class="text-gray-400 leading-relaxed text-lg font-light">
+                        A cardiac-tropic AAV capsid engineered for cardiomyocyte transduction at 40x the efficiency of
+                        AAV9. Single-dose intravenous delivery. No thoracotomy, no catheter, no immunosuppression
+                        protocol. We go where the disease is and we fix the transcript.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PIPELINE — left -->
+        <section class="min-h-screen px-6 md:px-24 flex flex-col justify-center py-20 mb-32">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="glass-panel p-10 md:p-16 rounded-[2rem] content-block">
+                    <p class="text-xs tracking-[0.25em] uppercase text-red-400/40 mb-4">Pipeline</p>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Three shots on goal.</h2>
+                    <p class="text-gray-400 leading-relaxed text-lg font-light">
+                        ART-101 targets MYBPC3 mutations in hypertrophic cardiomyopathy — Phase 2 enrolling now. ART-201
+                        silences LMNA-driven dilated cardiomyopathy. ART-301 is our first-in-class anti-fibrotic,
+                        reprogramming activated fibroblasts back to quiescence. All three use CardioVector. All three
+                        are IV-administered. None existed five years ago.
+                    </p>
+                </div>
+                <div class="hidden md:block"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Theme Switcher -->
+    <style>
+    #themeSwitcher{position:fixed;right:1.25rem;top:50%;transform:translateY(-50%);z-index:10001;display:flex;flex-direction:column;align-items:center;gap:0.4rem;padding:0.75rem 0.5rem;background:rgba(15,5,5,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,0,34,0.15);border-radius:100px;box-shadow:0 4px 32px rgba(0,0,0,0.4)}
+    #themeSwitcher a{text-decoration:none;display:flex;align-items:center;justify-content:center}
+    .ts-home{width:28px;height:28px;color:rgba(255,255,255,0.4);transition:color 0.3s ease,transform 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+    .ts-home:hover{color:#ff0022;transform:scale(1.1)}
+    .ts-home svg{width:14px;height:14px}
+    .ts-sep{width:14px;height:1px;background:rgba(255,0,34,0.25)}
+    .ts-dot{width:28px;height:28px;position:relative;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+    .ts-dot:hover{transform:scale(1.15)}
+    .ts-dot-inner{width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s}
+    .ts-dot:hover .ts-dot-inner{transform:scale(1.4)}
+    .ts-dot.active .ts-dot-inner{transform:scale(1.5);box-shadow:0 0 0 3px rgba(255,0,34,0.4)}
+    .ts-tip{position:absolute;right:calc(100% + 12px);white-space:nowrap;font-family:'Space Grotesk',sans-serif;font-size:0.65rem;letter-spacing:0.05em;color:#fff;background:rgba(15,5,5,0.95);padding:4px 12px;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.3);border:1px solid rgba(255,0,34,0.15);opacity:0;transform:translateX(6px);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none}
+    .ts-dot:hover .ts-tip{opacity:1;transform:translateX(0)}
+    @media(max-width:768px){#themeSwitcher{right:0.6rem;padding:0.5rem 0.3rem;gap:0.25rem}.ts-dot{width:24px;height:24px}.ts-dot-inner{width:8px;height:8px}.ts-tip{display:none}.ts-home{width:24px;height:24px}.ts-home svg{width:12px;height:12px}}
+    </style>
+    <nav id="themeSwitcher" aria-label="Theme navigation">
+        <a href="../index.html" class="ts-home" title="Gallery" aria-label="Back to gallery">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+        </a>
+        <div class="ts-sep"></div>
+        <a href="../theme1-corporate.html" class="ts-dot" aria-label="Theme 1: Precision & Prestige">
+            <span class="ts-dot-inner" style="background: linear-gradient(135deg, #1e3a5f 50%, #c9a84c 50%);"></span>
+            <span class="ts-tip">Precision &amp; Prestige</span>
+        </a>
+        <a href="../2/index.html" class="ts-dot" aria-label="Theme 2: Clinical Evidence">
+            <span class="ts-dot-inner" style="background: linear-gradient(135deg, #0A1628 50%, #C41E3A 50%);"></span>
+            <span class="ts-tip">Clinical Evidence</span>
+        </a>
+        <a href="../theme3-warm.html" class="ts-dot" aria-label="Theme 3: Organic Flow">
+            <span class="ts-dot-inner" style="background: linear-gradient(135deg, #faf8f5 50%, #e8634a 50%);"></span>
+            <span class="ts-tip">Organic Flow</span>
+        </a>
+        <a href="../theme4-brutalist.html" class="ts-dot" aria-label="Theme 4: Raw & Bold">
+            <span class="ts-dot-inner" style="background: linear-gradient(135deg, #0a0a0a 50%, #ff2d2d 50%);"></span>
+            <span class="ts-tip">Raw &amp; Bold</span>
+        </a>
+        <a href="../5/index.html" class="ts-dot" aria-label="Theme 5: Natural Authority">
+            <span class="ts-dot-inner" style="background: linear-gradient(135deg, #f3efe5 50%, #0a8d80 50%);"></span>
+            <span class="ts-tip">Natural Authority</span>
+        </a>
+        <a href="../6/index.html" class="ts-dot active" aria-label="Theme 6: Visceral Science" aria-current="page">
+            <span class="ts-dot-inner" style="background: linear-gradient(135deg, #000000 50%, #ff0022 50%);"></span>
+            <span class="ts-tip">Visceral Science</span>
+        </a>
+    </nav>
+
+    <script>
+        // ═══════════════════════════════════════
+        // 1. SCENE, CAMERA, RENDERER
+        // ═══════════════════════════════════════
+        const canvas = document.querySelector('#webgl-canvas');
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 25;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+
+        // ═══════════════════════════════════════
+        // 2. LIGHTING — DYNAMIC & HIGH CONTRAST
+        // ═══════════════════════════════════════
+
+        // Key: Intense crimson
+        const keyLight = new THREE.DirectionalLight(0xff0022, 4.0);
+        keyLight.position.set(20, 10, 20);
+        scene.add(keyLight);
+
+        // Fill: Deep red orbit
+        const fillLight = new THREE.PointLight(0xcc0011, 6, 100);
+        fillLight.position.set(-20, -10, 10);
+        scene.add(fillLight);
+
+        // Rim: Cool white separation
+        const rimLight = new THREE.SpotLight(0xffeedd, 2);
+        rimLight.position.set(0, 20, -25);
+        scene.add(rimLight);
+
+        // Warm underlight
+        const warmFill = new THREE.PointLight(0xff4400, 1.5, 60);
+        warmFill.position.set(10, -15, 15);
+        scene.add(warmFill);
+
+        // Ambient base
+        scene.add(new THREE.AmbientLight(0x110808));
+
+        // ═══════════════════════════════════════
+        // 3. LOAD GLB MODEL
+        // ═══════════════════════════════════════
+        const loader = new THREE.GLTFLoader();
+        const heartGroup = new THREE.Group();
+        scene.add(heartGroup);
+
+        // Custom material: high-gloss visceral red
+        const heartMat = new THREE.MeshPhysicalMaterial({
+            color: 0x990011,
+            metalness: 0.7,
+            roughness: 0.15,
+            transmission: 0.3,
+            thickness: 2.0,
+            ior: 1.5,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.05,
+            attenuationColor: new THREE.Color(0x220000),
+            attenuationDistance: 2.0,
+            side: THREE.DoubleSide,
+            bumpScale: 0.02
+        });
+
+        let modelReady = false;
+
+        // Base64 to ArrayBuffer utility
+        function base64ToArrayBuffer(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        const arrayBuffer = base64ToArrayBuffer(heartB64);
+
+        loader.parse(
+            arrayBuffer,
+            '',
+            function (gltf) {
+                const model = gltf.scene;
+
+                // Replace all materials with our custom glass material
+                model.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = heartMat;
+                    }
+                });
+
+                // Auto-center and auto-scale the model
+                const box = new THREE.Box3().setFromObject(model);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const targetSize = 14; // desired size in scene units
+                const scale = targetSize / maxDim;
+
+                model.position.sub(center);
+                model.scale.setScalar(scale);
+
+                heartGroup.add(model);
+
+                // Anatomical tilt: apex lower-left
+                heartGroup.rotation.z = 0.3;
+                heartGroup.rotation.x = 0.1;
+
+                // Point rim light at model
+                rimLight.lookAt(heartGroup.position);
+
+                modelReady = true;
+
+                // Hide loader
+                document.getElementById('loader').classList.add('hidden');
+
+                // Init GSAP scroll after model is ready
+                initScrollAnimations();
+            },
+            function (error) {
+                console.error('Error parsing model:', error);
+                // Fallback: hide loader anyway
+                document.getElementById('loader').classList.add('hidden');
+            }
+        );
+
+        // ═══════════════════════════════════════
+        // 4. ANIMATION LOOP + HEARTBEAT
+        // ═══════════════════════════════════════
+        const clock = new THREE.Clock();
+        const baseScale = 1.0;
+
+        function heartbeatPulse(t) {
+            const cycle = (t * 1.15) % 1; // ~69 bpm
+            let pulse = 0;
+            if (cycle < 0.07) {
+                pulse = Math.sin(cycle / 0.07 * Math.PI) * 0.04;
+            } else if (cycle > 0.11 && cycle < 0.18) {
+                pulse = Math.sin((cycle - 0.11) / 0.07 * Math.PI) * 0.022;
+            }
+            return baseScale + pulse;
+        }
+
+        // Mouse interaction for lighting and parallax
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2);
+            mouseY = (e.clientY - window.innerHeight / 2);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+
+            targetX = mouseX * 0.001;
+            targetY = mouseY * 0.001;
+
+            if (modelReady) {
+                // Heartbeat
+                const s = heartbeatPulse(t);
+                heartGroup.scale.setScalar(s);
+            }
+
+            // Mouse parallax for camera
+            camera.position.x += (targetX * 5 - camera.position.x) * 0.05;
+            camera.position.y += (-targetY * 5 - camera.position.y) * 0.05;
+            camera.lookAt(0, 0, 0);
+
+            // Dynamic lighting follows mouse loosely
+            keyLight.position.x += (mouseX * 0.05 - keyLight.position.x) * 0.05;
+            keyLight.position.y += (-mouseY * 0.05 + 10 - keyLight.position.y) * 0.05;
+
+            // Subtle fill light orbit
+            fillLight.position.x = Math.sin(t * 0.3) * 20;
+            fillLight.position.z = Math.cos(t * 0.3) * 15;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // ═══════════════════════════════════════
+        // 5. GSAP SCROLL & MAGNETIC UI
+        // ═══════════════════════════════════════
+        function initScrollAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Intro animations
+            gsap.from(".title-anim", { y: 100, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.2 });
+            gsap.from(".op-anim", { y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out", delay: 0.8 });
+
+            // Master timeline for 3D model scroll sequence
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".ui-layer",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1.5,
+                }
+            });
+
+            // Is Mobile check for heart positioning
+            const isMobile = window.innerWidth < 768;
+
+            // Section 1: Thesis (Heart moves Right)
+            tl.to(heartGroup.position, { x: isMobile ? 0 : 8, y: isMobile ? 5 : 0, ease: "power1.inOut" }, 0)
+                .to(heartGroup.rotation, { y: Math.PI * 0.8, x: 0.2, ease: "power1.inOut" }, 0)
+                .to(camera.position, { z: 18, ease: "power1.inOut" }, 0); // zoom in slightly
+
+            // Section 2: Platform (Heart moves Left)
+            tl.to(heartGroup.position, { x: isMobile ? 0 : -8, y: isMobile ? -2 : 0, ease: "power1.inOut" }, 0.33)
+                .to(heartGroup.rotation, { y: Math.PI * 1.5, x: -0.1, ease: "power1.inOut" }, 0.33);
+
+            // Section 3: Pipeline (Heart moves Right & Scales up)
+            tl.to(heartGroup.position, { x: isMobile ? 0 : 8, y: isMobile ? -5 : 0, ease: "power1.inOut" }, 0.66)
+                .to(heartGroup.rotation, { y: Math.PI * 2.2, x: 0.3, ease: "power1.inOut" }, 0.66)
+                .to(camera.position, { z: 12, ease: "power1.inOut" }, 0.66); // massive zoom for finale
+
+            // Fade up content blocks
+            document.querySelectorAll('.content-block').forEach(block => {
+                gsap.from(block, {
+                    scrollTrigger: { trigger: block, start: "top 85%", end: "top 40%", scrub: 1 },
+                    y: 100,
+                    opacity: 0,
+                    rotationX: 10,
+                    ease: "power2.out"
+                });
+            });
+
+            // Magnetic Button Setup
+            const magneticBtnWrap = document.querySelector('.magnetic-btn-wrap');
+            const magneticBtn = document.querySelector('.magnetic-btn');
+
+            if (magneticBtnWrap && !isMobile) {
+                magneticBtnWrap.addEventListener('mousemove', (e) => {
+                    const rect = magneticBtnWrap.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+
+                    gsap.to(magneticBtn, { x: x * 0.4, y: y * 0.4, duration: 0.5, ease: "power3.out" });
+                });
+
+                magneticBtnWrap.addEventListener('mouseleave', () => {
+                    gsap.to(magneticBtn, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+                });
+            }
+        }
+
+        // ═══════════════════════════════════════
+        // 6. RESIZE
+        // ═══════════════════════════════════════
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+    </script>
+</body>
+
+</html>
