@@ -684,7 +684,7 @@
 
   <main class="ui-layer">
     <!-- Side decoration -->
-    <div class="side-num">Web Design Portfolio &mdash; CardioVera Research &mdash; 2026</div>
+    <div class="side-num">Web Design Portfolio &mdash; Tracescribe Research &mdash; 2026</div>
 
     <!-- ============ HERO ============ -->
     <section class="hero">
@@ -692,19 +692,19 @@
         <p class="hero-label">Your Digital Front Door</p>
 
         <h1 class="hero-title">
-          <span>Your next client won't</span>
+          <span>Your next client will</span>
           <span><em>Google you.</em></span>
-          <span>They'll ask AI about you.</span>
+          <span>Then they'll ask AI about you.</span>
         </h1>
 
         <p class="hero-desc">
-          AI search is up 400% and climbing. Your website is what AI reads before it recommends you. Every one below is
-          built for both worlds &mdash; the search bar and the chat window.
+          Search engines and language models read your site differently &mdash; and both decide whether you get
+          recommended. Every build below is engineered for both: the search bar and the chat window.
         </p>
 
         <div class="scroll-hint">
           <span class="line"></span>
-          <span>See what's possible</span>
+          <span>See the builds &darr;</span>
         </div>
       </div>
     </section>
@@ -887,8 +887,8 @@
 
     <!-- ============ FOOTER ============ -->
     <footer class="showcase-footer">
-      <span class="footer-logo">CardioVera<em> Research</em></span>
-      <span class="footer-text">&copy; 2026 &mdash; SEO + GEO Ready</span>
+      <span class="footer-logo">Tracescribe<em> Research</em> &copy; 2026</span>
+      <span class="footer-text">Built for SEO + GEO</span>
     </footer>
   </main>
 
@@ -991,7 +991,7 @@
 
     scene.add(dnaGroup);
 
-    // Lighting modified for CardioVera aesthetics (Gold, Deep Blue)
+    // Lighting modified for Tracescribe aesthetics (Gold, Deep Blue)
     const accentLight1 = new THREE.PointLight(0xc9a84c, 10, 100); // Gold
     accentLight1.position.set(15, 10, 10);
     scene.add(accentLight1);
@@ -1018,16 +1018,20 @@
 
     // Scroll animations
     gsap.registerPlugin(ScrollTrigger);
+    const scrollTriggerConfig = {
+      trigger: ".ui-layer",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1
+    };
     gsap.to(dnaGroup.position, {
-      scrollTrigger: {
-        trigger: ".ui-layer",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 1
-      },
+      scrollTrigger: scrollTriggerConfig,
       y: 25,
-      z: 5,
-      rotationX: 0.5
+      z: 5
+    });
+    gsap.to(dnaGroup.rotation, {
+      scrollTrigger: scrollTriggerConfig,
+      x: 0.5
     });
 
     window.addEventListener('resize', () => {

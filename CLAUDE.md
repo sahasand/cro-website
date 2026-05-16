@@ -43,7 +43,7 @@ Tracescribe Research — a cardiovascular CRO (Contract Research Organization) m
   - **Design**: Pure black #000000 + crimson #ff0022 + rose gradients, Space Grotesk
   - **Features**: Three.js WebGL 3D heart model with heartbeat pulse animation, GSAP scroll-driven camera/model choreography, glassmorphism panels, magnetic button, mouse-parallax camera, dynamic lighting
   - **Content**: Arteris Therapeutics gene therapy branding (not rebranded to Tracescribe)
-- `playground.html` — Split-screen theme comparator (pick any 2 themes side by side, draggable divider, viewport presets, prompt output with copy)
+
 
 ## Architecture
 
