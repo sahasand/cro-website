@@ -37,27 +37,27 @@ Tracescribe Research — a cardiovascular CRO (Contract Research Organization) m
   - **Design**: Warm cream canvas #f3efe5 + teal #0a8d80 + terracotta #ae4d2f, DM Serif Display + Manrope + IBM Plex Mono
   - **Features**: 3D tilt cards, magnetic buttons, parallax mesh, floating panel, paper texture, "Since 1997" watermark
   - **Content**: Uses Tracescribe Research branding (founded 1997) for this specific implementation
-- `6/` — **"Visceral Science"** (multi-file architecture)
-  - `6/index.html` — Main HTML (~490 lines)
-  - `6/heart_b64.js` — Base64-encoded 3D heart model (GLB)
-  - **Design**: Pure black #000000 + crimson #ff0022 + rose gradients, Space Grotesk
-  - **Features**: Three.js WebGL 3D heart model with heartbeat pulse animation, GSAP scroll-driven camera/model choreography, glassmorphism panels, magnetic button, mouse-parallax camera, dynamic lighting
-  - **Content**: Arteris Therapeutics gene therapy branding (not rebranded to Tracescribe)
+- `6/` — **"Holographic Deck"** (single self-contained file in a subfolder)
+  - `6/index.html` — Main HTML (~2,440 lines, ~138KB; all CSS + JS inline, no external assets)
+  - **Design**: Deep navy/near-black (#02060F / #040D1D / navy #0A2A5E) + red #E63946, Plus Jakarta Sans + JetBrains Mono + Playfair Display
+  - **Features**: Three.js (via importmap `three@0.184.0`) procedural holographic WebGL scene behind frosted-glass panels — no model file; instrument-room HUD frame (corner brackets + live BPM/scroll readouts); 15 capability sections; IntersectionObserver reveals; tabbed trial portfolio; animated counters; self-updating events list (past events auto-drop); reduced-motion + `<noscript>` fallbacks; graceful no-WebGL degradation (content layer is independent of the 3D layer, `no3d` body class). No GSAP, no Tailwind.
+  - **Content**: Tracescribe Research, fully de-identified (role-only leadership titles, silhouette avatars, generic placeholder events). Founded 1997.
 
 
 ## Architecture
 
 Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and JS inline. They share no external stylesheets or scripts.
 
-**Exceptions**: Theme 2 ("Clinical Evidence"), Theme 5 ("Natural Authority"), and Theme 6 ("Visceral Science") use **multi-file architecture**:
-- Separate `index.html`, `styles.css`, and `script.js` files (theme 6 uses inline JS + external `heart_b64.js` model)
-- Organized folder structures: `/2/`, `/5/`, and `/6/`
+**Exceptions**: Theme 2 ("Clinical Evidence") and Theme 5 ("Natural Authority") use **multi-file architecture**:
+- Separate `index.html`, `styles.css`, and `script.js` files
+- Organized folder structures: `/2/` and `/5/`
 - Own documentation files
 - Themes 1, 3, 4 remain single-file for comparison
+- Theme 6 ("Holographic Deck") is a **single self-contained `index.html` inside `/6/`** (all CSS + JS inline, Three.js loaded from CDN via importmap)
 
 **Consistent section order across all themes:** Nav → Hero (100vh) → Stats → Services (6 cards) → About → Testimonials → Team (4 members) → Contact Form → Footer
 - **Theme1 exception:** Has 2 extra sections between Stats and Services: "The Problem We Solve" → "Three Commitments"
-- **Theme6 exception:** Uses its own section structure (Hero → Thesis → Platform → Pipeline) with Arteris Therapeutics content, not rebranded to standard layout
+- **Theme6 exception:** Uses its own capabilities-deck section structure (Hero → At a Glance → Thesis → Why → Positioning (ARO+CRO) → Operating Model → Capabilities → Differentiators → Founders → Case Study → Engagements → Experience → Team → Events → Contact), not the standard layout. Tracescribe-branded.
 
 **Common JS patterns in every theme:**
 - `IntersectionObserver` for scroll-triggered fade/bounce animations
@@ -69,7 +69,7 @@ Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and J
 **Theme Switcher (`#themeSwitcher`)** — a floating vertical nav fixed to the right edge of every theme page:
 - Grid icon links back to `index.html` (or `../index.html` for themes in subfolders), 6 split-gradient dots link to each theme
 - Active theme dot is scaled up with a glowing ring; hover shows tooltip with theme name
-- Styled natively per theme (e.g., theme2 gets crimson ring, theme5 gets teal ring + paper texture shadow, brutalist gets offset shadow, warm gets bouncy spring easing, theme6 gets dark glassmorphism with crimson glow)
+- Styled natively per theme (e.g., theme2 gets crimson ring, theme5 gets teal ring + paper texture shadow, brutalist gets offset shadow, warm gets bouncy spring easing, theme6 gets dark navy glassmorphism with a red glow ring (#E63946))
 - `z-index: 10001` (above noise overlays at 9999), responsive (shrinks on mobile, tooltips hidden)
 - CSS class names: `.ts-home`, `.ts-sep`, `.ts-dot`, `.ts-dot-inner`, `.ts-tip`, `.ts-dot.active`
 - **Subfolder themes (2, 5, 6)**: Use relative paths `../` since they're in subfolders
@@ -83,7 +83,7 @@ Each theme file is **fully self-contained** (~40-66KB) with all CSS, HTML, and J
 - **Theme5 ("Natural Authority")**: Multi-file structure in `/5/` folder, warm cream canvas + teal + terracotta, DM Serif Display + Manrope + IBM Plex Mono, 3D tilt cards, magnetic button effects, parallax mesh animations, paper texture grain overlay, floating hero panel. Uses Tracescribe Research branding in content.
 - **Theme3 ("Organic Flow")**: Single-file architecture, warm cream canvas #faf8f5 + coral #e8634a + amber #f2cc8f + sage #81b29a, DM Sans only, enhanced morphing blobs with SVG filter turbulence and organic border-radius keyframes (42% 58% → 60% 40% cycling), 3-layer parallax scroll system (slow 0.15x, medium 0.25x, fast 0.4x), paper texture overlay (body::before with mix-blend-mode multiply), advanced glassmorphism nav (24px backdrop-blur + saturate(160%)), magnetic button effects (90px radius pull with 0.35 strength), 3D card tilt (perspective 1000px with mousemove rotation), smooth cursor glow with `requestAnimationFrame` interpolation (0.18 lerp), spring physics easing (cubic-bezier 0.34, 1.56, 0.64, 1), refined stagger animations (120ms increments), stat pulse animation (3s infinite scale), enhanced testimonial carousel with spring transitions, 18 floating organic particles with randomized trajectories, gradient section bars (coral → coral-light), enhanced shadow system (warm-lg with layered rgba shadows). Polished to match execution quality of themes 1, 2, & 5.
 - **Theme4 ("Raw & Bold")**: Single-file architecture, black #0a0a0a + red #ff2d2d on paper #f0ece4, Instrument Serif italic + Azeret Mono, enforced ZERO border-radius on all elements (`*, *::before, *::after { border-radius: 0 !important; }`), multi-layer glitch effects (3-layer RGB split using ::before/::after pseudo-elements with independent animation keyframes, chromatic aberration, color separation with #ff2d2d and #00f0ff channels), horizontal scanline overlay (repeating-linear-gradient at 2px intervals with 8s translateY animation), terminal flicker on stats (opacity blink at 98%/99%/100% at 4s intervals with cubic-bezier 1,0,1,1), aggressive hard-edged interactions (0.05-0.08s transitions with linear/cubic 1,0,1,1 easing, NO smooth bounce), brutal offset box shadows (6px/8px solid blocks with zero blur), enhanced marquee strip (18s linear infinite with diamond separators ◆, 3px borders), VHS distortion effect (subtle scaleX/translateX animation at 3s), CRT screen flicker (0.15s opacity alternate), brutal input focus (3px red underline on focus, instant transitions), hard-edged card hover (8px shadow, -4px translate, 0.08s snap), sharp stagger animations (cubic-bezier 0.25, 0, 0.25, 1 with 0.05s delays), strikethrough section labels (3px red line-through), enhanced noise texture (fractalNoise with multiply blend at 0.03 opacity), scanline overlay (z-index 9998), custom brutal scrollbar (10px width, 2px borders, red hover), ghost CV text (42vw italic), testimonial left border (5px red, expands to 8px on hover), 3px border widths throughout. Polished to match execution quality of themes 1, 2, 3, & 5.
-- **Theme6 ("Visceral Science")**: Multi-file structure in `/6/` folder, pure black #000000 + crimson #ff0022, Space Grotesk only, Three.js WebGL 3D heart model loaded from base64-encoded GLB (`heart_b64.js`), heartbeat pulse animation (~69 bpm with systole/diastole), GSAP ScrollTrigger choreography (heart position/rotation/camera zoom scrubbed across 3 content sections), mouse-parallax camera movement, dynamic lighting (crimson key + orbiting fill + warm underlight), glassmorphism panels (24px blur + saturate(180%) + crimson-tinted borders), magnetic button with GSAP elastic snap-back, loading overlay with pulse ring, ambient crimson radial glow (body::before). Uses Arteris Therapeutics branding — not rebranded to Tracescribe.
+- **Theme6 ("Holographic Deck")**: Single self-contained `index.html` in `/6/` folder, deep navy/near-black (#02060F / #040D1D / navy #0A2A5E) + red #E63946, Plus Jakarta Sans + JetBrains Mono + Playfair Display. Three.js (importmap, `three@0.184.0`) procedural holographic WebGL scene behind frosted-glass capability panels — no model file. Instrument-room HUD frame (corner brackets + live BPM/scroll readouts), mouse-parallax camera, dynamic lighting, ambient crimson radial glow. 15-section capabilities deck with IntersectionObserver reveals, a tabbed trial portfolio, animated counters, and a self-updating events list (past events auto-drop). Two-layer architecture: a dependency-free DOM/content layer that always runs, plus a Three.js layer that degrades gracefully (no-WebGL / `<noscript>` → `no3d` body class hides the canvas + HUD, content intact). Honors `prefers-reduced-motion`. No GSAP, no Tailwind. Tracescribe-branded, fully de-identified (role-only titles, silhouette avatars, generic events).
 - Theme1 hero uses local AI-generated image `img1.png` (dark cinematic doctor with gold lighting, no external URL)
 - Theme1 team avatars use inline SVG monograms (Playfair Display initials, navy bg, gold text)
 - Section IDs available: `services`, `about`, `testimonials`, `team`, `contact`. Theme2 has `id="hero"`, `id="leadership"`, `id="core-lab"`, `id="data-timeline"`, `id="quality"`, `id="contact-form"`, `id="stats"`.
@@ -100,7 +100,7 @@ All pages are mobile-responsive with progressive breakpoints:
 - **Theme3 ("Organic Flow")**: Full responsive coverage with `sm:` / `md:` / `lg:` breakpoints. Hero text scaling (2.5rem → 5xl → 6xl → 7xl → 8xl), stats/services/team grid responsive, enhanced mobile blob sizing (320px/280px/300px with 60px blur), improved spacing and typography hierarchy. Cursor glow and parallax effects disabled on touch devices.
 - **Theme4 ("Raw & Bold")**: Full responsive coverage with `md:` breakpoints. Mobile-specific adjustments at 640px (ghost CV 50vw, cards rotate to 0deg, shadow-brutal reduces to 4px). Nav hamburger at `md:` with brutal 3-line menu. Stats grid 2→4 cols at `md:`, services 1→2→3 cols at `md:`/`lg:`, team 2→4 cols at `md:`. Enhanced brutal scrollbar (10px width with 2px borders). All transitions remain snappy (0.05-0.08s linear) on mobile.
 - **Theme5 ("Natural Authority")**: Vanilla CSS with breakpoints at 1120px, 920px, 680px. Hero grid collapses at 920px, metrics/leadership/commitments go 6→3→2→1 col, mobile menu dropdown at 920px, 3D tilt effects disabled on coarse pointers. Theme switcher scales down on mobile.
-- **Theme6 ("Visceral Science")**: Tailwind CSS with `md:` breakpoints. Hero text scales from 6xl to 9xl at `md:`. Content sections use `md:grid-cols-2` for alternating left/right layout, collapsing to single column on mobile. Heart model positioning adjusts for mobile (centered vs offset). Theme switcher scales down on mobile.
+- **Theme6 ("Holographic Deck")**: Vanilla CSS media queries (no Tailwind). Instrument HUD frame hidden ≤1080px; grids (stats, capabilities, founders, team) collapse via `auto-fit`/`minmax`; mobile nav menu; theme switcher shrinks and hides tooltips ≤768px.
 - **Index**: Vanilla CSS (no Tailwind) with three breakpoints: 1024px (tablet), 768px (mobile), 400px (small phones). Cursor glow disabled on touch devices.
 - All themes disable cursor glow on mobile/touch devices
 - Nav switches to hamburger at `md:` (768px) across all themes
